@@ -2,7 +2,7 @@ import {createClient} from "@/utils/supabase/client";
 export const columns = [
     {name: "ID", uid: "id", sortable: true},
     {name: "NUME", uid: "name", sortable: true},
-    {name: "VARSTA", uid: "varsta", sortable: true},
+    {name: "VARSTA", uid: "age", sortable: true},
     {name: "ROL", uid: "role", sortable: true},
     {name: "ECHIPA", uid: "team"},
     {name: "EMAIL", uid: "email"},

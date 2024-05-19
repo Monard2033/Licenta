@@ -10,7 +10,8 @@ const NavigationBar: React.FC = () => {
    const pathName = usePathname();
    if(pathName != "/login") {
        return (
-           <header className="border-2 border-purple-500 bg-[#FFDEADFF] p-3">
+           <div className="dark:bg-white sticky z-50 top-0 inset-x-0 h-16">
+           <header className="relative bg-gray-300">
                <nav>
                    <ul className="flex justify-between p-3 items-center">
                        <NavButtons />
@@ -18,6 +19,7 @@ const NavigationBar: React.FC = () => {
                    </ul>
                </nav>
            </header>
+           </div>
        );
    }
    else

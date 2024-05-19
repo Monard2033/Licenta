@@ -29,6 +29,9 @@ export function ProfileComponent() {
     const profile = () => {
          router.push("/dashboard");
     }
+    const setting = () => {
+        router.push("/setting");
+    }
 
         const handleLinkClick = () => {
             window.open('https://github.com/Monard2033', '_blank');
@@ -36,7 +39,7 @@ export function ProfileComponent() {
     return (
         <DropdownMenu >
             <DropdownMenuTrigger asChild >
-                <Button className="bg-blue-300 text-gray-950 border-1  ">
+                <Button className="bg-blue-300 text-gray-950 border-1">
                     Utilizator
                 </Button>
             </DropdownMenuTrigger>
@@ -52,8 +55,7 @@ export function ProfileComponent() {
                 <DropdownMenuItem>
                     <button onClick={handleLinkClick}>GitHub</button>
                 </DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
-                <DropdownMenuItem>API</DropdownMenuItem>
+                <DropdownMenuItem>Setari</DropdownMenuItem>
                 <DropdownMenuSeparator/>
                 <DropdownMenuItem onClick={e => logout()}>
                     Log out
