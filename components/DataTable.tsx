@@ -54,6 +54,7 @@ export default function DataTable() {
         })()
     }, [])
 
+
     const [page, setPage] = React.useState(1);
 
     const pages = Math.ceil(users.length / rowsPerPage);
@@ -262,12 +263,12 @@ export default function DataTable() {
                         </Button>
                     </div>
                 </div>
-                <div className="flex justify-between items-center">
-                    <span className="text-default-500 pl-1 text-small bg-gray-300 rounded">Total utilizatori: {users.length}</span>
-                    <label className="flex items-center text-default-500 text-small bg-gray-300 rounded">
+                <div className="flex justify-between p-1 items-center">
+                    <span className="text-default-500 pl-1 pr-1 text-small bg-gray-300 rounded">Total utilizatori: {users.length}</span>
+                    <label className="flex items-center pr-1 pl-1 text-default-500 text-small bg-gray-300 rounded">
                         Coloane per pagina:
                         <select
-                            className="bg-transparent outline-none justify-center text-default-500 text-small"
+                            className="bg-transparent pl-1 outline-none justify-center text-default-500 text-sm"
                             onChange={onRowsPerPageChange}
                         >
                             <option value="5">5</option>

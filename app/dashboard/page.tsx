@@ -1,8 +1,8 @@
-// pages/dashboard.tsx
 "use client"
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styles from '@/app/dashboard/Dashboard.module.css'; // Import CSS module for styling
-
+import { SubmitButton } from "./submit-button";
+import { createClient } from '@/utils/supabase/client';
 
 const Dashboard = () => {
     const [userData, setUserData] = useState({
@@ -10,45 +10,55 @@ const Dashboard = () => {
         email: "",
         password: "",
     });
+    const UpdateUserForm: React.FC = () => {
+        const [email, setEmail] = useState('');
 
+        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const {name, value} = e.target;
+            setUserData({...userData, [name]: value});
+        };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
-        setUserData({...userData, [name]: value});
-    };
+        const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            const {name, email, password} = userData;
+            const supabase = createClient();
+            const {data, error} = await supabase
+                .from('students')  // Replace 'students' with your table name
+                .update({email, password})
+                .eq('name', name); // Assuming you use 'name' as a unique identifier
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // Add logic to update user data
-        console.log('User data updated:', userData);
-    };
-    const userEmail = localStorage.getItem('userEmail');
-    return (
-        <div className={styles.container}>
-            <div className={styles.userInfo}>
-                <h1>Dashboard</h1>
-                <span>Opinca Mihail</span>
-                <form onSubmit={handleSubmit} className={styles.form}>
-                    <div className={styles.formGroup}>
-                        <label>Name:</label>
-                        <input type="text" placeholder={"Change Your Name"} name="name" value={userData.name}
-                               onChange={handleChange}/>
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label>Email:</label>
-                        <input type="email" placeholder={"Change Your Email"} name="email" value={userData.email}
-                               onChange={handleChange}/>
-                    </div>
-                    <div className={styles.formGroup}>
-                        <label>Password:</label>
-                        <input type="password" placeholder={"Change Your Password"} name="password"
-                               value={userData.password} onChange={handleChange}/>
-                    </div>
-                    <button type="submit" className={styles.submitButton}>Save Changes</button>
-                </form>
+            if (error) {
+                console.error('Error updating user:', error);
+            } else {
+                console.log('User updated successfully:', data);
+            }
+        };
+        const userEmail = localStorage.getItem('userEmail');
+        return (
+            <div className={styles.container}>
+                <div className={styles.userInfo}>
+                    <h1>Dashboard</h1>
+                    <form onSubmit={handleSubmit} className={styles.form}>
+                        <div className={styles.formGroup}>
+                            <label>Nume:</label>
+                            <input type="text" placeholder={"Adaugati Un Nume"} name="name" value={userData.name}
+                                   onChange={handleChange}/>
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label>Email:</label>
+                            <input type="email" placeholder={"Modifica Email"} name="email" value={userData.email}
+                                   onChange={handleChange}/>
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label>Parola:</label>
+                            <input type="password" placeholder={"Schimba Parola"} name="password"
+                                   value={userData.password} onChange={handleChange}/>
+                        </div>
+                        <SubmitButton type="submit" className={styles.submitButton}>Salveaza</SubmitButton>
+                    </form>
+                </div>
             </div>
-        </div>
-    );
-};
-
+        );
+    };
+}
 export default Dashboard;

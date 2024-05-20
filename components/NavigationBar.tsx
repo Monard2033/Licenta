@@ -5,7 +5,6 @@ import ProfileComponent from "@/components/ProfileComponent";
 import NavButtons from "@/components/NavButtons";
 import {usePathname} from "next/navigation";
 import React from "react";
-import {buttonVariants} from "@/components/ui/button";
 const NavigationBar: React.FC = () => {
    const pathName = usePathname();
    if(pathName != "/login") {
