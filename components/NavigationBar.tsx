@@ -12,10 +12,10 @@ const NavigationBar: React.FC = () => {
            <div className="dark:bg-white sticky z-50 top-0 inset-x-0 h-16">
            <header className="relative bg-gray-300">
                <nav>
-                   <ul className="flex justify-between p-3 items-center">
+                   <div className="flex justify-between p-3 items-center">
                        <NavButtons />
                        <ProfileComponent/>
-                   </ul>
+                   </div>
                </nav>
            </header>
            </div>

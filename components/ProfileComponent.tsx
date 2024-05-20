@@ -1,5 +1,4 @@
 'use client'
-import React, {useState} from "react";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem, Button, User} from "@nextui-org/react";
 import {PlusIcon} from "@/components/ui/PlusIcon.jsx";
 import {useRouter} from "next/navigation";
@@ -33,11 +32,7 @@ export default function ProfileComponent() {
             }}
         >
             <DropdownTrigger>
-                <Button variant="ghost"
-                        className="text-large"
-                        disableRipple
-                >
-                    Meniu
+                <Button variant="bordered" className="w-4 text-large" disableRipple>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="fill-accent"
                          viewBox="0 0 22 22">
                         <path d="M4 18h16v-2H4v2zM4 13h16v-2H4v2zM4 6v2h16V6H4z"/>
