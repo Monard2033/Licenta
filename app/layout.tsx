@@ -18,25 +18,23 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
-  return (
-    <html lang="en" className="h-full">
-    <head>
-        <title>IBM Dashboard</title>
-    </head>
-    <NextUIProvider>
+    return (
+        <html lang="en" className="h-full">
+        <head>
+            <title>University Dashboard</title>
+            <link rel="icon" href="/favicon.ico"/>
+        </head>
         <body className={cn("relative h-full font-sans antialiasing")}>
-        <main className="relative flex flex-col min-w-screen min-h-screen">
-            <NavigationBar/>
-            <div className="w-full flex flex-row">
-                <LeftSidePanel/>
-                <DataTable/>
-                {children}
-            </div>
-
-        </main>
+        <NextUIProvider>
+            <main className="relative flex flex-col min-w-screen min-h-screen">
+                <NavigationBar />
+                <div className="w-full flex flex-row">
+                    <LeftSidePanel />
+                    {children}
+                </div>
+            </main>
+        </NextUIProvider>
         </body>
-    </NextUIProvider>
-    </html>
-  );
+        </html>
+    );
 }

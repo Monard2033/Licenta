@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import {redirect} from "next/navigation";
 import React from "react";
+import DataTable from "@/components/DataTable";
 
 
 export default async function Index() {
@@ -24,10 +25,12 @@ export default async function Index() {
   console.log(data);
 
   return (
+      <main>
       <div>
         <div>
-
+          <DataTable/>
         </div>
       </div>
+      </main>
   );
 }

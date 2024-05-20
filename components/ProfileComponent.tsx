@@ -1,5 +1,4 @@
 'use client'
-import React, {useState} from "react";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem, Button, User} from "@nextui-org/react";
 import {PlusIcon} from "@/components/ui/PlusIcon.jsx";
 import {useRouter} from "next/navigation";
@@ -13,7 +12,7 @@ export default function ProfileComponent() {
     }
 
     const profile = () => {
-        router.push("/dashboard");
+        router.push("/profile");
     }
     const setting = () => {
         router.push("/setting");
@@ -22,6 +21,10 @@ export default function ProfileComponent() {
     const handleLinkClick = () => {
         window.open('https://github.com/Monard2033', '_blank');
     };
+
+    function onThemeChange() {
+
+    }
 
     return (
         <Dropdown
@@ -33,12 +36,8 @@ export default function ProfileComponent() {
             }}
         >
             <DropdownTrigger>
-                <Button variant="ghost"
-                        className="text-large"
-                        disableRipple
-                >
-                    Meniu
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="fill-accent"
+                <Button variant="ghost" className="w-4 text-large outline outline-2" disableRipple>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                          viewBox="0 0 22 22">
                         <path d="M4 18h16v-2H4v2zM4 13h16v-2H4v2zM4 6v2h16V6H4z"/>
                     </svg>
@@ -46,7 +45,7 @@ export default function ProfileComponent() {
             </DropdownTrigger>
             <DropdownMenu
                 aria-label="Custom item styles"
-                disabledKeys={["profile"]}
+                //disabledKeys={["profile"]}
                 className="p-3"
                 itemClasses={{
                     base: [
@@ -69,7 +68,6 @@ export default function ProfileComponent() {
                         className="h-14 gap-2 opacity-100"
                     >
                         <User
-
                             name="Junior Garcia"
                             description="@jrgarciadev"
                             classNames={{
@@ -82,17 +80,17 @@ export default function ProfileComponent() {
                             }}
                         />
                     </DropdownItem>
-                    <DropdownItem key="dashboard">
+                    <DropdownItem key="profile">
                         <button onClick={e => profile()}>Profil</button>
                     </DropdownItem>
                     <DropdownItem key="settings">
                         <button onClick={e => setting()}>Setari</button>
                     </DropdownItem>
                     <DropdownItem
-                        key="new_project"
+                        key="projects"
                         endContent={<PlusIcon className="text-large" width={undefined} height={undefined}/>}
                     >
-                        New Project
+                        Proiecte
                     </DropdownItem>
                 </DropdownSection>
 
@@ -109,6 +107,7 @@ export default function ProfileComponent() {
                                 className="z-10 outline-none w-16 py-0.5 rounded-md text-tiny group-data-[hover=true]:border-default-500 border-small border-default-300 dark:border-default-200 bg-transparent text-default-500"
                                 id="theme"
                                 name="theme"
+                                onChange={onThemeChange}
                             >
                                 <option>System</option>
                                 <option>Dark</option>

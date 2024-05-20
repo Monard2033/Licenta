@@ -27,6 +27,7 @@ import {SearchIcon} from "@/components/ui/SearchIcon";
 import {columns, fetchUsers, statusOptions} from "@/components/data";
 import {capitalize} from "@/components/ui/utils";
 
+
 const statusColorMap: Record<string, ChipProps["color"]> = {
     active: "success",
     paused: "danger",
@@ -35,7 +36,8 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 
 const INITIAL_VISIBLE_COLUMNS = ["id", "name", "age","role", "team", "email", "status", "actions"];
 
-export default function DataTable() {
+
+export default function App() {
     const [filterValue, setFilterValue] = React.useState("");
     const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
     const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -45,7 +47,6 @@ export default function DataTable() {
         column: "age",
         direction: "ascending",
     });
-
     const [users, setUsers] = React.useState<any>([]);
     useEffect(()=> {
         (async ()=> {
@@ -54,10 +55,7 @@ export default function DataTable() {
         })()
     }, [])
 
-
     const [page, setPage] = React.useState(1);
-
-    const pages = Math.ceil(users.length / rowsPerPage);
 
     const hasSearchFilter = Boolean(filterValue);
 
@@ -84,6 +82,8 @@ export default function DataTable() {
         return filteredUsers;
     }, [users, filterValue, statusFilter]);
 
+    const pages = Math.ceil(filteredItems.length / rowsPerPage);
+
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
@@ -100,18 +100,14 @@ export default function DataTable() {
             return sortDescriptor.direction === "descending" ? -cmp : cmp;
         });
     }, [sortDescriptor, items]);
-
-    const renderCell = React.useCallback((user: {[x: string]: any; email: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.PromiseLikeOfReactNode | null | undefined; teamID: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined; phone: string | number; status: string | number; }, columnKey: string | number) => {
+    const renderCell = React.useCallback((user: { [x: string]: any; avatar: any; email: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.PromiseLikeOfReactNode | null | undefined; team: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined; status: string | number | any; }, columnKey: string | number) => {
         const cellValue = user[columnKey];
 
         switch (columnKey) {
             case "name":
                 return (
                     <User
-                        avatarProps={{radius: "full", size: "sm", src: user.avatar}}
-                        classNames={{
-                            description: "text-default-500",
-                        }}
+                        avatarProps={{radius: "lg", src: user.status}}
                         description={user.email}
                         name={cellValue}
                     >
@@ -122,33 +118,28 @@ export default function DataTable() {
                 return (
                     <div className="flex flex-col">
                         <p className="text-bold text-small capitalize">{cellValue}</p>
-                        <p className="text-bold text-tiny capitalize text-default-500">{user.team}</p>
+                        <p className="text-bold text-tiny capitalize text-default-400">{user.team}</p>
                     </div>
                 );
             case "status":
                 return (
-                    <Chip
-                        className="capitalize border-none gap-1 text-default-600"
-                        color={statusColorMap[user.status]}
-                        size="sm"
-                        variant="dot"
-                    >
+                    <Chip className="capitalize" color={statusColorMap[user.status]} size="sm" variant="flat">
                         {cellValue}
                     </Chip>
                 );
             case "actions":
                 return (
                     <div className="relative flex justify-end items-center gap-2">
-                        <Dropdown className="bg-background border-1 border-default-200">
+                        <Dropdown>
                             <DropdownTrigger>
-                                <Button isIconOnly radius="full" size="sm" variant="light">
-                                    <VerticalDotsIcon className="text-default-400" width={"60px"} height={"60px"} />
+                                <Button isIconOnly size="sm" variant="light">
+                                    <VerticalDotsIcon className="text-default-300" width={undefined} height={undefined} />
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu>
-                                <DropdownItem>Vizualizare</DropdownItem>
-                                <DropdownItem>Editare</DropdownItem>
-                                <DropdownItem>Sterge</DropdownItem>
+                                <DropdownItem>View</DropdownItem>
+                                <DropdownItem>Edit</DropdownItem>
+                                <DropdownItem>Delete</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </div>
@@ -158,6 +149,17 @@ export default function DataTable() {
         }
     }, []);
 
+    const onNextPage = React.useCallback(() => {
+        if (page < pages) {
+            setPage(page + 1);
+        }
+    }, [page, pages]);
+
+    const onPreviousPage = React.useCallback(() => {
+        if (page > 1) {
+            setPage(page - 1);
+        }
+    }, [page]);
 
     const onRowsPerPageChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
         setRowsPerPage(Number(e.target.value));
@@ -172,45 +174,29 @@ export default function DataTable() {
             setFilterValue("");
         }
     }, []);
-    const onNextPage = React.useCallback(() => {
-        if (page < pages) {
-            setPage(page + 1);
-        }
-    }, [page, pages]);
 
-    const onPreviousPage = React.useCallback(() => {
-        if (page > 1) {
-            setPage(page - 1);
-        }
-    }, [page]);
-
+    const onClear = React.useCallback(()=>{
+        setFilterValue("")
+        setPage(1)
+    },[])
 
     const topContent = React.useMemo(() => {
         return (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 pt-3">
                 <div className="flex justify-between gap-3 items-end">
                     <Input
                         isClearable
-                        classNames={{
-                            base: "w-full sm:max-w-[44%]",
-                            inputWrapper: "border-1",
-                        }}
-                        placeholder="Search by name..."
-                        size="sm"
-                        startContent={<SearchIcon className="text-default-300" />}
+                        className="w-full sm:max-w-[44%]"
+                        placeholder="Cauta dupa nume..."
+                        startContent={<SearchIcon />}
                         value={filterValue}
-                        variant="bordered"
-                        onClear={() => setFilterValue("")}
+                        onClear={() => onClear()}
                         onValueChange={onSearchChange}
                     />
                     <div className="flex gap-3">
                         <Dropdown>
                             <DropdownTrigger className="hidden sm:flex">
-                                <Button
-                                    endContent={<ChevronDownIcon className="text-small" />}
-                                    size="sm"
-                                    variant="flat"
-                                >
+                                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
                                     Status
                                 </Button>
                             </DropdownTrigger>
@@ -231,11 +217,7 @@ export default function DataTable() {
                         </Dropdown>
                         <Dropdown>
                             <DropdownTrigger className="hidden sm:flex">
-                                <Button
-                                    endContent={<ChevronDownIcon className="text-small" />}
-                                    size="sm"
-                                    variant="flat"
-                                >
+                                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
                                     Coloane
                                 </Button>
                             </DropdownTrigger>
@@ -254,11 +236,7 @@ export default function DataTable() {
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        <Button
-                            className="bg-foreground justify-center text-background"
-                            endContent={<PlusIcon width={"64px"} height={"64px"} />}
-                            size="sm"
-                        >
+                        <Button color="primary" endContent={<PlusIcon width={"64px"} height={"64px"} />}>
                             Adauga
                         </Button>
                     </div>
@@ -266,7 +244,7 @@ export default function DataTable() {
                 <div className="flex justify-between p-1 items-center">
                     <span className="text-default-500 pl-1 pr-1 text-small bg-gray-300 rounded">Total utilizatori: {users.length}</span>
                     <label className="flex items-center pr-1 pl-1 text-default-500 text-small bg-gray-300 rounded">
-                        Coloane per pagina:
+                       Linii per Pagina:
                         <select
                             className="bg-transparent pl-1 outline-none justify-center text-default-500 text-sm"
                             onChange={onRowsPerPageChange}
@@ -292,68 +270,44 @@ export default function DataTable() {
     const bottomContent = React.useMemo(() => {
         return (
             <div className="py-2 px-2 flex justify-between items-center">
-                <span className="w-[30%] text-small text-default-400">
-                {selectedKeys === "all"
-                    ? "All items selected"
-                    : `${selectedKeys.size} of ${filteredItems.length} selected`}
-                </span>
-                <div className="hidden sm:flex flex-1 justify-end gap-3 pr-7">
-                <Button  size="sm" variant="flat" onPress={onPreviousPage}>
-                    Previous
-                </Button>
-                </div>
-                <Pagination
-                    classNames={{
-                        cursor: "bg-foreground text-background",
-                    }}
-                    color="default"
-                    isDisabled={hasSearchFilter}
-                    page={page}
-                    total={pages}
-                    variant="light"
-                    onChange={setPage}
-                />
-                <div className="hidden sm:flex flex-1 justify-start gap-3 pl-7">
-                    <Button size="sm" variant="flat" onPress={onNextPage}>
-                        Next
-                    </Button>
+        <span className="w-[20%] text-small text-default-400">
+          {selectedKeys === "all"
+              ? "All items selected"
+              : `${selectedKeys.size} din ${filteredItems.length} selectate`}
+        </span>
+                <div className="flex w-full items-center justify-between gap-3">
+                    <span className="flex flex-1 justify-end mx-1 my-1">
+                        <Button size="sm" isDisabled={pages === 1} variant="ghost" onPress={onPreviousPage}>
+                            Precedent
+                         </Button>
+                    </span>
+                    <Pagination className="p-2"
+                                isCompact
+                                showShadow
+                                color="primary"
+                                page={page}
+                                total={pages}
+                                onChange={setPage}
+                    />
+                    <span className="flex flex-1 mx-1 my-1">
+                        <Button size="sm" isDisabled={pages === 15} variant="ghost" onPress={onNextPage}>
+                            Urmator
+                        </Button>
+                    </span>
                 </div>
             </div>
         );
     }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
-    const classNames = React.useMemo(
-        () => ({
-            wrapper: ["max-h-[382px]"],
-            th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
-            td: [
-                // changing the rows border radius
-                // first
-                "group-data-[first=true]:first:before:rounded-none",
-                "group-data-[first=true]:last:before:rounded-none",
-                // middle
-                "group-data-[middle=true]:before:rounded-none",
-                // last
-                "group-data-[last=true]:first:before:rounded-none",
-                "group-data-[last=true]:last:before:rounded-none",
-            ],
-        }),
-        [],
-    );
-
     return (
         <Table
-            isCompact
-            removeWrapper
             aria-label="Example table with custom cells, pagination and sorting"
+            isHeaderSticky
             bottomContent={bottomContent}
             bottomContentPlacement="outside"
-            checkboxesProps={{
-                classNames: {
-                    wrapper: "after:bg-foreground after:text-background text-background",
-                },
+            classNames={{
+                wrapper: "max-h-[382px]",
             }}
-            classNames={classNames}
             selectedKeys={selectedKeys}
             selectionMode="multiple"
             sortDescriptor={sortDescriptor}
@@ -373,7 +327,7 @@ export default function DataTable() {
                     </TableColumn>
                 )}
             </TableHeader>
-            <TableBody emptyContent={"No users found"} items={sortedItems}>
+            <TableBody emptyContent={"Nu exista utilizatori"} items={sortedItems}>
                 {(item) => (
                     <TableRow key={item.id}>
                         {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

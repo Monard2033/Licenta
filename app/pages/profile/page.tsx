@@ -1,10 +1,10 @@
 "use client"
 import React, { useState } from 'react';
-import styles from '@/app/dashboard/Dashboard.module.css'; // Import CSS module for styling
+import styles from '@/app/pages/profile/Dashboard.module.css'; // Import CSS module for styling
 import { SubmitButton } from "./submit-button";
 import { createClient } from '@/utils/supabase/client';
 
-const Dashboard = () => {
+const Profile = () => {
     const [userData, setUserData] = useState({
         name: "",
         email: "",
@@ -61,4 +61,4 @@ const Dashboard = () => {
         );
     };
 }
-export default Dashboard;
+export default Profile;

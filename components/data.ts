@@ -8,6 +8,7 @@ export const columns = [
     {name: "EMAIL", uid: "email"},
     {name: "STATUS", uid: "status", sortable: true},
     {name: "ACTIUNI", uid: "actions"},
+    {name: "avatar", uid: "avatar", sortable: true},
 ];
 export const statusOptions = [
     {name: "Active", uid: "active"},
