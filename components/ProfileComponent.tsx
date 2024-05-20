@@ -45,12 +45,11 @@ export default function ProfileComponent() {
             </DropdownTrigger>
             <DropdownMenu
                 aria-label="Custom item styles"
-                //disabledKeys={["profile"]}
                 className="p-3"
                 itemClasses={{
                     base: [
                         "rounded-md",
-                        "text-default-500",
+                        "text-primary-900",
                         "transition-opacity",
                         "data-[hover=true]:text-foreground",
                         "data-[hover=true]:bg-default-100",
@@ -80,23 +79,20 @@ export default function ProfileComponent() {
                             }}
                         />
                     </DropdownItem>
-                    <DropdownItem key="profile">
-                        <button onClick={e => profile()}>Profil</button>
-                    </DropdownItem>
-                    <DropdownItem key="settings">
-                        <button onClick={e => setting()}>Setari</button>
+                    <DropdownItem key="profile" >
+                        <button onClick={e => profile()}>Profilu Tau</button>
                     </DropdownItem>
                     <DropdownItem
                         key="projects"
-                        endContent={<PlusIcon className="text-large" width={undefined} height={undefined}/>}
+                        endContent={<PlusIcon className="text-large" width={48} height={48}/>}
                     >
-                        Proiecte
+                        Proiectele Tale
                     </DropdownItem>
                 </DropdownSection>
 
                 <DropdownSection aria-label="Preferences" showDivider>
-                    <DropdownItem key="quick_search" shortcut="⌘K">
-                        Quick search
+                    <DropdownItem key="quick_search">
+                        Cautare rapida
                     </DropdownItem>
                     <DropdownItem
                         isReadOnly
@@ -104,7 +100,7 @@ export default function ProfileComponent() {
                         className="cursor-default"
                         endContent={
                             <select
-                                className="z-10 outline-none w-16 py-0.5 rounded-md text-tiny group-data-[hover=true]:border-default-500 border-small border-default-300 dark:border-default-200 bg-transparent text-default-500"
+                                className="z-10 text-primary-900 outline-none w-16 py-0.5 rounded-md text-tiny group-data-[hover=true]:border-default-500 border-small border-default-300 dark:border-default-200 bg-transparent"
                                 id="theme"
                                 name="theme"
                                 onChange={onThemeChange}
@@ -118,12 +114,12 @@ export default function ProfileComponent() {
                         Theme
                     </DropdownItem>
                 </DropdownSection>
-                <DropdownSection aria-label="Help & Feedback">
-                    <DropdownItem key="help_and_feedback">
-                        Help & Feedback
+                <DropdownSection aria-label="Setari si Delogare">
+                    <DropdownItem key="settings">
+                        <button onClick={e => setting()}>Setari</button>
                     </DropdownItem>
                     <DropdownItem>
-                        <button onClick={e => logout()}>Delogare</button>
+                    <button onClick={e => logout()}>Delogare</button>
                     </DropdownItem>
                 </DropdownSection>
             </DropdownMenu>

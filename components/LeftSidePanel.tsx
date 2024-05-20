@@ -20,10 +20,15 @@ const LeftSidePanel=()=>{
                 </button>
                 </div>
                 <div className=" my-8 mx-2 h-full items-center justify-between">
-                    Rest of the content
+                    <div className="my-2">
+                        <span>First Project</span>
+                    </div>
+                    <div>
+                       <span> Second Project</span>
+                    </div>
                 </div>
             </div>
-      </div>
+        </div>
     }
     return <></>
 

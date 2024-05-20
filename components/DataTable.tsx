@@ -276,18 +276,22 @@ export default function App() {
               : `${selectedKeys.size} din ${filteredItems.length} selectate`}
         </span>
                 <div className="flex w-full items-center justify-between gap-3">
-                    <span className="flex flex-1 justify-end mx-1 my-1">
+                    <span className="flex flex-1 justify-end mx-1 my-1 ">
                         <Button size="sm" isDisabled={pages === 1} variant="ghost" onPress={onPreviousPage}>
                             Precedent
                          </Button>
                     </span>
-                    <Pagination className="p-2"
-                                isCompact
-                                showShadow
-                                color="primary"
-                                page={page}
-                                total={pages}
-                                onChange={setPage}
+                    <Pagination
+                        classNames={{
+                            wrapper: "hover:blue-700",
+                        }}
+                        className="p-2"
+                        isCompact
+                        showShadow
+                        color="primary"
+                        page={page}
+                        total={pages}
+                        onChange={setPage}
                     />
                     <span className="flex flex-1 mx-1 my-1">
                         <Button size="sm" isDisabled={pages === 15} variant="ghost" onPress={onNextPage}>

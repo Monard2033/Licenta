@@ -2,8 +2,9 @@
   @tailwind components;
   @tailwind utilities;
 
+
 * {
-  //outline: 1px solid red;
+  outline: 1px solid red;
 }
   @layer base {
     :root {
@@ -18,13 +19,16 @@
       --popover: 0 0% 100%;
       --popover-foreground: 222.2 84% 4.9%;
 
-      --primary: 222.2 47.4% 11.2%;
+      --primary: 221, 100%, 36%;
+      //--primary: hsl(221, 100%, 36%);
       --primary-foreground: 210 40% 98%;
 
-      --secondary: 210 40% 96.1%;
+      --secondary: 231, 4%, 63%;
+      --secondaryhsl: hsl(231, 4%, 63%);
       --secondary-foreground: 222.2 47.4% 11.2%;
 
-      --muted: 210 40% 96.1%;
+      --muted: 0, 0%, 49%;
+      --mutedhsl: hsl(0, 0%, 49%);
       --muted-foreground: 215.4 16.3% 46.9%;
 
       --accent: 210 40% 96.1%;
