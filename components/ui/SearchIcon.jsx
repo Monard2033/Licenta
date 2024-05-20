@@ -1,13 +1,19 @@
 import React from "react";
-export const SearchIcon = (props) => (
+export const SearchIcon = ({
+                               size = 24,
+                               strokeWidth = 1.5,
+                               width,
+                               height,
+                               ...props
+                           }) => (
     <svg
         aria-hidden="true"
         fill="none"
         focusable="false"
-        height="1em"
+        height={height || size}
         role="presentation"
         viewBox="0 0 24 24"
-        width="1em"
+        width={width || size}
         {...props}
     >
         <path
@@ -15,14 +21,15 @@ export const SearchIcon = (props) => (
             stroke="currentColor"
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="2"
+            strokeWidth={strokeWidth}
         />
         <path
             d="M22 22L20 20"
             stroke="currentColor"
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth="2"
+            strokeWidth={strokeWidth}
         />
     </svg>
 );
+

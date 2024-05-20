@@ -188,7 +188,7 @@ export default function App() {
                         isClearable
                         className="w-full sm:max-w-[44%]"
                         placeholder="Cauta dupa nume..."
-                        startContent={<SearchIcon />}
+                        startContent={<SearchIcon width={undefined} height={undefined} />}
                         value={filterValue}
                         onClear={() => onClear()}
                         onValueChange={onSearchChange}

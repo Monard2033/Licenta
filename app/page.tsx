@@ -29,6 +29,7 @@ export default async function Index() {
       <div>
         <div>
           <DataTable/>
+
         </div>
       </div>
       </main>

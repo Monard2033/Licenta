@@ -51,7 +51,7 @@ export default function Login({
   };
 
   return (
-    <div className="flex w-screen h-screen flex-col items-center w-full px-8 justify-center gap-2">
+    <div className="flex h-screen flex-col items-center w-full px-8 justify-center gap-2">
 
       <form className="animate-in flex flex-col w-full md:max-w-md justify-center gap-2 text-foreground">
         <label className="text-md" htmlFor="email">

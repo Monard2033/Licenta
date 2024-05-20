@@ -1,3 +1,4 @@
+import { Link } from "lucide-react";
 import {usePathname} from "next/navigation";
 import React from "react";
 
@@ -16,12 +17,12 @@ const LeftSidePanel=()=>{
                          <path
                         d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z"/>
                      </svg>
-                New
+                     New
                 </button>
                 </div>
                 <div className=" my-8 mx-2 h-full items-center justify-between">
                     <div className="my-2">
-                        <span>First Project</span>
+                        <Link href="/project">Your First Project</Link>
                     </div>
                     <div>
                        <span> Second Project</span>
