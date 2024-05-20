@@ -1,4 +1,5 @@
 'use client'
+import React, {useState} from "react";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem, Button, User} from "@nextui-org/react";
 import {PlusIcon} from "@/components/ui/PlusIcon.jsx";
 import {useRouter} from "next/navigation";
@@ -22,10 +23,6 @@ export default function ProfileComponent() {
         window.open('https://github.com/Monard2033', '_blank');
     };
 
-    function onThemeChange() {
-
-    }
-
     return (
         <Dropdown
             showArrow
@@ -45,7 +42,7 @@ export default function ProfileComponent() {
             </DropdownTrigger>
             <DropdownMenu
                 aria-label="Custom item styles"
-                //disabledKeys={["profile"]}
+                disabledKeys={["profile"]}
                 className="p-3"
                 itemClasses={{
                     base: [
@@ -68,6 +65,7 @@ export default function ProfileComponent() {
                         className="h-14 gap-2 opacity-100"
                     >
                         <User
+
                             name="Junior Garcia"
                             description="@jrgarciadev"
                             classNames={{
@@ -107,7 +105,6 @@ export default function ProfileComponent() {
                                 className="z-10 outline-none w-16 py-0.5 rounded-md text-tiny group-data-[hover=true]:border-default-500 border-small border-default-300 dark:border-default-200 bg-transparent text-default-500"
                                 id="theme"
                                 name="theme"
-                                onChange={onThemeChange}
                             >
                                 <option>System</option>
                                 <option>Dark</option>
