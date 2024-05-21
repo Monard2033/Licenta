@@ -31,6 +31,9 @@ export default function NavigationBar() {
     const profile = () => {
         router.push("/profile");
     }
+    const project = () => {
+        router.push("/project");
+    }
     const setting = () => {
         router.push("/setting");
     }
@@ -44,20 +47,20 @@ export default function NavigationBar() {
     const pathName = usePathname();
     if(pathName != "/login") {
         return (
-            <Navbar isBordered className="flex justify-between items-center w-full">
-                <NavbarContent className="justify-start">
-                    <NavbarBrand className="mr-4">
-                        <Link className="hidden sm:block font-bold text-inherit" href={"/"}>Campus Virtual</Link>
+            <Navbar maxWidth="full" >
+                <NavbarContent className="flex p-0 justify-center" >
+                    <NavbarBrand className="flex items-center justify-center">
+                        <Link className="hidden sm:block font-bold" href={"/"}>Campus Virtual</Link>
                     </NavbarBrand>
-                    <NavbarContent className="hidden sm:flex gap-3">
+                    <NavbarContent justify="center"  className="flex bg-blue-100">
                         <NavbarItem>
                             <Link color="foreground" href="#">
                                 Features
                             </Link>
                         </NavbarItem>
                         <NavbarItem isActive>
-                            <Link href="#" aria-current="page" color="secondary">
-                                Customers
+                            <Link href="/utilizatori" aria-current="page" color="secondary">
+                                Utilizatori
                             </Link>
                         </NavbarItem>
                         <NavbarItem>
@@ -68,7 +71,7 @@ export default function NavigationBar() {
                     </NavbarContent>
                 </NavbarContent>
 
-                <NavbarContent as="div" className="items-center" justify="end">
+                <NavbarContent className="flex items-center" justify="end">
                     <Input
                         classNames={{
                             base: "max-w-full sm:max-w-[10rem] h-10",
@@ -116,7 +119,7 @@ export default function NavigationBar() {
                                     key="profile"
                                     className="h-14 gap-2 opacity-100"
                                 >
-                                    <p className="font-semibold">Sunteti Conectat Ca</p>
+                                    <p className="font-semibold">Sunteti Conectat Ca:</p>
                                     <p className="font-semibold">{displayUserEmail()}</p>
                                 </DropdownItem>
                                 <DropdownItem key="profile">
@@ -124,9 +127,8 @@ export default function NavigationBar() {
                                 </DropdownItem>
                                 <DropdownItem
                                     key="projects"
-                                    //endContent={<PlusIcon className="text-large" width={48} height={48}/>}
                                 >
-                                    Proiectele Tale:
+                                    <button onClick={e => project()}>Proiectele Tale</button>
                                 </DropdownItem>
                             </DropdownSection>
 
