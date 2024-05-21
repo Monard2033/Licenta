@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import styles from '@/app/profile/Dashboard.module.css';
+import styles from '@/app/profile/Profile.module.css';
 import { createClient } from '@/utils/supabase/client';
 
 const Profile = () => {

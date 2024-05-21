@@ -1,9 +1,13 @@
 import { Link } from "lucide-react";
 import {usePathname} from "next/navigation";
 import React from "react";
+import { useRouter} from "next/navigation";
 
 const LeftSidePanel=()=>{
-
+    const router = useRouter();
+    const project = () => {
+        router.push("/project");
+    }
     const pathName = usePathname();
     if(pathName != "/login")
     {
@@ -22,7 +26,9 @@ const LeftSidePanel=()=>{
                 </div>
                 <div className=" my-8 mx-2 h-full items-center justify-between">
                     <div className="my-2">
-                        <Link href="/project">Your First Project</Link>
+                       <span>
+                           <button onClick={e => project()}>First Project</button>
+                       </span>
                     </div>
                     <div>
                        <span> Second Project</span>

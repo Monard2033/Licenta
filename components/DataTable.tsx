@@ -25,7 +25,7 @@ import {VerticalDotsIcon} from "@/components/ui/VerticalDotsIcon";
 import {ChevronDownIcon} from "@/components/ui/ChevronDownIcon";
 import {SearchIcon} from "@/components/ui/SearchIcon";
 import {columns, fetchUsers, statusOptions} from "@/components/data";
-import {capitalize} from "@/components/ui/utils";
+import {capitalize} from "@/lib/utils";
 
 
 const statusColorMap: Record<string, ChipProps["color"]> = {

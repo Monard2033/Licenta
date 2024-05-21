@@ -1,17 +1,14 @@
-// ProjectPage.tsx
 import React from 'react';
-import { Project } from '@/components/ui/types';
-import styles from './ProjectPage.module.css';
-
+import styles from './Project.module.css';
+import {Project} from "@/lib/types"
 interface ProjectPageProps {
     project: Project;
 }
-
-const ProjectPage: React.FC<ProjectPageProps> = ({ project }) => {
+const Project: React.FC<ProjectPageProps> = ({ project }) => {
     return (
         <div className={styles.projectPage}>
             <header className={styles.header}>
-                <img src={project.owner.avatarUrl} alt={project.owner.name} className={styles.ownerAvatar} />
+                <img src={project.owner.avatarUrl} alt={project.owner.name} className={styles.ownerAvatar}/>
                 <h1 className={styles.projectName}>{project.name}</h1>
                 <p className={styles.projectDescription}>{project.description}</p>
             </header>
@@ -21,7 +18,8 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ project }) => {
                 <div className={styles.contributorsList}>
                     {project.contributors.map((contributor, index) => (
                         <div key={index} className={styles.contributor}>
-                            <img src={contributor.avatarUrl} alt={contributor.name} className={styles.contributorAvatar} />
+                            <img src={contributor.avatarUrl} alt={contributor.name}
+                                 className={styles.contributorAvatar}/>
                             <span>{contributor.name}</span>
                         </div>
                     ))}
@@ -44,7 +42,8 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ project }) => {
                 <ul>
                     {project.commits.map((commit) => (
                         <li key={commit.id} className={styles.commit}>
-                            <img src={commit.author.avatarUrl} alt={commit.author.name} className={styles.commitAuthorAvatar} />
+                            <img src={commit.author.avatarUrl} alt={commit.author.name}
+                                 className={styles.commitAuthorAvatar}/>
                             <span className={styles.commitMessage}>{commit.message}</span> - <span>{commit.date}</span>
                         </li>
                     ))}
@@ -54,4 +53,4 @@ const ProjectPage: React.FC<ProjectPageProps> = ({ project }) => {
     );
 };
 
-export default ProjectPage;
+export default Project;

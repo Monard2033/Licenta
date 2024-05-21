@@ -29,10 +29,10 @@ export default function NavigationBar() {
         return user?.email || null;
     }
     const profile = () => {
-        router.push("/pages/profile");
+        router.push("/profile");
     }
     const setting = () => {
-        router.push("/pages/setting");
+        router.push("/setting");
     }
 
     const handleLinkClick = () => {
