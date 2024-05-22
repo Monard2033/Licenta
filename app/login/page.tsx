@@ -31,6 +31,7 @@ export default function Login({
     "use server";
 
     const origin = headers().get("origin");
+    const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const supabase = createClient();

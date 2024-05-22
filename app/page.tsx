@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import {redirect} from "next/navigation";
 import React from "react";
 import DataTable from "@/components/DataTable";
+import Calendar from "@/components/Calendar";
 
 
 export default async function Index() {
@@ -25,12 +26,9 @@ export default async function Index() {
   console.log(data);
 
   return (
-      <main>
-      <div>
-        <div>
-          <DataTable/>
-
-        </div>
+      <main className="p-3 flex flex-col justify-between w-screen h-screen bg-red-900">
+      <div className="flex h-fit">
+        <Calendar/>
       </div>
       </main>
   );

@@ -6,6 +6,7 @@ import React from "react";
 import {cn} from "@/lib/utils";
 import LeftSidePanel from "@/components/LeftSidePanel";
 import DataTable from "@/components/DataTable";
+import Header from "@/components/Header";
 
 
 const defaultUrl = process.env.VERCEL_URL
@@ -24,12 +25,13 @@ export default function RootLayout({
             <title>University Dashboard</title>
             <link rel="icon" href="/favicon.ico"/>
         </head>
-        <body className={cn("relative h-full font-sans antialiasing")}>
+        <body className={cn("relative h-full font-sans antialiasing bg-cyan-900")}>
         <NextUIProvider>
             <main className="relative flex flex-col min-w-screen min-h-screen">
                 <NavigationBar />
-                <div className="w-full flex flex-row">
-                    <LeftSidePanel />
+                <Header/>
+                <div className="flex flex-row pl-4">
+                <LeftSidePanel />
                     {children}
                 </div>
             </main>

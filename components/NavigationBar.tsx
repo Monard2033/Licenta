@@ -25,7 +25,8 @@ export default function NavigationBar() {
         router.replace("/login");
     }
     async function displayUserEmail() {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user } } = await supabase.auth.getUser()
+        console.log(user)
         return user?.email || null;
     }
     const profile = () => {
@@ -47,12 +48,12 @@ export default function NavigationBar() {
     const pathName = usePathname();
     if(pathName != "/login") {
         return (
-            <Navbar maxWidth="full" >
-                <NavbarContent className="flex p-0 justify-center" >
-                    <NavbarBrand className="flex items-center justify-center">
+            <Navbar maxWidth="full" className="h-16 bg-primary-50">
+                <NavbarContent className="flex rounded-3xl">
+                    <NavbarBrand className="flex items-center justify-center ml-12">
                         <Link className="hidden sm:block font-bold" href={"/"}>Campus Virtual</Link>
                     </NavbarBrand>
-                    <NavbarContent justify="center"  className="flex bg-blue-100">
+                    <NavbarContent justify="center" className="flex rounded-3xl border-1 px-56 ml-12">
                         <NavbarItem>
                             <Link color="foreground" href="#">
                                 Features
