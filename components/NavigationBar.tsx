@@ -82,7 +82,7 @@ export default function NavigationBar() {
                         }}
                         placeholder="Type to search..."
                         size="sm"
-                        startContent={<SearchIcon size={18} width={undefined} height={undefined}/>}
+                        startContent={<SearchIcon size={18} width={32} height={32}/>}
                         type="search"
                     />
                     <Dropdown placement="bottom-end">
