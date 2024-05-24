@@ -7,8 +7,10 @@
   },
   "dependencies": {
     "@internationalized/date": "^3.5.4",
+    "@nextui-org/breadcrumbs": "^2.0.7",
     "@nextui-org/button": "^2.0.31",
     "@nextui-org/calendar": "^2.0.4",
+    "@nextui-org/modal": "^2.0.33",
     "@nextui-org/react": "^2.3.6",
     "@nextui-org/system": "^2.1.2",
     "@nextui-org/table": "^2.0.33",

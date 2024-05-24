@@ -27,7 +27,7 @@ export default function Calendar() {
     let nextMonthValue = {start: startOfMonth(nextMonth), end: endOfMonth(nextMonth)};
 
 
-    const CustomRadio = (props) => {
+    const CustomRadio = (props: any) => {
         const {children, ...otherProps} = props;
 
         return (

@@ -1,36 +1,40 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {usePathname} from "next/navigation";
 import {createClient} from "@/utils/supabase/client";
-import {text} from "node:stream/consumers";
+import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
 
 const Header = () => {
     const pathName = usePathname();
     const supabase = createClient()
-
-    async function getUserEmail() {
-        const {data: {user}} = await supabase.auth.getUser()
-        console.log(user);
-        return user?.email || null;
-    }
-        let text;
-        switch (pathName) {
-            case '/profile':
-                text = "This is the Profile Page"
-                break;
-            case '/project':
-                text = 'This is the Projects Page'
-                break;
-            default:
-                text = "Tablou de Bord"
+  const [title, setTitle] = useState <string>()
+    useEffect(()=> {
+        switch(pathName)
+        {
+            case "/" : setTitle("Tablou de Bord")
+                break
+            case "/profile": (async () => {
+                const { data: { user } } = await supabase.auth.getUser()
+                setTitle("Bun Venit: " + user?.email)
+            })()
+                break
 
         }
-
+    },[pathName])
     if (pathName != "/login") {
         return (
-            <header className="py-1.5 px-1.5">
-                <div className="rounded-3xl bg-blue-500 hover:mx-1 hover:my-2 h-36 px-10 transition-all duration-300 mx-4 size my-2 pt-4">
-                    <div className="flex flex-col text-3xl font-semibold w-fit">
-                        {text}
+            <header className="my-1.5 mx-1.5">
+                <div className=" flex flex-col rounded-3xl border-3 bg-blue-500 hover:mx-0.5 h-[150px] px-10 transition-all duration-300 mx-2 size my-2 pt-4">
+                    <div className="text-3xl font-semibold w-fit">
+                        {title}
+                    </div>
+                    <div className="mt-14 w-fit">
+                        <Breadcrumbs>
+                            <BreadcrumbItem>Home</BreadcrumbItem>
+                            <BreadcrumbItem>Music</BreadcrumbItem>
+                            <BreadcrumbItem>Artist</BreadcrumbItem>
+                            <BreadcrumbItem>Album</BreadcrumbItem>
+                            <BreadcrumbItem>Song</BreadcrumbItem>
+                        </Breadcrumbs>
                     </div>
                 </div>
             </header>

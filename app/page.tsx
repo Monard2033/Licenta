@@ -3,6 +3,7 @@ import {redirect} from "next/navigation";
 import React from "react";
 import DataTable from "@/components/DataTable";
 import Calendar from "@/components/Calendar";
+import Header from "@/components/Header";
 
 
 export default async function Index() {
@@ -26,9 +27,9 @@ export default async function Index() {
   console.log(data);
 
   return (
-      <main className="p-3 flex flex-col justify-between w-screen h-screen bg-red-900">
+      <main className="m-2 flex flex-col justify-between w-screen hover:my-1 hover:mx-1 transition-all duration-300">
       <div className="flex h-fit">
-        <Calendar/>
+        <DataTable />
       </div>
       </main>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
     Navbar,
     NavbarBrand,
@@ -16,8 +16,10 @@ import {
 import {SearchIcon} from "@/components/ui/SearchIcon.jsx";
 import {createClient} from "@/utils/supabase/client";
 import {usePathname, useRouter} from "next/navigation";
+import {useTheme} from "next-themes";
 
-export default function NavigationBar() {
+export default function NavigationBar(props : any) {
+    const { theme, setTheme } = useTheme()
     const supabase = createClient()
     const router = useRouter();
     const logout = () => {
@@ -42,37 +44,35 @@ export default function NavigationBar() {
     const handleLinkClick = () => {
         window.open('https://github.com/Monard2033', '_blank');
     };
-    function onThemeChange() {
 
-    }
+
     const pathName = usePathname();
     if(pathName != "/login") {
         return (
-            <Navbar maxWidth="full" className="h-16 bg-primary-50">
+            <Navbar maxWidth="full" className="h-[53px] bg-content2 border-2">
                 <NavbarContent className="flex rounded-3xl">
                     <NavbarBrand className="flex items-center justify-center ml-12">
                         <Link className="hidden sm:block font-bold" href={"/"}>Campus Virtual</Link>
                     </NavbarBrand>
-                    <NavbarContent justify="center" className="flex rounded-3xl border-1 px-56 ml-12">
+                    <NavbarContent justify="center" className="flex text-default-500 px-56 ml-12">
                         <NavbarItem>
-                            <Link color="foreground" href="#">
+                            <Link  href="#">
                                 Features
                             </Link>
                         </NavbarItem>
-                        <NavbarItem isActive>
-                            <Link href="/utilizatori" aria-current="page" color="secondary">
+                        <NavbarItem>
+                            <Link href="/utilizatori" aria-current="page">
                                 Utilizatori
                             </Link>
                         </NavbarItem>
                         <NavbarItem>
-                            <Link color="foreground" href="#">
+                            <Link  href="#">
                                 Integrations
                             </Link>
                         </NavbarItem>
                     </NavbarContent>
                 </NavbarContent>
-
-                <NavbarContent className="flex items-center" justify="end">
+                <NavbarContent aria-label={"Profile Button"} className="flex items-center" justify="end">
                     <Input
                         classNames={{
                             base: "max-w-full sm:max-w-[10rem] h-10",
@@ -91,8 +91,8 @@ export default function NavigationBar() {
                                 isBordered
                                 as="button"
                                 className="transition-transform"
-                                color="secondary"
-                                name={user.name}
+                                color={"success"}
+                                name={user?.name}
                                 size="sm"
                                 src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
                             />
@@ -132,7 +132,6 @@ export default function NavigationBar() {
                                     <button onClick={e => project()}>Proiectele Tale</button>
                                 </DropdownItem>
                             </DropdownSection>
-
                             <DropdownSection aria-label="Preferences" showDivider>
                                 <DropdownItem key="quick_search">
                                     Cautare rapida
@@ -143,18 +142,27 @@ export default function NavigationBar() {
                                     className="cursor-default"
                                     endContent={
                                         <select
-                                            className="z-10 text-primary-900 outline-none w-16 py-0.5 rounded-md text-tiny group-data-[hover=true]:border-default-500 border-small border-default-300 dark:border-default-200 bg-transparent"
+                                            className="z-10 text-primary-900 w-16 py-0.5 rounded-md text-xs border-small dark:border-default-200 bg-default-400/20 dark:bg-content2"
                                             id="theme"
                                             name="theme"
-                                            onChange={onThemeChange}
+                                            onChange={e => {
+                                            if (e.target.value === "Dark") {
+                                                setTheme("dark");
+                                            } else if (e.target.value === "Light") {
+                                                setTheme("light");
+                                            } else if (e.target.value === "System") {
+                                                setTheme("system");
+                                            }
+                                            }}
                                         >
-                                            <option>System</option>
-                                            <option>Dark</option>
-                                            <option>Light</option>
+                                            <option value="System">System</option>
+                                            <option value="Dark">Dark</option>
+                                            <option value="Light">Light</option>
                                         </select>
+
                                     }
                                 >
-                                    Theme
+                                   Theme
                                 </DropdownItem>
                             </DropdownSection>
                             <DropdownSection aria-label="Setari si Delogare">

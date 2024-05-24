@@ -20,13 +20,16 @@ import {
     ChipProps,
     SortDescriptor
 } from "@nextui-org/react";
-import {PlusIcon} from "@/components/ui/PlusIcon";
 import {VerticalDotsIcon} from "@/components/ui/VerticalDotsIcon";
 import {ChevronDownIcon} from "@/components/ui/ChevronDownIcon";
 import {SearchIcon} from "@/components/ui/SearchIcon";
-import {columns, fetchUsers, statusOptions} from "@/components/data";
+import {columns, deleteUsers, fetchUsers, statusOptions} from "@/components/data";
 import {capitalize} from "@/lib/utils";
+import InsertData from "@/components/InsertData";
 
+interface Props {
+    updateUsers: () => Promise<void>;
+}
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
     active: "success",
@@ -37,7 +40,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 const INITIAL_VISIBLE_COLUMNS = ["id", "name", "age","role", "team", "email", "status", "actions"];
 
 
-export default function App() {
+export default function DataTable() {
     const [filterValue, setFilterValue] = React.useState("");
     const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
     const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -48,14 +51,18 @@ export default function App() {
         direction: "ascending",
     });
     const [users, setUsers] = React.useState<any>([]);
-    useEffect(()=> {
-        (async ()=> {
+
+    useEffect(() => {
+        (async () => {
             setUsers(await fetchUsers())
-            console.log(users)
         })()
     }, [])
 
     const [page, setPage] = React.useState(1);
+
+    const updateUsers = async () => {
+        setUsers(await fetchUsers())
+    }
 
     const hasSearchFilter = Boolean(filterValue);
 
@@ -100,7 +107,13 @@ export default function App() {
             return sortDescriptor.direction === "descending" ? -cmp : cmp;
         });
     }, [sortDescriptor, items]);
-    const renderCell = React.useCallback((user: { [x: string]: any; avatar: any; email: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.PromiseLikeOfReactNode | null | undefined; team: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined; status: string | number | any; }, columnKey: string | number) => {
+    const renderCell = React.useCallback((user: {
+        [x: string]: any;
+        avatar: any;
+        email: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.PromiseLikeOfReactNode | null | undefined;
+        team: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined;
+        status: string | number | any;
+    }, columnKey: string | number) => {
         const cellValue = user[columnKey];
 
         switch (columnKey) {
@@ -133,13 +146,14 @@ export default function App() {
                         <Dropdown>
                             <DropdownTrigger>
                                 <Button isIconOnly size="sm" variant="light">
-                                    <VerticalDotsIcon className="text-default-300" width={undefined} height={undefined} />
+                                    <VerticalDotsIcon className="text-default-300" width={undefined}
+                                                      height={undefined}/>
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu>
                                 <DropdownItem>View</DropdownItem>
                                 <DropdownItem>Edit</DropdownItem>
-                                <DropdownItem>Delete</DropdownItem>
+                                <DropdownItem onClick={() => deleteUsers(columnKey)}>Delete</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </div>
@@ -175,20 +189,24 @@ export default function App() {
         }
     }, []);
 
-    const onClear = React.useCallback(()=>{
+    const onClear = React.useCallback(() => {
         setFilterValue("")
         setPage(1)
-    },[])
+    }, [])
 
     const topContent = React.useMemo(() => {
         return (
             <div className="flex flex-col gap-4 pt-3">
                 <div className="flex justify-between gap-3 items-end">
                     <Input
+                        classNames={{
+                            //when in dark mode make a border 1px around the input
+                            inputWrapper: "text-default-500 bg-default-500/20 dark:bg-default-500/20 border border-default-500/20",
+                        }}
                         isClearable
                         className="w-full sm:max-w-[44%]"
                         placeholder="Cauta dupa nume..."
-                        startContent={<SearchIcon width={undefined} height={undefined} />}
+                        startContent={<SearchIcon width={undefined} height={undefined}/>}
                         value={filterValue}
                         onClear={() => onClear()}
                         onValueChange={onSearchChange}
@@ -196,7 +214,7 @@ export default function App() {
                     <div className="flex gap-3">
                         <Dropdown>
                             <DropdownTrigger className="hidden sm:flex">
-                                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+                                <Button endContent={<ChevronDownIcon className="text-small"/>} variant="flat">
                                     Status
                                 </Button>
                             </DropdownTrigger>
@@ -217,7 +235,7 @@ export default function App() {
                         </Dropdown>
                         <Dropdown>
                             <DropdownTrigger className="hidden sm:flex">
-                                <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+                                <Button endContent={<ChevronDownIcon className="text-small"/>} variant="flat">
                                     Coloane
                                 </Button>
                             </DropdownTrigger>
@@ -236,15 +254,14 @@ export default function App() {
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        <Button color="primary" endContent={<PlusIcon width={"64px"} height={"64px"} />}>
-                            Adauga
-                        </Button>
+                        <InsertData updateUsers={updateUsers}/>
                     </div>
                 </div>
                 <div className="flex justify-between p-1 items-center">
-                    <span className="text-default-500 pl-1 pr-1 text-small bg-gray-300 rounded">Total utilizatori: {users.length}</span>
-                    <label className="flex items-center pr-1 pl-1 text-default-500 text-small bg-gray-300 rounded">
-                       Linii per Pagina:
+                        <span
+                            className="text-default-500 pl-1 pr-1 text-small bg-content3 rounded">Total utilizatori: {users.length}</span>
+                    <label className="flex items-center pr-1 pl-1 text-default-500 text-small bg-content3 rounded">
+                        Linii per Pagina:
                         <select
                             className="bg-transparent pl-1 outline-none justify-center text-default-500 text-sm"
                             onChange={onRowsPerPageChange}
@@ -283,12 +300,13 @@ export default function App() {
                     </span>
                     <Pagination
                         classNames={{
-                            wrapper: "hover:blue-700",
+                            wrapper: "hover:blue-700 rounded-2xl bg-blue-300 dark:bg-blue-600",
                         }}
                         className="p-2"
                         isCompact
                         showShadow
-                        color="primary"
+                        color="success"
+                        variant="light"
                         page={page}
                         total={pages}
                         onChange={setPage}

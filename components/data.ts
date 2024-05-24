@@ -1,4 +1,5 @@
 import {createClient} from "@/utils/supabase/client";
+import {ChipProps} from "@nextui-org/react";
 export const columns = [
     {name: "ID", uid: "id", sortable: true},
     {name: "NUME", uid: "name", sortable: true},
@@ -10,21 +11,45 @@ export const columns = [
     {name: "ACTIUNI", uid: "actions"},
     {name: "avatar", uid: "avatar", sortable: true},
 ];
+//export a function that return the column status from supabase
 export const statusOptions = [
-    {name: "Active", uid: "active"},
-    {name: "Paused", uid: "paused"},
+    {name: "Activ", uid: "active"},
+    {name: "Lucreaza", uid: "paused"},
     {name: "Vacation", uid: "vacation"},
 ];
+
+export const statusColorMap: Record<string, ChipProps["color"]> = {
+    active: "success",
+    paused: "danger",
+    vacation: "warning",
+};
 export const fetchUsers = async () => {
     const supabase = createClient()
     const { data, error } = await supabase
-        .from('students')
-        .select();
+        .from('users')
+        .select("*");
 
     if (error) {
         console.error('Error fetching users:', error);
-    } else {
+    }
+    else{
         console.log(data);
        return data
     }
+};
+
+export const deleteUsers = async (selectedKeys: string | number):Promise<any> => {
+    const supabase = createClient()
+    const { data, error } = await supabase
+        .from('users')
+        .delete()
+        .eq('id', 1);
+    if (error) {
+        console.error('Error deleting users:', error);
+    }
+    else{
+        console.log(data);
+        return data
+    }
+
 };

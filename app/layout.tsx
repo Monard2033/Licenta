@@ -2,6 +2,7 @@
 import "./globals.css";
 import NavigationBar from "@/components/NavigationBar";
 import {NextUIProvider} from "@nextui-org/react";
+import {ThemeProvider as NextThemesProvider} from "next-themes";
 import React from "react";
 import {cn} from "@/lib/utils";
 import LeftSidePanel from "@/components/LeftSidePanel";
@@ -22,19 +23,23 @@ export default function RootLayout({
     return (
         <html lang="en" className="h-full">
         <head>
-            <title>University Dashboard</title>
+            <title>IBM Dashboard</title>
             <link rel="icon" href="/favicon.ico"/>
         </head>
-        <body className={cn("relative h-full font-sans antialiasing bg-cyan-900")}>
+        <body className={cn("relative h-full font-sans antialiasing bg-content2")}>
         <NextUIProvider>
+            <NextThemesProvider attribute="class" defaultTheme="light">
             <main className="relative flex flex-col min-w-screen min-h-screen">
                 <NavigationBar />
                 <Header/>
-                <div className="flex flex-row pl-4">
-                <LeftSidePanel />
+                <div className="flex flex-row ml-4 grow">
+                    <div className="">
+                        <LeftSidePanel />
+                    </div>
                     {children}
                 </div>
             </main>
+            </NextThemesProvider>
         </NextUIProvider>
         </body>
         </html>
