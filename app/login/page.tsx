@@ -65,7 +65,7 @@ export default function Login({
           required
         />
         <label className="text-md" htmlFor="password">
-          Password
+          Parola
         </label>
         <input
           className="rounded-md px-4 py-2 bg-inherit border mb-6"
@@ -79,14 +79,14 @@ export default function Login({
           className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
           pendingText="Signing In..."
         >
-          Sign In
+          Conectare
         </SubmitButton>
         <SubmitButton
           formAction={signUp}
           className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
           pendingText="Signing Up..."
         >
-          Sign Up
+          Autentificare
         </SubmitButton>
         {searchParams?.message && (
           <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">

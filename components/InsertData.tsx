@@ -22,18 +22,15 @@ export default function InsertData({updateUsers}:{updateUsers: ()=> Promise<void
         role: "",
         team: "",
         status: "",
-        age: "",
     });
-    /*useEffect(() => {
-        console.log(userData)
-    }, [userData]);*/
+
     const supabase = createClient()
     const handleSubmit = async () => {
          const { data,error } = await supabase
             .from('users')
             .insert(userData)
-        console.log(error)
-        if(!error){
+        if(!error)
+        {
             alert("Adaugat")
             updateUsers()
         }
@@ -97,14 +94,6 @@ export default function InsertData({updateUsers}:{updateUsers: ()=> Promise<void
                                             return {
                                                 ...prev,
                                                 status:e.target.value
-                                            }
-                                        })
-                                    }}/>
-                                    <Input label={"Ani"} placeholder={"NULL"} onChange={(e)=>{
-                                        setUserData((prev)=>{
-                                            return {
-                                                ...prev,
-                                                age:e.target.value
                                             }
                                         })
                                     }}/>

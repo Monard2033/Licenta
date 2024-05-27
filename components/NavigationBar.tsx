@@ -28,7 +28,6 @@ export default function NavigationBar(props : any) {
     }
     async function displayUserEmail() {
         const { data: { user } } = await supabase.auth.getUser()
-        console.log(user)
         return user?.email || null;
     }
     const profile = () => {
@@ -45,14 +44,13 @@ export default function NavigationBar(props : any) {
         window.open('https://github.com/Monard2033', '_blank');
     };
 
-
     const pathName = usePathname();
     if(pathName != "/login") {
         return (
             <Navbar maxWidth="full" className="h-[53px] bg-content2 border-2">
                 <NavbarContent className="flex rounded-3xl">
                     <NavbarBrand className="flex items-center justify-center ml-12">
-                        <Link className="hidden sm:block font-bold" href={"/"}>Campus Virtual</Link>
+                        <Link className="hidden sm:block font-bold" href={"/"}>IBM DASHBOARD</Link>
                     </NavbarBrand>
                     <NavbarContent justify="center" className="flex text-default-500 px-56 ml-12">
                         <NavbarItem>

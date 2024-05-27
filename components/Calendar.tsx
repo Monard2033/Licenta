@@ -52,24 +52,6 @@ export default function Calendar() {
     return (
         <div className="flex flex-col gap-6">
             <RangeCalendar
-                bottomContent={
-                    <RadioGroup
-                        aria-label="Date precision"
-                        classNames={{
-                            base: "w-full pb-2",
-                            wrapper: "-my-2.5 py-2.5 px-3 gap-1 flex-nowrap max-w-[280px] overflow-x-scroll",
-                        }}
-                        defaultValue="exact_dates"
-                        orientation="horizontal"
-                    >
-                        <CustomRadio value="exact_dates">Exact dates</CustomRadio>
-                        <CustomRadio value="1_day">1 day</CustomRadio>
-                        <CustomRadio value="2_days">2 days</CustomRadio>
-                        <CustomRadio value="3_days">3 days</CustomRadio>
-                        <CustomRadio value="7_days">7 days</CustomRadio>
-                        <CustomRadio value="14_days">14 days</CustomRadio>
-                    </RadioGroup>
-                }
                 focusedValue={focusedValue}
                 nextButtonProps={{
                     variant: "bordered",
@@ -77,39 +59,7 @@ export default function Calendar() {
                 prevButtonProps={{
                     variant: "bordered",
                 }}
-                topContent={
-                    <ButtonGroup
-                        fullWidth
-                        className="px-3 max-w-full pb-2 pt-3 bg-content1 [&>button]:text-default-500 [&>button]:border-default-200/60"
-                        radius="full"
-                        size="sm"
-                        variant="bordered"
-                    >
-                        <Button
-                            onPress={() => {
-                                setValue(nextWeek);
-                                setFocusedValue(nextWeek.end);
-                            }}
-                        >
-                            Next week
-                        </Button>
-                        <Button
-                            onPress={() => {
-                                setValue(thisMonth);
-                                setFocusedValue(thisMonth.start);
-                            }}
-                        >
-                            This month
-                        </Button>
-                        <Button
-                            onPress={() => {
-                                setValue(nextMonthValue), setFocusedValue(nextMonthValue.start);
-                            }}
-                        >
-                            Next month
-                        </Button>
-                    </ButtonGroup>
-                }
+
                 value={value}
                 onChange={setValue}
                 onFocusChange={setFocusedValue}
@@ -117,3 +67,4 @@ export default function Calendar() {
         </div>
     );
 }
+

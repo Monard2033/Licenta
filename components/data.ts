@@ -1,13 +1,12 @@
 import {createClient} from "@/utils/supabase/client";
-import {ChipProps} from "@nextui-org/react";
-export const columns = [
+
+export const usercolumns = [
     {name: "ID", uid: "id", sortable: true},
     {name: "NUME", uid: "name", sortable: true},
     {name: "VARSTA", uid: "age", sortable: true},
     {name: "ROL", uid: "role", sortable: true},
-    {name: "ECHIPA", uid: "team"},
+    {name: "ECHIPA", uid: "team", sortable: true},
     {name: "EMAIL", uid: "email"},
-    {name: "STATUS", uid: "status", sortable: true},
     {name: "ACTIUNI", uid: "actions"},
     {name: "avatar", uid: "avatar", sortable: true},
 ];
@@ -18,22 +17,16 @@ export const statusOptions = [
     {name: "Vacation", uid: "vacation"},
 ];
 
-export const statusColorMap: Record<string, ChipProps["color"]> = {
-    active: "success",
-    paused: "danger",
-    vacation: "warning",
-};
 export const fetchUsers = async () => {
     const supabase = createClient()
     const { data, error } = await supabase
         .from('users')
-        .select("*");
+        .select('* , teams ( team_id)')
 
     if (error) {
         console.error('Error fetching users:', error);
     }
     else{
-        console.log(data);
        return data
     }
 };
@@ -53,3 +46,11 @@ export const deleteUsers = async (selectedKeys: string | number):Promise<any> =>
     }
 
 };
+export const projectcolumns = [
+    {name: "ID", uid: "id"},
+    {name: "NUME", uid: "name"},
+    {name: "Descriere", uid: "description"},
+    {name: "Statut", uid: "status"},
+    {name: "Data Inceperii" , uid: "start_date"},
+    {name: "Data Finalizarii" , uid: "end_date"},
+];

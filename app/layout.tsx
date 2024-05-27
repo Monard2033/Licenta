@@ -21,14 +21,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
     return (
-        <html lang="en" className="h-full">
+        <html>
         <head>
-            <title>IBM Dashboard</title>
+            <title>IBM Nexus: The Student Hub</title>
             <link rel="icon" href="/favicon.ico"/>
         </head>
         <body className={cn("relative h-full font-sans antialiasing bg-content2")}>
         <NextUIProvider>
-            <NextThemesProvider attribute="class" defaultTheme="light">
+            <NextThemesProvider attribute="class">
             <main className="relative flex flex-col min-w-screen min-h-screen">
                 <NavigationBar />
                 <Header/>

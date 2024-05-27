@@ -1,8 +1,9 @@
 "use client"
 import React, {useEffect, useState} from 'react';
-import styles from '@/app/profile/Profile.module.css';
+
 import { createClient } from '@/utils/supabase/client';
-import {Button, Input, user} from "@nextui-org/react";
+import {Button, Input} from "@nextui-org/react";
+
 
 const Profile = () => {
     const [userData, setUserData] = useState({
@@ -10,44 +11,57 @@ const Profile = () => {
         email: "",
         password: "",
     });
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
-        setUserData({...userData, [name]: value});
-    };
-   useEffect(() => {
-       localStorage.setItem("user", JSON.stringify(user))
-   }, [/*user*/] )
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        const {name, email, password} = userData;
-        const supabase = createClient();
-        const {data, error} = await supabase
-            .from('students')
-            .update({name,email, password})
-            .eq('name',name)
-            .eq('email',email)
-            .eq('password',password);
 
-        if (error) {
-            console.error('Error updating user:', error);
-        } else {
-            console.log('User updated successfully:', data);
+    const supabase = createClient()
+    const handleSubmit = async () => {
+
+        const { data,error } = await supabase
+            .from('users')
+            .update(userData)
+        if(!error)
+        {
+            alert("Modificat")
+            handleSubmit()
+        }
+        else{
+            alert("Eroare")
         }
     };
     return (
-        <div className={styles.container}>
-            <div className={styles.userInfo}>
+        <main className="mx-4 flex flex-col bg-content2 border-2 justify-between w-screen">
+        <div className="flex flex-col bg-content1 m-2 border-3 rounded-medium hover:my-1 hover:mx-1 transition-all duration-300 ">
+            <div className="w-[30%] border-3 rounded-medium bg-content1">
                 <h1>Editeaza Datele Personale:</h1>
-                <form onSubmit={handleSubmit} className={styles.form}>
-                    <Input label={"NUME:"} placeholder={"Nume Prenume"} name={userData.name} onInput={handleChange}/>
-                    <Input label={"EMAIL:"} placeholder={"adressa@gmail.com"} name={userData.email} onInput={handleChange}/>
-                    <Input label={"PAROLA:"} type="password" placeholder={"Parola"} name={userData.password} onInput={handleChange}/>
-                    <Button type="button" onClick={() =>handleSubmit}> Salveaza Modificarile</Button>
+                <form onSubmit={handleSubmit} className="grid gap-1">
+                    <Input label={"NUME:"} placeholder={"Nume Prenume"}  onChange={(e)=>{
+                        setUserData((prev)=>{
+                            return {
+                                ...prev,
+                                name:e.target.value
+                            }
+                        })
+                    }}/>
+                    <Input label={"EMAIL:"} placeholder={"adresa@student.upt.ro"}  onChange={(e)=>{
+                        setUserData((prev)=>{
+                            return {
+                                ...prev,
+                                email:e.target.value
+                            }
+                        })
+                    }}/>
+                    <Input label={"PAROLA:"} type="password" placeholder={"Parola"}  onChange={(e)=>{
+                        setUserData((prev)=>{
+                            return {
+                                ...prev,
+                                password:e.target.value
+                            }
+                        })
+                    }}/>
+                    <Button type="button" onClick={handleSubmit}> Salveaza Modificarile</Button>
                 </form>
             </div>
-            <div>
-
-            </div>
         </div>
+        </main>
     );
 }
 export default Profile;

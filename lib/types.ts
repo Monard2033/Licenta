@@ -2,7 +2,7 @@
 export interface Project {
     name: string;
     description: string;
-    owner: {
+    users: {
         name: string;
         avatarUrl: string;
     };

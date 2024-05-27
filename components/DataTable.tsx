@@ -23,9 +23,10 @@ import {
 import {VerticalDotsIcon} from "@/components/ui/VerticalDotsIcon";
 import {ChevronDownIcon} from "@/components/ui/ChevronDownIcon";
 import {SearchIcon} from "@/components/ui/SearchIcon";
-import {columns, deleteUsers, fetchUsers, statusOptions} from "@/components/data";
+import {usercolumns, deleteUsers, fetchUsers, statusOptions} from "@/components/data";
 import {capitalize} from "@/lib/utils";
 import InsertData from "@/components/InsertData";
+import {router} from "next/client";
 
 interface Props {
     updateUsers: () => Promise<void>;
@@ -37,7 +38,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
     vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["id", "name", "age","role", "team", "email", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["id", "name" , "team", "role", "email", "actions"];
 
 
 export default function DataTable() {
@@ -67,9 +68,8 @@ export default function DataTable() {
     const hasSearchFilter = Boolean(filterValue);
 
     const headerColumns = React.useMemo(() => {
-        if (visibleColumns === "all") return columns;
-
-        return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
+        if (visibleColumns === "all") return usercolumns;
+        return usercolumns.filter((column) => Array.from(visibleColumns).includes(column.uid));
     }, [visibleColumns]);
 
     const filteredItems = React.useMemo(() => {
@@ -113,6 +113,7 @@ export default function DataTable() {
         email: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.PromiseLikeOfReactNode | null | undefined;
         team: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined;
         status: string | number | any;
+        role: string | any;
     }, columnKey: string | number) => {
         const cellValue = user[columnKey];
 
@@ -131,7 +132,7 @@ export default function DataTable() {
                 return (
                     <div className="flex flex-col">
                         <p className="text-bold text-small capitalize">{cellValue}</p>
-                        <p className="text-bold text-tiny capitalize text-default-400">{user.team}</p>
+                        <p className="text-bold text-tiny capitalize text-default-400">{user.role}</p>
                     </div>
                 );
             case "status":
@@ -151,9 +152,9 @@ export default function DataTable() {
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu>
-                                <DropdownItem>View</DropdownItem>
+                                <DropdownItem onClick={event =>router.push(`/profile/${user.uid}`)}> View</DropdownItem>
                                 <DropdownItem>Edit</DropdownItem>
-                                <DropdownItem onClick={() => deleteUsers(columnKey)}>Delete</DropdownItem>
+                                <DropdownItem onClick={() => deleteUsers(user.uid)}>Delete</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </div>
@@ -204,7 +205,7 @@ export default function DataTable() {
                             inputWrapper: "text-default-500 bg-default-500/20 dark:bg-default-500/20 border border-default-500/20",
                         }}
                         isClearable
-                        className="w-full sm:max-w-[44%]"
+                        className="w-full sm:max-w-[44%] mx-2"
                         placeholder="Cauta dupa nume..."
                         startContent={<SearchIcon width={undefined} height={undefined}/>}
                         value={filterValue}
@@ -247,19 +248,19 @@ export default function DataTable() {
                                 selectionMode="multiple"
                                 onSelectionChange={setVisibleColumns}
                             >
-                                {columns.map((column) => (
+                                {usercolumns.map((column) => (
                                     <DropdownItem key={column.uid} className="capitalize">
                                         {capitalize(column.name)}
                                     </DropdownItem>
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        <InsertData updateUsers={updateUsers}/>
+                        {users.role !== "Student" && <InsertData updateUsers={updateUsers}/>}
                     </div>
                 </div>
                 <div className="flex justify-between p-1 items-center">
                         <span
-                            className="text-default-500 pl-1 pr-1 text-small bg-content3 rounded">Total utilizatori: {users.length}</span>
+                            className="text-default-500 ml-2 text-small bg-content3 rounded">Total utilizatori: {users.length}</span>
                     <label className="flex items-center pr-1 pl-1 text-default-500 text-small bg-content3 rounded">
                         Linii per Pagina:
                         <select
