@@ -28,11 +28,11 @@ const Settings = () => {
         }
     };
     return (
-        <main className="mx-4 flex flex-col bg-content2 border-2 justify-between w-screen">
-            <div className="flex flex-col bg-content1 m-2 border-3 rounded-medium hover:my-1 hover:mx-1 transition-all duration-300 ">
+        <main className="mx-4 flex flex-col bg-content2 border-2 justify-between w-screen h-screen">
+            <div className=" bg-content1 m-2 border-3 rounded-medium hover:my-1 hover:mx-1 transition-all duration-300 ">
                 <div className="w-[30%] border-3 rounded-medium bg-content1">
                     <h1>Editeaza Datele Personale:</h1>
-                    <form onSubmit={handleSubmit} className="grid gap-1">
+                    <form onSubmit={handleSubmit} className="grid gap-3">
                         <Input label={"NUME:"} placeholder={"Nume Prenume"}  onChange={(e)=>{
                             setUserData((prev)=>{
                                 return {

@@ -18,15 +18,20 @@ import {
     Pagination,
     Selection,
     ChipProps,
-    SortDescriptor
+    SortDescriptor, Tooltip
 } from "@nextui-org/react";
 import {VerticalDotsIcon} from "@/components/ui/VerticalDotsIcon";
 import {ChevronDownIcon} from "@/components/ui/ChevronDownIcon";
 import {SearchIcon} from "@/components/ui/SearchIcon";
-import {usercolumns, deleteUsers, fetchUsers, statusOptions} from "@/components/data";
+import {EditIcon} from "@/components/ui/EditIcon";
+import {DeleteIcon} from "@/components/ui/DeleteIcon";
+import {EyeIcon} from "@/components/ui/EyeIcon";
+import {usercolumns, fetchUsers, statusOptions} from "@/components/data";
 import {capitalize} from "@/lib/utils";
 import InsertData from "@/components/InsertData";
-import {router} from "next/client";
+import {useRouter} from "next/navigation";
+import EditData from "@/components/EditData";
+import {deleteUsers} from "@/utils/users";
 
 interface Props {
     updateUsers: () => Promise<void>;
@@ -47,19 +52,24 @@ export default function DataTable() {
     const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
     const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [users, setUsers] = React.useState<any>([]);
+    const [page, setPage] = React.useState(1);
     const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
         column: "age",
         direction: "ascending",
     });
-    const [users, setUsers] = React.useState<any>([]);
+    const router = useRouter();
 
     useEffect(() => {
         (async () => {
             setUsers(await fetchUsers())
+
         })()
     }, [])
 
-    const [page, setPage] = React.useState(1);
+    useEffect(() => {
+
+    }, [users])
 
     const updateUsers = async () => {
         setUsers(await fetchUsers())
@@ -109,6 +119,7 @@ export default function DataTable() {
     }, [sortDescriptor, items]);
     const renderCell = React.useCallback((user: {
         [x: string]: any;
+        id: any;
         avatar: any;
         email: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.PromiseLikeOfReactNode | null | undefined;
         team: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined;
@@ -152,13 +163,13 @@ export default function DataTable() {
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu>
-                                <DropdownItem onClick={event =>router.push(`/profile/${user.uid}`)}> View</DropdownItem>
-                                <DropdownItem>Edit</DropdownItem>
-                                <DropdownItem onClick={() => deleteUsers(user.uid)}>Delete</DropdownItem>
+                                <DropdownItem onClick={event =>router.push(`/profile/${user.id}`)}>Vizualizeaza</DropdownItem>
+                                <DropdownItem onClick={() => deleteUsers(user.id)}>Sterge</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </div>
                 );
+
             default:
                 return cellValue;
         }

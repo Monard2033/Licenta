@@ -31,21 +31,7 @@ export const fetchUsers = async () => {
     }
 };
 
-export const deleteUsers = async (selectedKeys: string | number):Promise<any> => {
-    const supabase = createClient()
-    const { data, error } = await supabase
-        .from('users')
-        .delete()
-        .eq('id', 1);
-    if (error) {
-        console.error('Error deleting users:', error);
-    }
-    else{
-        console.log(data);
-        return data
-    }
 
-};
 export const projectcolumns = [
     {name: "ID", uid: "id"},
     {name: "NUME", uid: "name"},

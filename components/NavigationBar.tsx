@@ -30,59 +30,17 @@ export default function NavigationBar(props : any) {
         const { data: { user } } = await supabase.auth.getUser()
         return user?.email || null;
     }
-    const profile = () => {
-        router.push("/profile");
-    }
-    const project = () => {
-        router.push("/project");
-    }
-    const setting = () => {
-        router.push("/setting");
-    }
-
-    const handleLinkClick = () => {
-        window.open('https://github.com/Monard2033', '_blank');
-    };
 
     const pathName = usePathname();
     if(pathName != "/login") {
         return (
             <Navbar maxWidth="full" className="h-[53px] bg-content2 border-2">
                 <NavbarContent className="flex rounded-3xl">
-                    <NavbarBrand className="flex items-center justify-center ml-12">
-                        <Link className="hidden sm:block font-bold" href={"/"}>IBM DASHBOARD</Link>
+                    <NavbarBrand className="flex justify-start">
+                        <Link className="text-xl font-bold hover:border-2  rounded-medium duration-100 transition-all" href={"/"}>PAGINA PRINCIPALA</Link>
                     </NavbarBrand>
-                    <NavbarContent justify="center" className="flex text-default-500 px-56 ml-12">
-                        <NavbarItem>
-                            <Link  href="#">
-                                Features
-                            </Link>
-                        </NavbarItem>
-                        <NavbarItem>
-                            <Link href="/utilizatori" aria-current="page">
-                                Utilizatori
-                            </Link>
-                        </NavbarItem>
-                        <NavbarItem>
-                            <Link  href="#">
-                                Integrations
-                            </Link>
-                        </NavbarItem>
-                    </NavbarContent>
                 </NavbarContent>
                 <NavbarContent aria-label={"Profile Button"} className="flex items-center" justify="end">
-                    <Input
-                        classNames={{
-                            base: "max-w-full sm:max-w-[10rem] h-10",
-                            mainWrapper: "h-full",
-                            input: "text-small",
-                            inputWrapper: "h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20",
-                        }}
-                        placeholder="Type to search..."
-                        size="sm"
-                        startContent={<SearchIcon size={18} width={32} height={32}/>}
-                        type="search"
-                    />
                     <Dropdown placement="bottom-end">
                         <DropdownTrigger>
                             <Avatar
@@ -122,12 +80,12 @@ export default function NavigationBar(props : any) {
                                     <p className="font-semibold">{displayUserEmail()}</p>
                                 </DropdownItem>
                                 <DropdownItem key="profile">
-                                    <button onClick={e => profile()}>Profilu Tau</button>
+                                    <button onClick={e=>router.push("/profile")}>Profilu Tau</button>
                                 </DropdownItem>
                                 <DropdownItem
                                     key="projects"
                                 >
-                                    <button onClick={e => project()}>Proiectele Tale</button>
+                                    <button onClick={e =>  router.push("/projects")}>Proiectele Tale</button>
                                 </DropdownItem>
                             </DropdownSection>
                             <DropdownSection aria-label="Preferences" showDivider>
@@ -165,7 +123,7 @@ export default function NavigationBar(props : any) {
                             </DropdownSection>
                             <DropdownSection aria-label="Setari si Delogare">
                                 <DropdownItem key="settings">
-                                    <button onClick={e => setting()}>Setari</button>
+                                    <button onClick={e =>  router.push("/settings")}>Setari</button>
                                 </DropdownItem>
                                 <DropdownItem>
                                     <button onClick={e => logout()}>Delogare</button>

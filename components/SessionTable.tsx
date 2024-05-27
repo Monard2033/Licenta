@@ -11,8 +11,8 @@ const SessionTable = () => {
         id: 0,
         grade: 0,
         attendance: '',
-        student_id: '',
-        activity_id: '',
+        student_name: '',
+        activity_name: '',
         date: '',
     }])
 

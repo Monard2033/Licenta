@@ -13,7 +13,7 @@ import {
 import {PlusIcon} from "@/components/ui/PlusIcon";
 import {createClient} from "@/utils/supabase/client";
 
-export default function InsertData({updateUsers}:{updateUsers: ()=> Promise<void>}) {
+export default function EditData({updateUsers}:{updateUsers: ()=> Promise<void>}) {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const [userData, setUserData] = useState({
         name: "",
@@ -25,7 +25,7 @@ export default function InsertData({updateUsers}:{updateUsers: ()=> Promise<void
 
     const supabase = createClient()
     const handleSubmit = async () => {
-         const { data,error } = await supabase
+        const { data,error } = await supabase
             .from('users')
             .insert(userData)
         if(!error)
@@ -36,16 +36,14 @@ export default function InsertData({updateUsers}:{updateUsers: ()=> Promise<void
     };
     return (
         <>
-            <Button color="success" variant="bordered" className="text-content1-foreground "
-                    onPress={onOpen}
-                    endContent={<PlusIcon width={"64px"} height={"64px"} />}
-            >Adauga
-            </Button>
+           <Button onPress={onOpen}>
+               Editeaza
+           </Button>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Adauga Utilizator</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Editeaza Utilizator</ModalHeader>
                             <ModalBody>
                                 <div className={"flex flex-col gap-3"}>
                                     <Input label={"Nume Prenume"} placeholder={"Text"} onChange={(e)=>{

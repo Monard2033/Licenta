@@ -1,24 +1,34 @@
 import React, {useEffect, useState} from 'react';
-import {usePathname} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {createClient} from "@/utils/supabase/client";
 import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
+import {fetchUserData, UserInterface} from "@/utils/users";
 
-const Header = () => {
+
+
+const Header = (params : any) => {
     const pathName = usePathname();
     const supabase = createClient()
-  const [title, setTitle] = useState <string>()
+    const [title, setTitle] = useState <string>()
+    const [user, setUser] = useState<UserInterface>();
     useEffect(()=> {
         switch(pathName)
         {
             case "/" : setTitle("Tablou de Bord")
                 break
-            case "/profile": (async () => {
+            case "/settings": (async () => {
                 const { data: { user } } = await supabase.auth.getUser()
                 setTitle("Bun Venit: " + user?.email)
             })()
                 break
-
+            case "/profile/[id]": (async () => {
+                const {data } = await fetchUserData(params.id)
+                setUser(data);
+                setTitle("Datele Utilizatorului: " + user?.email)
+            })()
+                break
         }
+
     },[pathName])
     if (pathName != "/login") {
         return (
@@ -29,11 +39,9 @@ const Header = () => {
                     </div>
                     <div className="mt-14 w-fit">
                         <Breadcrumbs>
-                            <BreadcrumbItem>Home</BreadcrumbItem>
-                            <BreadcrumbItem>Music</BreadcrumbItem>
-                            <BreadcrumbItem>Artist</BreadcrumbItem>
-                            <BreadcrumbItem>Album</BreadcrumbItem>
-                            <BreadcrumbItem>Song</BreadcrumbItem>
+                            <BreadcrumbItem>Pagina Principala</BreadcrumbItem>
+                            <BreadcrumbItem>Profil</BreadcrumbItem>
+                            <BreadcrumbItem>Setari</BreadcrumbItem>
                         </Breadcrumbs>
                     </div>
                 </div>
