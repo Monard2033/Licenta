@@ -1,4 +1,5 @@
 import {createClient} from "@/utils/supabase/client";
+import {expandRows} from "@tanstack/table-core";
 
 export const usercolumns = [
     {name: "ID", uid: "id", sortable: true},
@@ -6,8 +7,8 @@ export const usercolumns = [
     {name: "VARSTA", uid: "age", sortable: true},
     {name: "ROL", uid: "role", sortable: true},
     {name: "ECHIPA", uid: "team", sortable: true},
-    {name: "EMAIL", uid: "email"},
-    {name: "ACTIUNI", uid: "actions"},
+    {name: "EMAIL", uid: "email" , sortable: true},
+    {name: "ACTIUNI", uid: "actions" ,sortable: true},
     {name: "avatar", uid: "avatar", sortable: true},
 ];
 //export a function that return the column status from supabase
@@ -21,22 +22,7 @@ export const fetchUsers = async () => {
     const supabase = createClient()
     const { data, error } = await supabase
         .from('users')
-        .select('* , teams ( team_id)')
-
-    if (error) {
-        console.error('Error fetching users:', error);
-    }
-    else{
-       return data
-    }
+        .select('* , teams(team_id) ');
+        return data
 };
 
-
-export const projectcolumns = [
-    {name: "ID", uid: "id"},
-    {name: "NUME", uid: "name"},
-    {name: "Descriere", uid: "description"},
-    {name: "Statut", uid: "status"},
-    {name: "Data Inceperii" , uid: "start_date"},
-    {name: "Data Finalizarii" , uid: "end_date"},
-];

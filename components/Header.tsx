@@ -33,7 +33,7 @@ const Header = (params : any) => {
     if (pathName != "/login") {
         return (
             <header className="my-1.5 mx-1.5">
-                <div className=" flex flex-col rounded-3xl border-3 bg-blue-500 hover:mx-0.5 h-[150px] px-10 transition-all duration-300 mx-2 size my-2 pt-4">
+                <div className=" flex flex-col rounded-3xl border-3 bg-blue-500 dark:bg-blue-900 hover:mx-0.5 h-[150px] px-10 transition-all duration-300 mx-2 size my-2 pt-4">
                     <div className="text-3xl font-semibold w-fit">
                         {title}
                     </div>

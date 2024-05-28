@@ -13,37 +13,41 @@ export interface TeamInterface {
     name: string;
 }
 export interface SessionInterface{
-    id: number;
+    session_id: number;
     student_name: string;
     team_name: string;
     project_name: number;
     grade: number;
     attendance: number;
     date: string;
+    student_id: number;
 }
 
 const supabase = createClient()
 export const fetchUserData = async (userId: any) => {
     const {data, error} = await supabase
         .from('users')
-        .select('* , teams ( team_id)')
+        .select('*')
         .eq('id', userId)
+        .single();
     return {data, error}
 };
 
-export const fetchUserTeam = async (userId: any) => {
+export const fetchUserTeam = async (teamId: any) => {
     const {data, error} = await supabase
         .from('teams')
         .select('*')
-        .eq('id', userId)
+        .eq('team_id', teamId)
+        .single();
     return {data, error}
 };
 
 export const fetchUserSessions = async (userId: any) => {
     const {data, error} = await supabase
         .from('sessions')
-        .select('*, users(name), teams(name), projects(name)')
-        .eq('id', userId)
+        .select('*')
+        .eq('student_id', userId)
+        .single();
     return {data, error}
 };
 
@@ -51,7 +55,8 @@ export const fetchUserProjects = async (userId: any) => {
     const {data, error} = await supabase
         .from('projects')
         .select('*')
-        .eq('id', userId);
+        .eq('id', userId)
+        .single();
     return {data, error}
 
 };

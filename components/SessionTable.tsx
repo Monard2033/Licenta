@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
+import {getKeyValue, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow} from "@nextui-org/react";
 const supabase = createClient()
 
 
@@ -8,10 +9,12 @@ const SessionTable = () => {
     const [grades, setGrades] = useState([]);
     const [attendance, setAttendance] = useState([]);
     const [sessionData, setSessionData] = useState([{
-        id: 0,
+        session_id: 0,
         grade: 0,
         attendance: '',
         student_name: '',
+        team_name: '',
+        project_name: '',
         activity_name: '',
         date: '',
     }])
@@ -19,7 +22,7 @@ const SessionTable = () => {
     const fetchSessions = async () => {
         const { data, error } = await supabase
             .from('sessions')
-            .select('*, users(id), projects(id)');
+            .select('*');
         if (error) console.log(error);
         return data;
     };
@@ -58,64 +61,21 @@ const SessionTable = () => {
 
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Tabela de Sesiuni</h1>
-            <table className="min-w-full bg-white border border-gray-200">
-                <thead>
-                <tr>
-                    <th className="py-2 px-4 border-b">Sesiunea</th>
-                    <th className="py-2 px-4 border-b">Data</th>
-                    <th className="py-2 px-4 border-b">Nota</th>
-                    <th className="py-2 px-4 border-b">Prezenta</th>
-                    <th className="py-2 px-4 border-b">Actiuni</th>
-                </tr>
-                </thead>
-                <tbody>
-                {sessionData.map(session => (
-                    <tr key={session.id}>
-                        <td className="py-2 px-4 border-b">{session.id}</td>
-                        <td className="py-2 px-4 border-b">{session.date}</td>
-                        <td className="py-2 px-4 border-b">
-                            <input
-                                type="number"
-                                value={grades[session.id] || ''}
-                                onChange={(e)=>{
-                                    setGrades((prev)=>{
-                                        return {
-                                            ...prev,
-                                            grade:e.target.value
-                                        }
-                                    })
-                                }}
-                                className="border px-2 py-1"
-                            />
-                        </td>
-                        <td className="py-2 px-4 border-b">
-                            <input
-                                type="checkbox"
-                                checked={attendance[session.id] || false}
-                                onChange={(e)=>{
-                                    setAttendance((prev)=>{
-                                        return {
-                                            ...prev,
-                                            attendance:e.target.checked
-                                        }
-                                    })
-                                }}
-                                className="border px-2 py-1"
-                            />
-                        </td>
-                        <td className="py-2 px-4 border-b">
-                            <button
-                                onClick={() => handleSubmit(session.id)}
-                                className="bg-blue-500 text-white px-4 py-2 rounded"
-                            >
-                                Save
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+            <h1 className="flex text-2xl font-bold mb-4 justify-center">Tabela de Sesiuni</h1>
+            <Table>
+                <TableHeader>
+                    {sessionData.map((column) =>
+                        <TableColumn key={column.session_id}>{column.session_id}</TableColumn>
+                    )}
+                </TableHeader>
+                <TableBody>
+                    {sessionData.map((row) =>
+                        <TableRow key={row.session_id}>
+                            {(columnKey) => <TableCell>{getKeyValue(row, columnKey)}</TableCell>}
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
         </div>
     );
 };

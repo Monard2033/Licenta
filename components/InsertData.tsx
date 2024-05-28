@@ -36,7 +36,7 @@ export default function InsertData({updateUsers}:{updateUsers: ()=> Promise<void
     };
     return (
         <>
-            <Button color="success" variant="bordered" className="text-content1-foreground "
+            <Button color="success" variant="bordered" className="text-content1-foreground mr-4"
                     onPress={onOpen}
                     endContent={<PlusIcon width={"64px"} height={"64px"} />}
             >Adauga

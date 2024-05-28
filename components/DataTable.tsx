@@ -18,19 +18,15 @@ import {
     Pagination,
     Selection,
     ChipProps,
-    SortDescriptor, Tooltip
+    SortDescriptor,
 } from "@nextui-org/react";
 import {VerticalDotsIcon} from "@/components/ui/VerticalDotsIcon";
 import {ChevronDownIcon} from "@/components/ui/ChevronDownIcon";
 import {SearchIcon} from "@/components/ui/SearchIcon";
-import {EditIcon} from "@/components/ui/EditIcon";
-import {DeleteIcon} from "@/components/ui/DeleteIcon";
-import {EyeIcon} from "@/components/ui/EyeIcon";
 import {usercolumns, fetchUsers, statusOptions} from "@/components/data";
 import {capitalize} from "@/lib/utils";
 import InsertData from "@/components/InsertData";
 import {useRouter} from "next/navigation";
-import EditData from "@/components/EditData";
 import {deleteUsers} from "@/utils/users";
 
 interface Props {
@@ -52,7 +48,7 @@ export default function DataTable() {
     const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
     const [statusFilter, setStatusFilter] = React.useState<Selection>("all");
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [users, setUsers] = React.useState<any>([]);
+    const [users , setUsers] = React.useState<any>([]);
     const [page, setPage] = React.useState(1);
     const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
         column: "age",
@@ -63,12 +59,10 @@ export default function DataTable() {
     useEffect(() => {
         (async () => {
             setUsers(await fetchUsers())
-
         })()
     }, [])
 
     useEffect(() => {
-
     }, [users])
 
     const updateUsers = async () => {
@@ -272,7 +266,7 @@ export default function DataTable() {
                 <div className="flex justify-between p-1 items-center">
                         <span
                             className="text-default-500 ml-2 text-small bg-content3 rounded">Total utilizatori: {users.length}</span>
-                    <label className="flex items-center pr-1 pl-1 text-default-500 text-small bg-content3 rounded">
+                    <label className="flex items-center pr-1 pl-1 mr-3 text-default-500 text-small bg-content3 rounded">
                         Linii per Pagina:
                         <select
                             className="bg-transparent pl-1 outline-none justify-center text-default-500 text-sm"
@@ -335,7 +329,6 @@ export default function DataTable() {
 
     return (
         <Table
-            aria-label="Example table with custom cells, pagination and sorting"
             isHeaderSticky
             bottomContent={bottomContent}
             bottomContentPlacement="outside"
