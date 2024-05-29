@@ -11,47 +11,73 @@ import {
     Dropdown,
     DropdownMenu,
     Avatar,
-    DropdownSection, user
+    DropdownSection, user, Button, Textarea
 } from "@nextui-org/react";
 import {SearchIcon} from "@/components/ui/SearchIcon.jsx";
 import {createClient} from "@/utils/supabase/client";
 import {usePathname, useRouter} from "next/navigation";
 import {useTheme} from "next-themes";
+import {MessageIcon} from "@/components/ui/MessageIcon";
+import Chat from "@/components/Chat";
+import {CircleUserIcon, Icon} from "lucide-react";
+;
 
 export default function NavigationBar(props : any) {
-    const { theme, setTheme } = useTheme()
+    const {theme, setTheme} = useTheme()
     const supabase = createClient()
     const router = useRouter();
     const logout = () => {
         supabase.auth.signOut();
         router.replace("/login");
     }
+
     async function displayUserEmail() {
-        const { data: { user } } = await supabase.auth.getUser()
+        const {data: {user}} = await supabase.auth.getUser()
         return user?.email || null;
     }
 
+    const [isChatVisible, setIsChatVisible] = useState(false);
+
+    const toggleChat = () => {
+        setIsChatVisible(!isChatVisible);
+    };
     const pathName = usePathname();
-    if(pathName != "/login") {
+    if (pathName != "/login") {
         return (
             <Navbar maxWidth="full" className="h-[53px] bg-content2 border-2">
                 <NavbarContent className="flex rounded-3xl">
-                    <NavbarBrand className="flex justify-start">
-                        <Link className="text-xl font-bold hover:border-2  rounded-medium duration-100 transition-all" href={"/"}>PAGINA PRINCIPALA</Link>
+                    <NavbarBrand aria-label="link-pagina" className="flex justify-start">
+                        <Link className="text-xl font-bold hover:border-2 rounded-medium duration-100 transition-all"
+                              href={"/"}>PAGINA PRINCIPALA</Link>
                     </NavbarBrand>
                 </NavbarContent>
                 <NavbarContent aria-label={"Profile Button"} className="flex items-center" justify="end">
+                    <Dropdown>
+                        <DropdownTrigger>
+                            <Button aria-label="chat-button" isIconOnly radius="lg" size="lg">
+                                <MessageIcon size={"32"} height={undefined} width={undefined}/>
+                            </Button>
+                        </DropdownTrigger>
+                        <DropdownMenu aria-label="Chat Section" className=" w-80 h-full bg-content1 dark:bg-default-50">
+                           <DropdownItem aria-label="Chat" isReadOnly className="bg-content3 cursor-default ">
+                                  <Chat isVisible={setIsChatVisible} />
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
                     <Dropdown placement="bottom-end">
                         <DropdownTrigger>
-                            <Avatar
-                                isBordered
+                            <Button
+                                aria-label="profile-button"
+                                isIconOnly
                                 as="button"
                                 className="transition-transform"
-                                color={"success"}
+                                color="default"
                                 name={user?.name}
-                                size="sm"
-                                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                            />
+                                radius="full"
+                                size="lg"
+                            >
+                                <CircleUserIcon size={"40"} fill="none"/>
+                            </Button>
                         </DropdownTrigger>
                         <DropdownMenu
                             aria-label="Custom item styles"
@@ -80,18 +106,15 @@ export default function NavigationBar(props : any) {
                                     <p className="font-semibold">{displayUserEmail()}</p>
                                 </DropdownItem>
                                 <DropdownItem key="profile">
-                                    <button onClick={e=>router.push("/profile")}>Profilu Tau</button>
+                                    <button onClick={e => router.push("/profile")}>Profilu Tau</button>
                                 </DropdownItem>
                                 <DropdownItem
                                     key="projects"
                                 >
-                                    <button onClick={e =>  router.push("/projects")}>Proiectele Tale</button>
+                                    <button onClick={e => router.push("/projects")}>Proiectele Tale</button>
                                 </DropdownItem>
                             </DropdownSection>
                             <DropdownSection aria-label="Preferences" showDivider>
-                                <DropdownItem key="quick_search">
-                                    Cautare rapida
-                                </DropdownItem>
                                 <DropdownItem
                                     isReadOnly
                                     key="theme"
@@ -102,13 +125,13 @@ export default function NavigationBar(props : any) {
                                             id="theme"
                                             name="theme"
                                             onChange={e => {
-                                            if (e.target.value === "Dark") {
-                                                setTheme("dark");
-                                            } else if (e.target.value === "Light") {
-                                                setTheme("light");
-                                            } else if (e.target.value === "System") {
-                                                setTheme("system");
-                                            }
+                                                if (e.target.value === "Dark") {
+                                                    setTheme("dark");
+                                                } else if (e.target.value === "Light") {
+                                                    setTheme("light");
+                                                } else if (e.target.value === "System") {
+                                                    setTheme("system");
+                                                }
                                             }}
                                         >
                                             <option value="System">System</option>
@@ -118,12 +141,12 @@ export default function NavigationBar(props : any) {
 
                                     }
                                 >
-                                   Theme
+                                    Theme
                                 </DropdownItem>
                             </DropdownSection>
                             <DropdownSection aria-label="Setari si Delogare">
                                 <DropdownItem key="settings">
-                                    <button onClick={e =>  router.push("/settings")}>Setari</button>
+                                    <button onClick={e => router.push("/settings")}>Setari</button>
                                 </DropdownItem>
                                 <DropdownItem>
                                     <button onClick={e => logout()}>Delogare</button>

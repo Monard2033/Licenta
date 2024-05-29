@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {usePathname, useRouter} from "next/navigation";
 import {createClient} from "@/utils/supabase/client";
 import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
-import {fetchUserData, UserInterface} from "@/utils/users";
+import {fetchUsersData, UserInterface} from "@/utils/users";
 
 
 
@@ -22,8 +22,8 @@ const Header = (params : any) => {
             })()
                 break
             case "/profile/[id]": (async () => {
-                const {data } = await fetchUserData(params.id)
-                setUser(data);
+                const {data: {user} } = await fetchUsersData(params.id)
+                setUser(user);
                 setTitle("Datele Utilizatorului: " + user?.email)
             })()
                 break

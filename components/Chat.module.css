@@ -1,0 +1,53 @@
+.chat-container {
+    position: fixed;
+    right: -300px; /* Adjust based on the width of the chat */
+    top: 0;
+    width: 300px; /* Adjust as needed */
+    height: 100%;
+    background-color: white; /* Adjust as needed */
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s ease;
+    z-index: 1000;
+}
+.chat-container.visible {
+    right: 0;
+}
+.chat-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+    background-color: #f1f1f1; /* Adjust as needed */
+}
+
+.chat-body {
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.chat-footer {
+    display: flex;
+    padding: 10px;
+    background-color: #f1f1f1; /* Adjust as needed */
+}
+
+.chat-bubble {
+    background-color: #e1ffc7; /* Light green */
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: fit-content;
+    max-width: 80%;
+}
+
+.chat-bubble strong {
+    display: block;
+}
+/* Left-align messages */
+.chat-textarea {
+    text-align: left;
+}
+
+/* Right-align messages */
+.chat-textarea .own-message {
+    text-align: right;
+}

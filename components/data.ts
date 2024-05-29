@@ -1,5 +1,5 @@
+
 import {createClient} from "@/utils/supabase/client";
-import {expandRows} from "@tanstack/table-core";
 
 export const usercolumns = [
     {name: "ID", uid: "id", sortable: true},
@@ -11,7 +11,7 @@ export const usercolumns = [
     {name: "ACTIUNI", uid: "actions" ,sortable: true},
     {name: "avatar", uid: "avatar", sortable: true},
 ];
-//export a function that return the column status from supabase
+
 export const statusOptions = [
     {name: "Activ", uid: "active"},
     {name: "Lucreaza", uid: "paused"},
@@ -22,7 +22,8 @@ export const fetchUsers = async () => {
     const supabase = createClient()
     const { data, error } = await supabase
         .from('users')
-        .select('* , teams(team_id) ');
+        .select('*');
         return data
 };
+
 

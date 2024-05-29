@@ -1,4 +1,3 @@
-
 import {createClient} from "@/utils/supabase/client";
 export interface UserInterface {
     id: number;
@@ -22,9 +21,17 @@ export interface SessionInterface{
     date: string;
     student_id: number;
 }
+export interface ProjectInterface{
+    project_id: number;
+    name: string;
+    description: string;
+    status: string;
+    start_date: string;
+    end_date: string;
+}
 
 const supabase = createClient()
-export const fetchUserData = async (userId: any) => {
+export const fetchUsersData = async (userId: any) => {
     const {data, error} = await supabase
         .from('users')
         .select('*')
@@ -33,7 +40,7 @@ export const fetchUserData = async (userId: any) => {
     return {data, error}
 };
 
-export const fetchUserTeam = async (teamId: any) => {
+export const fetchUsersTeam = async (teamId: any) => {
     const {data, error} = await supabase
         .from('teams')
         .select('*')
@@ -42,20 +49,19 @@ export const fetchUserTeam = async (teamId: any) => {
     return {data, error}
 };
 
-export const fetchUserSessions = async (userId: any) => {
+export const fetchUsersSessions = async (userId: any) => {
     const {data, error} = await supabase
         .from('sessions')
         .select('*')
-        .eq('student_id', userId)
+        .eq('id', userId)
         .single();
     return {data, error}
 };
 
-export const fetchUserProjects = async (userId: any) => {
+export const fetchUsersProjects = async (userId: any) => {
     const {data, error} = await supabase
         .from('projects')
         .select('*')
-        .eq('id', userId)
         .single();
     return {data, error}
 
@@ -69,7 +75,7 @@ export const deleteUsers = async (userId: any) => {
     return {data, error}
 
 };
-export const fetchUserComments = async (userId: any) => {
+export const fetchUsersComments = async (userId: any) => {
     const {data, error} = await supabase
         .from('comments')
         .select('*, projects(id)')
