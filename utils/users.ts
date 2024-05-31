@@ -5,12 +5,15 @@ export interface UserInterface {
     email: string;
     role: string;
     team: number;
+    project_name: string;
+    members: string[];
 }
 export interface TeamInterface {
     id: number;
     team_id: number;
     name: string;
 }
+
 export interface SessionInterface{
     session_id: number;
     student_name: string;
@@ -47,6 +50,13 @@ export const fetchUsersTeam = async (teamId: any) => {
         .eq('team_id', teamId)
         .single();
     return {data, error}
+};
+export const fetchTeamMembers = async (teamId: any) => {
+    const { data, error } = await supabase
+        .from('users')
+        .select('name')
+        .eq('team', teamId);
+    return {data}
 };
 
 export const fetchUsersSessions = async (userId: any) => {

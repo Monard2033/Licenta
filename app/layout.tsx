@@ -8,11 +8,12 @@ import {cn} from "@/lib/utils";
 import LeftSidePanel from "@/components/LeftSidePanel";
 import DataTable from "@/components/DataTable";
 import Header from "@/components/Header";
+import {BrowserRouter} from "react-router-dom";
 
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+  : "http://localhost:3000/main";
 
 
 export default function RootLayout({

@@ -39,6 +39,6 @@ app.prepare().then(() => {
     const PORT = 3000;
     httpServer.listen(PORT, (err) => {
         if (err) throw err;
-        console.log(`Server running on http://localhost:${PORT}`);
+        console.log(`Server running on http://localhost:${PORT}/main`);
     });
 });

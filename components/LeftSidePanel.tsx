@@ -14,17 +14,21 @@ const LeftSidePanel=()=>{
         return <div className="flex flex-col rounded min-h-full min-w-[330px] border-2">
             <div className="flex flex-col">
                 <div
-                    className="flex flex-col m-0.5 p-2 h-48 bg-content1 hover:my-0 hover:mx-0 transition-all duration-300 rounded-medium border-3">
+                    className="flex flex-col shadow-xl m-1 p-2 h-48 bg-content1 hover:m-0.5 transition-all duration-300 rounded-medium border-3">
                     <div className="bg-blue-500 my-2 w-full h-10 rounded-medium text-xl text-white">
                         <h5 className="flex items-center mx-2 h-full">Meniul Tau</h5>
                     </div>
-                    <span className="flex flex-col">
-                        <button className="flex justify-start ml-6" onClick={e => router.push("/profile")}>Profil</button>
-                        <button className="flex justify-start ml-6" onClick={e => router.push("/sessions")}>Sesiuni</button>
+                    <span className="flex flex-col gap-1">
+                        <button className="flex justify-center hover:text-blue-800 border-1 p-1 rounded-3xl"
+                                onClick={e => router.push("/profile")}>Profil</button>
+                        <button className="flex justify-center hover:text-blue-800 border-1 p-1 rounded-3xl"
+                                onClick={e => router.push("/sessions")}>Sesiuni</button>
+                        <button className="flex justify-center hover:text-blue-800 border-1 p-1 rounded-3xl"
+                            onClick={e => router.push("/projects")}>Proiecte</button>
                     </span>
                 </div>
                 <div
-                    className="flex flex-col items-center p-2 border-3 justify-between hover:my-3 hover:mx-0 transition-all duration-300 m-0.5 mt-4 bg-content1 rounded-medium">
+                    className="flex flex-col shadow-xl p-2 border-3 justify-between hover:my-3 hover:mx-0 transition-all duration-300 m-0.5 mt-4 bg-content1 rounded-medium">
                     <div className="bg-blue-500 my-2 w-full h-10 rounded-medium text-xl text-white">
                         <h5 className="flex items-center mx-2 h-full">Navigare</h5>
                     </div>

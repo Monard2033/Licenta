@@ -47,19 +47,19 @@ export default function NavigationBar(props : any) {
             <Navbar maxWidth="full" className="h-[53px] bg-content2 border-2">
                 <NavbarContent className="flex rounded-3xl">
                     <NavbarBrand aria-label="link-pagina" className="flex justify-start">
-                        <Link className="text-xl font-bold hover:border-2 rounded-medium duration-100 transition-all"
-                              href={"/"}>PAGINA PRINCIPALA</Link>
+                        <Link className="text-xl p-1 m-2 font-bold hover:border-3 rounded-medium duration-100 transition-all"
+                              href={"/main"}>PAGINA PRINCIPALA</Link>
                     </NavbarBrand>
                 </NavbarContent>
                 <NavbarContent aria-label={"Profile Button"} className="flex items-center" justify="end">
                     <Dropdown>
                         <DropdownTrigger>
-                            <Button aria-label="chat-button" isIconOnly radius="lg" size="lg">
-                                <MessageIcon size={"32"} height={undefined} width={undefined}/>
+                            <Button aria-label="chat-button" isIconOnly radius="full" size="md">
+                                <MessageIcon size={"28"} height={undefined} width={undefined}/>
                             </Button>
                         </DropdownTrigger>
-                        <DropdownMenu aria-label="Chat Section" className=" w-80 h-full bg-content1 dark:bg-default-50">
-                           <DropdownItem aria-label="Chat" isReadOnly className="bg-content3 cursor-default ">
+                        <DropdownMenu aria-label="Chat Section"  className=" w-80 h-full bg-content1 dark:bg-default-50">
+                           <DropdownItem aria-label="Chat" isReadOnly={true} className="bg-content3 cursor-default ">
                                   <Chat isVisible={setIsChatVisible} />
                             </DropdownItem>
                         </DropdownMenu>
@@ -74,9 +74,9 @@ export default function NavigationBar(props : any) {
                                 color="default"
                                 name={user?.name}
                                 radius="full"
-                                size="lg"
+                                size="md"
                             >
-                                <CircleUserIcon size={"40"} fill="none"/>
+                                <CircleUserIcon size={"36"} fill="none"/>
                             </Button>
                         </DropdownTrigger>
                         <DropdownMenu

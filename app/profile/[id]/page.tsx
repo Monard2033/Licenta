@@ -1,20 +1,20 @@
 'use client'
 import React, {useEffect, useState} from 'react';
-
 import {
     fetchUsersData, fetchUsersProjects,
     fetchUsersSessions,
     fetchUsersTeam,
+    fetchTeamMembers,
     SessionInterface,
     TeamInterface,
-    UserInterface
+    UserInterface,
+    ProjectInterface,
 } from "@/utils/users";
-import {ProjectInterface} from "@/lib/types";
-
 
 const UserProfile = (params : any) => {
     const [user, setUser] = useState<UserInterface>();
     const [team, setTeam] = useState<TeamInterface>();
+    const [membersData, setMembersData] = useState<string>();
     const [session, setSession] = useState<SessionInterface>();
     const [project, setProject] = useState<ProjectInterface>();
 
@@ -32,6 +32,18 @@ const UserProfile = (params : any) => {
                 return console.log(data)
             }
             setTeam(data);
+        }
+    }
+    async function Members(){
+        try {
+            const {data: {user} } = await fetchUsersData(params.params.id)
+            if (user) {
+                // Concatenate names into a single string
+                const names: string = user.map((user: any) => user.name).join(', ');
+                setMembersData(names);
+            }
+        } catch (error) {
+            console.error('Error fetching members:', error);
         }
     }
     async function Session(){
@@ -53,6 +65,8 @@ const UserProfile = (params : any) => {
     useEffect(() => {
         User();
         Project();
+        Members();
+
     }, [])
     useEffect(() => {
         if(user && user.team) {
@@ -63,30 +77,35 @@ const UserProfile = (params : any) => {
     }, [user])
     if(user) {
         return (
-            <main className="mx-4 flex flex-col bg-content2 border-2 justify-between w-screen">
-                <div className="flex flex-row h-full gap-2 justify-between bg-content2 p-3 m-2 border-3 rounded-medium hover:my-1 hover:mx-1 transition-all duration-300 ">
-                    <div className="w-[30%] border-3 rounded-medium h-[30%] p-3 bg-content1">
+            <main className="mx-4 flex flex-col bg-content2 p-3 border-2 justify-between w-screen">
+                <div
+                    className="flex flex-row h-fit justify-between bg-content2 p-2 m-2 border-3 rounded-medium">
+                    <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
                         <form className="flex flex-col gap-2">
                             <span className="flex justify-center">Datele Utilizatorului:</span>
                             <span>Nume Student: {user?.name}</span>
                             <span>Email Student: {user?.email}</span>
                             <span>Tip: {user?.role}</span>
                             <span>Echipa Studentului: {user?.team}</span>
+                            <span>Proiectul Studentului: {user?.project_name}</span>
                         </form>
                     </div>
-                    <div className="w-[30%] border-3 rounded-medium h-[30%] p-3 bg-content1">
+                    <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
                         <form className="flex flex-col gap-2">
                             <span className="flex justify-center">Echipa Utilizatorului:</span>
-                            <span>Numele Echipei: {team?.name}</span>
                             <span>ID-ul Echipei: {team?.team_id}</span>
+                            <span>Numele Echipei: {team?.name}</span>
+                            <span>Membrii Echipei: {membersData}</span>
                         </form>
                     </div>
-                    <div className="w-[30%] border-3 rounded-medium h-[30%] p-3 bg-content1">
-                        <form className="flex flex-col gap-2">
+                    <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
+                        <form className="flex flex-col gap-3">
                             <span className="flex justify-center">Proiectele Utilizatorului:</span>
                             <span>Nume Proiect: {project?.name}</span>
                             <span>Descriere Proiect: {project?.description}</span>
                             <span>Statut Proiect: {project?.status}</span>
+                            <span>Data Incepere Proiect: {project?.start_date}</span>
+                            <span>Data Finalizare Proiect: {project?.end_date}</span>
                         </form>
                     </div>
                 </div>

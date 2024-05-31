@@ -1,11 +1,10 @@
 import React, {useState, useEffect, useRef} from 'react';
 import io from 'socket.io-client';
-import {Button, Textarea} from "@nextui-org/react";
+import {Button} from "@nextui-org/react";
 import {createClient} from "@/utils/supabase/client";
-
 import {SendIcon} from "@/components/ui/SendIcon"
 import {Trash} from "lucide-react";
-import {wait} from "next/dist/lib/wait";
+
 
 const socket = io('http://localhost:3000');
 
@@ -101,8 +100,7 @@ const Chat = ({isVisible}) => {
                     />
                 </div>
                 <div className="flex mt-2 flex-row border-2 rounded-2xl">
-                   <textarea
-                       rows="10"
+                   <input
                        ref={messageInputRef}
                        onFocus={handleFocus}
                        value={message}

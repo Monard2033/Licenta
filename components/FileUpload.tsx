@@ -1,11 +1,12 @@
-import {createClient} from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 import React from "react";
 
-const FileUpload = ({ projectId }: { projectId: string }) => {
-    const supabase = createClient()
+const FileUpload = ({ projectId, onFileUpload }: { projectId: string, onFileUpload?: (file: any) => void }) => {
+    const supabase = createClient();
+
     const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if(!file) return;
+        if (!file) return;
         const filePath = `projects/${projectId}/${file.name}`;
 
         const { data, error } = await supabase
@@ -17,6 +18,9 @@ const FileUpload = ({ projectId }: { projectId: string }) => {
             console.error('Error uploading file:', error);
         } else {
             console.log('File uploaded:', data);
+            if (onFileUpload) {
+                onFileUpload(file);
+            }
         }
     };
 
@@ -26,4 +30,5 @@ const FileUpload = ({ projectId }: { projectId: string }) => {
         </div>
     );
 };
+
 export default FileUpload;

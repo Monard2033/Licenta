@@ -1,12 +1,11 @@
-'use client'
-import {createClient} from "@/utils/supabase/client";
-import {useEffect, useState} from "react";
-import {usePathname} from "next/navigation";
-import {Textarea} from "@nextui-org/react";
+'use client';
+import { createClient } from "@/utils/supabase/client";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { Textarea } from "@nextui-org/react";
 
-
-const CommentSection = ({ projectId }: { projectId: number }) => {
-    const supabase = createClient()
+const CommentSection = ({ projectId, onCommentSubmit }: { projectId: number, onCommentSubmit?: (comment: any) => void }) => {
+    const supabase = createClient();
     const [newComment, setNewComment] = useState('');
     const [comments, setComments] = useState([{
         projectId: "",
@@ -21,17 +20,23 @@ const CommentSection = ({ projectId }: { projectId: number }) => {
     }, [projectId]);
 
     const fetchComments = async () => {
-        const {data, error} = await supabase
+        const { data, error } = await supabase
             .from('comments')
             .select('*')
             .eq('project_id', projectId);
-        setComments(comments);
+
+        if (error) {
+            console.error('Error fetching comments:', error);
+        } else {
+            setComments(data);
+        }
     };
 
     const handleCommentSubmit = async (e: { preventDefault: () => void; }) => {
-        const {data, error} = await supabase
+        e.preventDefault();
+        const { data, error } = await supabase
             .from('comments')
-            .insert([{project_id: projectId, content: newComment}]);
+            .insert([{ project_id: projectId, content: newComment }]);
 
         if (error) {
             console.error('Error adding comment:', error);
@@ -40,6 +45,7 @@ const CommentSection = ({ projectId }: { projectId: number }) => {
             fetchComments();
         }
     };
+
     const pathName = usePathname();
 
     return (
@@ -64,5 +70,6 @@ const CommentSection = ({ projectId }: { projectId: number }) => {
             </div>
         </div>
     );
-}
-export  default CommentSection;
+};
+
+export default CommentSection;
