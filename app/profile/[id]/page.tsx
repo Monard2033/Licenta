@@ -14,7 +14,7 @@ import {
 const UserProfile = (params : any) => {
     const [user, setUser] = useState<UserInterface>();
     const [team, setTeam] = useState<TeamInterface>();
-    const [membersData, setMembersData] = useState<string>();
+    const [membersData, setMembersData] = useState<string[]>([]);
     const [session, setSession] = useState<SessionInterface>();
     const [project, setProject] = useState<ProjectInterface>();
 
@@ -39,10 +39,8 @@ const UserProfile = (params : any) => {
             console.log(user)
             const {data } = await fetchTeamMembers(user?.team)
             if (data) {
-                // Concatenate names into a single string
-                const names: string = data.map((user: any) => user.name).join(', ');
+                const names: string[] = data.map((user: any) => user.name);
                 setMembersData(names);
-                console.log(data)
             }
         } catch (error) {
             console.error('Error fetching members:', error);
@@ -78,9 +76,9 @@ const UserProfile = (params : any) => {
     }, [user])
     if(user) {
         return (
-            <main className="mx-4 flex flex-col bg-content2 p-3 border-2 justify-between w-screen">
+            <main className="mx-4 flex flex-col bg-content2 p-1 border-2 justify-between w-screen">
                 <div
-                    className="flex flex-row h-fit justify-between bg-content2 p-2 m-2 border-3 rounded-medium">
+                    className="flex flex-row h-fit justify-between bg-content2 p-3 m-2 border-3 rounded-medium">
                     <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
                         <form className="flex flex-col gap-2">
                             <span className="flex justify-center">Datele Utilizatorului:</span>
@@ -96,10 +94,18 @@ const UserProfile = (params : any) => {
                             <span className="flex justify-center">Echipa Utilizatorului:</span>
                             <span>ID-ul Echipei: {team?.team_id}</span>
                             <span>Numele Echipei: {team?.name}</span>
-                            <span>Membrii Echipei: {membersData}</span>
+                            <div className="flex space-x-2">
+                                <span>Membrii Echipei:</span>
+                                <div className="flex flex-row border-y-2 rounded-medium space-x-2">
+                                    {membersData.map((name, index) => (
+                                        <span key={index} className="px-2 border-x-2 rounded-medium">{name}</span>
+                                    ))}
+                                </div>
+                            </div>
                         </form>
                     </div>
-                    <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
+                    <div
+                        className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
                         <form className="flex flex-col gap-3">
                             <span className="flex justify-center">Proiectele Utilizatorului:</span>
                             <span>Nume Proiect: {project?.name}</span>

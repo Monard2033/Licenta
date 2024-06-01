@@ -23,7 +23,7 @@ import {
 import {VerticalDotsIcon} from "@/components/ui/VerticalDotsIcon";
 import {ChevronDownIcon} from "@/components/ui/ChevronDownIcon";
 import {SearchIcon} from "@/components/ui/SearchIcon";
-import {usercolumns, fetchUsers, statusOptions} from "@/components/data";
+import {usercolumns, fetchUsers} from "@/components/data";
 import {capitalize} from "@/lib/utils";
 import InsertData from "@/components/InsertData";
 import {useRouter} from "next/navigation";
@@ -39,7 +39,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
     vacation: "warning",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["id", "name" , "team", "role", "email", "actions"];
+const INITIAL_VISIBLE_COLUMNS = ["id", "name" , "team","project_name", "role", "email", "actions"];
 
 
 export default function DataTable() {
@@ -84,11 +84,6 @@ export default function DataTable() {
                 user.name.toLowerCase().includes(filterValue.toLowerCase()),
             );
         }
-        if (statusFilter !== "all" && Array.from(statusFilter).length !== statusOptions.length) {
-            filteredUsers = filteredUsers.filter((user) =>
-                Array.from(statusFilter).includes(user.status),
-            );
-        }
 
         return filteredUsers;
     }, [users, filterValue, statusFilter]);
@@ -115,8 +110,8 @@ export default function DataTable() {
         [x: string]: any;
         id: any;
         avatar: any;
-        email: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.PromiseLikeOfReactNode | null | undefined;
-        team: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | React.PromiseLikeOfReactNode | null | undefined;
+        email: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> |  null | undefined;
+        team: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal |  null | undefined;
         status: string | number | any;
         role: string | any;
     }, columnKey: string | number) => {
@@ -218,27 +213,7 @@ export default function DataTable() {
                         onValueChange={onSearchChange}
                     />
                     <div className="flex gap-3">
-                        <Dropdown>
-                            <DropdownTrigger className="hidden sm:flex">
-                                <Button endContent={<ChevronDownIcon className="text-small"/>} variant="flat">
-                                    Status
-                                </Button>
-                            </DropdownTrigger>
-                            <DropdownMenu
-                                disallowEmptySelection
-                                aria-label="Table Columns"
-                                closeOnSelect={false}
-                                selectedKeys={statusFilter}
-                                selectionMode="multiple"
-                                onSelectionChange={setStatusFilter}
-                            >
-                                {statusOptions.map((status) => (
-                                    <DropdownItem key={status.uid} className="capitalize">
-                                        {capitalize(status.name)}
-                                    </DropdownItem>
-                                ))}
-                            </DropdownMenu>
-                        </Dropdown>
+
                         <Dropdown>
                             <DropdownTrigger className="hidden sm:flex">
                                 <Button endContent={<ChevronDownIcon className="text-small"/>} variant="flat">
@@ -263,10 +238,10 @@ export default function DataTable() {
                         {users.role !== "Student" && <InsertData updateUsers={updateUsers}/>}
                     </div>
                 </div>
-                <div className="flex justify-between p-1 items-center">
+                <div className="flex justify-between items-center">
                         <span
-                            className="text-default-500 ml-2 text-small bg-content3 rounded">Total utilizatori: {users.length}</span>
-                    <label className="flex items-center pr-1 pl-1 mr-3 text-default-500 text-small bg-content3 rounded">
+                            className="text-default-500 ml-3 px-1 text-small bg-content3 rounded">Total utilizatori: {users.length}</span>
+                    <label className="text-default-500 px-1 mr-3 text-small bg-content3 rounded">
                         Linii per Pagina:
                         <select
                             className="bg-transparent pl-1 outline-none justify-center text-default-500 text-sm"

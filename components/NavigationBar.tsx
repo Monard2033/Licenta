@@ -1,3 +1,4 @@
+"use client"
 import React, {useEffect, useState} from "react";
 import {
     Navbar,
@@ -13,34 +14,25 @@ import {
     Avatar,
     DropdownSection, user, Button, Textarea
 } from "@nextui-org/react";
-import {SearchIcon} from "@/components/ui/SearchIcon.jsx";
 import {createClient} from "@/utils/supabase/client";
 import {usePathname, useRouter} from "next/navigation";
 import {useTheme} from "next-themes";
 import {MessageIcon} from "@/components/ui/MessageIcon";
 import Chat from "@/components/Chat";
-import {CircleUserIcon, Icon} from "lucide-react";
+import {CircleUserIcon} from "lucide-react";
 ;
 
 export default function NavigationBar(props : any) {
     const {theme, setTheme} = useTheme()
     const supabase = createClient()
     const router = useRouter();
-    const logout = () => {
-        supabase.auth.signOut();
-        router.replace("/login");
-    }
+
 
     async function displayUserEmail() {
         const {data: {user}} = await supabase.auth.getUser()
         return user?.email || null;
     }
 
-    const [isChatVisible, setIsChatVisible] = useState(false);
-
-    const toggleChat = () => {
-        setIsChatVisible(!isChatVisible);
-    };
     const pathName = usePathname();
     if (pathName != "/login") {
         return (
@@ -149,7 +141,7 @@ export default function NavigationBar(props : any) {
                                     <button onClick={e => router.push("/settings")}>Setari</button>
                                 </DropdownItem>
                                 <DropdownItem>
-                                    <button onClick={e => logout()}>Delogare</button>
+                                    <button onClick={e => router.replace("/login")}>Delogare</button>
                                 </DropdownItem>
                             </DropdownSection>
                         </DropdownMenu>

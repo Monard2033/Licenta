@@ -1,6 +1,10 @@
+// @ts-check
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    basePath: "/main",
-};
+    /* config options here */
+}
 
-module.exports = nextConfig;
+module.exports = {
+    basePath: '/main',
+}

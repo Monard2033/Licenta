@@ -1,4 +1,3 @@
-"use client"
 import "./globals.css";
 import NavigationBar from "@/components/NavigationBar";
 import {NextUIProvider} from "@nextui-org/react";
@@ -6,21 +5,16 @@ import {ThemeProvider as NextThemesProvider} from "next-themes";
 import React from "react";
 import {cn} from "@/lib/utils";
 import LeftSidePanel from "@/components/LeftSidePanel";
-import DataTable from "@/components/DataTable";
 import Header from "@/components/Header";
-import {BrowserRouter} from "react-router-dom";
+
 
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000/main";
 
+export default function RootLayout({ children }: { children: React.ReactNode }) {
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
     return (
         <html>
         <head>
@@ -30,16 +24,16 @@ export default function RootLayout({
         <body className={cn("relative h-full font-sans antialiasing bg-content2")}>
         <NextUIProvider>
             <NextThemesProvider attribute="class">
-            <main className="relative flex flex-col min-w-screen min-h-screen">
-                <NavigationBar />
-                <Header/>
-                <div className="flex flex-row ml-4 grow">
-                    <div className="">
-                        <LeftSidePanel />
+                <main className="relative flex flex-col min-w-screen min-h-screen">
+                    <NavigationBar/>
+                    <Header/>
+                    <div className="flex flex-row ml-4 grow">
+                        <div>
+                            <LeftSidePanel/>
+                        </div>
+                        {children}
                     </div>
-                    {children}
-                </div>
-            </main>
+                </main>
             </NextThemesProvider>
         </NextUIProvider>
         </body>
