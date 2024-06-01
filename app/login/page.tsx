@@ -85,7 +85,7 @@ export default function Login({
             className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
             pendingText="Signing Up..."
         >
-          Autentificare
+          Inregistrare
         </SubmitButton>
         {searchParams?.message && (
             <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">

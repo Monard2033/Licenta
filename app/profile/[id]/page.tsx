@@ -36,11 +36,13 @@ const UserProfile = (params : any) => {
     }
     async function Members(){
         try {
-            const {data: {user} } = await fetchUsersData(params.params.id)
-            if (user) {
+            console.log(user)
+            const {data } = await fetchTeamMembers(user?.team)
+            if (data) {
                 // Concatenate names into a single string
-                const names: string = user.map((user: any) => user.name).join(', ');
+                const names: string = data.map((user: any) => user.name).join(', ');
                 setMembersData(names);
+                console.log(data)
             }
         } catch (error) {
             console.error('Error fetching members:', error);
@@ -65,15 +67,14 @@ const UserProfile = (params : any) => {
     useEffect(() => {
         User();
         Project();
-        Members();
 
     }, [])
     useEffect(() => {
         if(user && user.team) {
             Team();
             Session();
+            Members();
         }
-        console.log(team)
     }, [user])
     if(user) {
         return (

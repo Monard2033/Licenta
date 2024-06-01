@@ -58,9 +58,9 @@ export default function NavigationBar(props : any) {
                                 <MessageIcon size={"28"} height={undefined} width={undefined}/>
                             </Button>
                         </DropdownTrigger>
-                        <DropdownMenu aria-label="Chat Section"  className=" w-80 h-full bg-content1 dark:bg-default-50">
+                        <DropdownMenu aria-label="Chat Section" className=" w-[350px] h-full bg-content1 dark:bg-default-50">
                            <DropdownItem aria-label="Chat" isReadOnly={true} className="bg-content3 cursor-default ">
-                                  <Chat isVisible={setIsChatVisible} />
+                                  <Chat isVisible />
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>

@@ -32,7 +32,16 @@ export interface ProjectInterface{
     start_date: string;
     end_date: string;
 }
-
+export interface MessageInterface{
+    id: number;
+    chat_id: number;
+    author_id: number;
+    content: string;
+}
+export interface ChatUsersInterface{
+    chat_id: number;
+    user_id: number;
+}
 const supabase = createClient()
 export const fetchUsersData = async (userId: any) => {
     const {data, error} = await supabase
@@ -54,7 +63,7 @@ export const fetchUsersTeam = async (teamId: any) => {
 export const fetchTeamMembers = async (teamId: any) => {
     const { data, error } = await supabase
         .from('users')
-        .select('name')
+        .select('*')
         .eq('team', teamId);
     return {data}
 };

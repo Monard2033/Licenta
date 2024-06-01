@@ -1,45 +1,49 @@
+"use client"
 import React, {useEffect, useState} from 'react';
-import {usePathname, useRouter} from "next/navigation";
+import {useParams, usePathname, useRouter} from "next/navigation";
 import {createClient} from "@/utils/supabase/client";
 import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
 import {fetchUsersData, UserInterface} from "@/utils/users";
 import Link from "next/link";
 
-const Header = (params : any) => {
-    const pathName = usePathname();
+const Header = () => {
+    const params = useParams()
+    const router = useRouter()
+    const pathName = usePathname()
     const supabase = createClient()
     const [title, setTitle] = useState <string>()
     const [breadcrumb, setBreadcrumb] = useState<{ label: string, href: string }[]>([]);
-    const [user1, setUser] = useState<UserInterface>();
-    async function User(id: string) {
-        const { data, error } = await fetchUsersData(params.params.id);
-        if (data) {
-            setUser(data);
-        }
+    const [users, setUsers] = useState<UserInterface>();
+    const getPath = () => {
+        if(pathName.startsWith("/profile/")) return "/profile-user"
+        return pathName
     }
     useEffect(()=> {
+        const currentPathname = getPath()
         const path = location.pathname;
         const pathSegments = path.split('/').filter(segment => segment !== '');
         const generateContent = async () => {
-            let titleText: string = "";
-            switch (pathName) {
+            switch (currentPathname) {
                 case "/":
-                    titleText = "Tablou de Bord";
+                    setTitle("Tablou de Bord")
                     break;
                 case "/settings":
                     const { data: {user} } = await supabase.auth.getUser();
-                    titleText = "Bun Venit: " + user?.email;
+                    setTitle("Bun Venit " + user?.email);
                     break;
                 case "/projects":
-                    titleText = "Proiectele Tale";
+                    setTitle("Proiectele Tale")
                     break;
-                case "/main/profile/":
-                    const userId = pathSegments[1];
-                    await User(userId);
-                    titleText = "Datele Utilizatorului: " + user1?.email;
+                case "/profile-user":
+                    const { data, error } = await fetchUsersData(params.id);
+                    if (data) {
+                        setUsers(data);
+                        setTitle(`Datele Utilizatorului: ${data.name}`);
+                    } else {
+                        setTitle('Datele Utilizatorului: Not Found');
+                    }
                     break;
             }
-            setTitle(titleText);
 
             // Generate breadcrumb items based on path segments
             const breadcrumbItems = pathSegments.map((segment,index) => {
@@ -63,7 +67,7 @@ const Header = (params : any) => {
         };
 
         generateContent();
-    },[pathName])
+    },[router, pathName])
     if (pathName != "/login") {
         return (
             <header className="my-1.5 mx-1.5 p-0 m-0 border-0">
@@ -90,5 +94,4 @@ const Header = (params : any) => {
     } else
         return <></>
 };
-
 export default Header;
