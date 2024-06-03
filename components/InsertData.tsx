@@ -39,7 +39,8 @@ export default function InsertData({updateUsers}:{updateUsers: ()=> Promise<void
             <Button color="success" variant="bordered" className="text-content1-foreground mr-4"
                     onPress={onOpen}
                     endContent={<PlusIcon width={"64px"} height={"64px"} />}
-            >Adauga
+            >
+                Adauga
             </Button>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
                 <ModalContent>

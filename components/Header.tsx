@@ -34,6 +34,9 @@ const Header = () => {
                 case "/projects":
                     setTitle("Proiectele Tale")
                     break;
+                case "/sessions":
+                    setTitle("Sesiunile Tale")
+                    break;
                 case "/profile-user":
                     const { data, error } = await fetchUsersData(params.id);
                     if (data) {
@@ -45,7 +48,6 @@ const Header = () => {
                     break;
             }
 
-            // Generate breadcrumb items based on path segments
             const breadcrumbItems = pathSegments.map((segment,index) => {
                 let href = '/' + pathSegments.slice(0, index + 1).join('/');
                 switch (segment) {
