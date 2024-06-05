@@ -108,7 +108,7 @@ const UserProfile = (params : any) => {
                         className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
                         <form className="flex flex-col gap-3">
                             <span className="flex justify-center">Proiectele Utilizatorului:</span>
-                            <span>Nume Proiect: {project?.name}</span>
+                            <span>Nume Proiect: {project?.project_name}</span>
                             <span>Descriere Proiect: {project?.description}</span>
                             <span>Statut Proiect: {project?.status}</span>
                             <span>Data Incepere Proiect: {project?.start_date}</span>

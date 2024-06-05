@@ -1,29 +1,24 @@
 'use client';
 import { createClient } from "@/utils/supabase/client";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Textarea } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
+import { CommentsInterface} from "@/utils/users";
 
-const CommentSection = ({ projectId, onCommentSubmit }: { projectId: number, onCommentSubmit?: (comment: any) => void }) => {
+const CommentSection = ({ userId, taskName }: { userId: string, onCommentSubmit?: (comment: any) => void,taskName: string }) => {
     const supabase = createClient();
     const [newComment, setNewComment] = useState('');
-    const [comments, setComments] = useState([{
-        projectId: "",
-        userid: "",
-        content: "",
-        created_at: "",
-        updated_at: "",
-    }]);
+    const [comments, setComments] = useState<CommentsInterface[]>([]);
 
     useEffect(() => {
         fetchComments();
-    }, [projectId]);
+    }, [taskName]);
 
     const fetchComments = async () => {
         const { data, error } = await supabase
             .from('comments')
             .select('*')
-            .eq('project_id', projectId);
+            .eq('task_name', taskName);
 
         if (error) {
             console.error('Error fetching comments:', error);
@@ -36,35 +31,47 @@ const CommentSection = ({ projectId, onCommentSubmit }: { projectId: number, onC
         e.preventDefault();
         const { data, error } = await supabase
             .from('comments')
-            .insert([{ project_id: projectId, content: newComment }]);
+            .insert([{
+                task_name: taskName,
+                user_name: userId,
+                content: newComment,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            }]);
 
         if (error) {
             console.error('Error adding comment:', error);
         } else {
             setNewComment('');
             fetchComments();
+            ("Trimis cu succes")
         }
     };
 
     const pathName = usePathname();
 
     return (
-        <div className="comments-section">
-            <h3>Comments</h3>
-            <form onSubmit={handleCommentSubmit}>
-                <Textarea
-                    className="col-span-12 md:col-span-6 mb-6 md:mb-0 border-2 rounded-medium"
-                    disableAutosize={false}
+        <div className="comments-section flex flex-col w-full bg-content2 rounded-3xl border-1 gap-2 p-2">
+            <h3>ADAUGA UN COMENTARIU PENTRU ACEASTA SARCINA</h3>
+            <form className="flex flex-col items-end gap-2" onSubmit={handleCommentSubmit}>
+                <textarea
+                    className="border-2 rounded-medium w-full min-h-44 max-h-64 bg-inherit p-2"
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Add a comment"
+                    placeholder="     ...comentariu"
                 />
-                <button type="submit">Submit</button>
+                <Button className="w-fit justify-center" type="submit">Adauga</Button>
             </form>
             <div className="comments-list">
                 {comments.map((comment: any) => (
-                    <div key={comment.id}>
-                        {comment.content}
+                    <div key={comment.id} className="comment-item border p-2 my-2 rounded">
+                        <div className="comment-content">{comment.content}</div>
+                        <div className="comment-meta text-sm text-gray-500">
+                            <div>Task: {comment.task_name}</div>
+                            <div>User: {comment.user_name}</div>
+                            <div>Created At: {new Date(comment.created_at).toLocaleString()}</div>
+                            <div>Updated At: {new Date(comment.updated_at).toLocaleString()}</div>
+                        </div>
                     </div>
                 ))}
             </div>

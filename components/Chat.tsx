@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button } from "@nextui-org/react";
+import {Button, Textarea} from "@nextui-org/react";
 import { createClient } from "@/utils/supabase/client";
 import { SendIcon } from "@/components/ui/SendIcon";
 import { Trash } from "lucide-react";

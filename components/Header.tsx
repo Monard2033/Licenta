@@ -57,7 +57,7 @@ const Header = () => {
                         return { label: "Setarile Tale", href: "/settings" };
                     case "sessions":
                         return { label: "Sesiunile Tale", href: "/sessions" };
-                    case "projects":
+                    case "tasks":
                         return { label: "Proiectele Tale", href: "/projects" };
                     case "profile":
                         return { label: "Profil", href: "/profile" };
@@ -72,7 +72,7 @@ const Header = () => {
     },[router, pathName])
     if (pathName != "/login") {
         return (
-            <header className="my-1.5 mx-1.5 p-0 m-0 border-0">
+            <header className="sticky my-1.5 mx-1.5 p-0 m-0 border-0">
                 <div
                     className="flex flex-col rounded-3xl border-3 bg-gradient-to-l bg-blue-600 m-2 dark:bg-blue-900 hover:mx-0.5 h-[150px] px-10 transition-all duration-300 size pt-4">
                     <div className="text-3xl text-blue-100 font-semibold w-fit" >

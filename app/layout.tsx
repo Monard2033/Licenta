@@ -24,10 +24,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <body className={cn("relative h-full font-sans antialiasing bg-content2")}>
         <NextUIProvider>
             <NextThemesProvider attribute="class">
-                <main className="relative flex flex-col min-w-screen min-h-screen">
+                <main className="relative flex flex-col min-w-screen min-h-full">
                     <NavigationBar/>
+                    <div className="static">
                     <Header/>
-                    <div className="flex flex-row ml-4 grow">
+                    </div>
+                    <div className="flex flex-row ml-4 h-full min-h-screen grow">
                         <div>
                             <LeftSidePanel/>
                         </div>

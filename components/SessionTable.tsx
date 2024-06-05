@@ -11,20 +11,19 @@ import {
     TableHeader,
     TableRow,
     Tabs,
-    Tab, Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem
+    Tab, Input, getKeyValue,
+    Tooltip
 } from "@nextui-org/react";
-import {fetchUsers, sessioncolumns} from "@/components/data";
-import {VerticalDotsIcon} from "@/components/ui/VerticalDotsIcon";
-import {deleteUsers} from "@/utils/users";
-import InsertData from "@/components/InsertData";
-import EditData from "@/components/EditData";
+import { sessioncolumns} from "@/components/data";
+
 
 const supabase = createClient();
 
 const SessionTable = () => {
     const [sessionData, setSessionData] = useState<any>([]);
     const [selectedTab, setSelectedTab] = useState(1);
-    const [selectedUserId, setSelectedUserId] = useState<number>();
+    const [editingCell, setEditingCell] = useState({ row: null, column: null });
+    const [editValue, setEditValue] = useState('');
     const fetchSessionData = async (sessionId: number) => {
         const { data, error } = await supabase
             .from('sessions')  // Assuming 'users' is the table where session data is stored
@@ -37,9 +36,15 @@ const SessionTable = () => {
         return data;
     };
 
-    const updateSessions = async () => {
-        setSessionData(await fetchUsers())
-    }
+    const updateSession = async (userId:any, updatedField: any) => {
+        const { data, error } = await supabase
+            .from('sessions')
+            .update(updatedField)
+            .eq('student_id', userId);
+        if (error) console.log(error);
+        return data;
+    };
+
 
     useEffect(() => {
         const getSessionData = async () => {
@@ -52,41 +57,36 @@ const SessionTable = () => {
     const handleTabChange = (key: any) => {
         setSelectedTab(parseInt(key));
     };
-    const renderCell = React.useCallback((user: {
-        [x: string]: any;
-        id: any;
-    }, columnKey: string | number) => {
-        const cellValue = user[columnKey];
 
-        switch (columnKey) {
-            case "actions":
-                return (
-                    <div className=" flex justify-between items-center">
-                        <Dropdown>
-                            <DropdownTrigger>
-                                <Button isIconOnly size="sm" variant="light">
-                                    <VerticalDotsIcon className="text-default-300" width={undefined}
-                                                      height={undefined}/>
-                                </Button>
-                            </DropdownTrigger>
-                            <DropdownMenu>
-                                <DropdownItem onClick={(e) => deleteUsers(user.id)}>
-                                    Sterge
-                                </DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                    </div>
-                );
-
-            default:
-                return cellValue;
+    const handleDoubleClick = (rowIndex:any, columnKey:any) => {
+        if (['grade', 'attendance', 'date'].includes(columnKey)) {
+            setEditingCell({ row: rowIndex, column: columnKey });
+            setEditValue(sessionData[rowIndex][columnKey]);
         }
-    }, []);
+    };
+
+    const handleBlur = async () => {
+        const updatedData = [...sessionData];
+        // @ts-ignore
+        const updatedRow = { ...updatedData[editingCell.row], [editingCell.column]: editValue };
+        // @ts-ignore
+        updatedData[editingCell.row] = updatedRow;
+        // @ts-ignore
+        await updateSession(updatedRow.student_id, { [editingCell.column]: editValue });
+        setSessionData(updatedData);
+        setEditingCell({ row: null, column: null });
+    };
+
+
+    const handleKeyDown = async (e:any) => {
+        if (e.key === 'Enter') {
+            await handleBlur();
+        }
+    };
 
     return (
         <div className="p-4">
             <h1 className="flex text-2xl font-bold mb-4 justify-center">Tabela de Sesiuni</h1>
-            <EditData updateSessions={updateSessions}/>
             <Tabs
                 aria-label="Options"
                 selectedKey={String(selectedTab)}
@@ -95,6 +95,7 @@ const SessionTable = () => {
                 <Tab key="1" title="Session 1">
                     <Card>
                         <CardBody>
+                            <Tooltip content="Prin dublu click puteti modifica notele, prezenta si data">
                             <Table
                                 isHeaderSticky
                                 classNames={{
@@ -112,17 +113,33 @@ const SessionTable = () => {
                                     )}
                                 </TableHeader>
                                 <TableBody>
-                                    {sessionData.map((row, rowIndex) => (
+                                    {sessionData.map((row: any, rowIndex: React.Key | null | undefined) => (
                                         <TableRow key={rowIndex}>
-                                            {(columnKey) =>
-                                                <TableCell>
-                                                    {renderCell(row,columnKey)}
+                                            {sessioncolumns.map((column) => (
+                                                <TableCell key={column.uid} onDoubleClick={() => handleDoubleClick(rowIndex, column.uid)}>
+                                                    {editingCell.row === rowIndex && editingCell.column === column.uid ? (
+                                                        <Input
+                                                            value={editValue}
+                                                            onChange={(e) => setEditValue(e.target.value)}
+                                                            onBlur={handleBlur}
+                                                            onKeyDown={handleKeyDown}
+                                                            autoFocus
+                                                        />
+                                                    ) : (
+                                                        <div>
+                                                            {getKeyValue(row, column.uid)}
+                                                            {['grade', 'attendance', 'date'].includes(column.uid) && (
+                                                                <span style={{ marginLeft: 5, color: '#888' }}>(dbl-click pt edit)</span>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </TableCell>
-                                            }
+                                            ))}
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
+                        </Tooltip>
                         </CardBody>
                     </Card>
                 </Tab>
@@ -146,13 +163,28 @@ const SessionTable = () => {
                                     )}
                                 </TableHeader>
                                 <TableBody>
-                                    {sessionData.map((row, rowIndex) => (
+                                    {sessionData.map((row: any, rowIndex: React.Key | null | undefined) => (
                                         <TableRow key={rowIndex}>
-                                            {(columnKey) =>
-                                                <TableCell>
-                                                    {renderCell(row,columnKey)}
+                                            {sessioncolumns.map((column) => (
+                                                <TableCell key={column.uid} onDoubleClick={() => handleDoubleClick(rowIndex, column.uid)}>
+                                                    {editingCell.row === rowIndex && editingCell.column === column.uid ? (
+                                                        <Input
+                                                            value={editValue}
+                                                            onChange={(e) => setEditValue(e.target.value)}
+                                                            onBlur={handleBlur}
+                                                            onKeyDown={handleKeyDown}
+                                                            autoFocus
+                                                        />
+                                                    ) : (
+                                                        <div>
+                                                            {getKeyValue(row, column.uid)}
+                                                            {['grade', 'attendance', 'date'].includes(column.uid) && (
+                                                                <span style={{ marginLeft: 5, color: '#888' }}>(dbl-click pt edit)</span>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </TableCell>
-                                            }
+                                            ))}
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -180,13 +212,28 @@ const SessionTable = () => {
                                     )}
                                 </TableHeader>
                                 <TableBody>
-                                    {sessionData.map((row, rowIndex) => (
+                                    {sessionData.map((row: any, rowIndex: React.Key | null | undefined) => (
                                         <TableRow key={rowIndex}>
-                                            {(columnKey) =>
-                                                <TableCell>
-                                                    {renderCell(row,columnKey)}
+                                            {sessioncolumns.map((column) => (
+                                                <TableCell key={column.uid} onDoubleClick={() => handleDoubleClick(rowIndex, column.uid)}>
+                                                    {editingCell.row === rowIndex && editingCell.column === column.uid ? (
+                                                        <Input
+                                                            value={editValue}
+                                                            onChange={(e) => setEditValue(e.target.value)}
+                                                            onBlur={handleBlur}
+                                                            onKeyDown={handleKeyDown}
+                                                            autoFocus
+                                                        />
+                                                    ) : (
+                                                        <div>
+                                                            {getKeyValue(row, column.uid)}
+                                                            {['grade', 'attendance', 'date'].includes(column.uid) && (
+                                                                <span style={{ marginLeft: 5, color: '#888' }}>(dbl-click pt edit)</span>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </TableCell>
-                                            }
+                                            ))}
                                         </TableRow>
                                     ))}
                                 </TableBody>
