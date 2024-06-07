@@ -67,10 +67,10 @@ const CommentSection = ({ userId, taskName }: { userId: string, onCommentSubmit?
                     <div key={comment.id} className="comment-item border p-2 my-2 rounded">
                         <div className="comment-content">{comment.content}</div>
                         <div className="comment-meta text-sm text-gray-500">
-                            <div>Task: {comment.task_name}</div>
-                            <div>User: {comment.user_name}</div>
-                            <div>Created At: {new Date(comment.created_at).toLocaleString()}</div>
-                            <div>Updated At: {new Date(comment.updated_at).toLocaleString()}</div>
+                            <div>Sarcina: {comment.task_name}</div>
+                            <div>Utilizator: {comment.user_name}</div>
+                            <div>Creat La: {new Date(comment.created_at).toLocaleString()}</div>
+                            <div>Actualizat La: {new Date(comment.updated_at).toLocaleString()}</div>
                         </div>
                     </div>
                 ))}

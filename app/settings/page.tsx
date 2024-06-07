@@ -1,67 +1,104 @@
 "use client"
-import React, {useEffect, useState} from 'react';
-import styles from '@/app/profile/Profile.module.css';
+import React, { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import {Button, Input} from "@nextui-org/react";
+import { Button, Input } from '@nextui-org/react';
 
+const supabase = createClient();
 
 const Settings = () => {
     const [userData, setUserData] = useState({
-        name: "",
         email: "",
         password: "",
     });
+    const [loading, setLoading] = useState(true);
+    const [isOwnProfile, setIsOwnProfile] = useState(false);
 
-    const supabase = createClient()
-    const handleSubmit = async () => {
-
-        const { data,error } = await supabase
-            .from('users')
-            .update(userData)
-        if(!error)
-        {
-            alert("Modificat")
-            handleSubmit()
+    // Check if it's the user's own profile
+    async function checkOwnProfile() {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) {
+            console.error('Error fetching user profile:', error.message);
+            return null;
         }
-        else{
-            alert("Eroare")
+        if (user?.email) {
+            setIsOwnProfile(true);
+            return user.email;
+        }
+        return null;
+    }
+
+    // Fetch the user data
+    const fetchUserData = async (email: string) => {
+        setUserData({ ...userData, email });
+        setLoading(false);
+    };
+
+    // Handle form submission to update user credentials
+    const handleSubmit = async () => {
+        try {
+            const { data: { user }, error } = await supabase.auth.updateUser({
+                email: userData.email,
+                password: userData.password
+            });
+
+            alert('Credentials updated successfully');
+        } catch (error) {
+            alert('Error updating credentials');
         }
     };
+
+    // Effect to initialize data on component mount
+    useEffect(() => {
+        const initialize = async () => {
+            const email = await checkOwnProfile();
+            if (email) {
+                await fetchUserData(email);
+            }
+        };
+        initialize();
+    }, []);
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+
     return (
-        <main className="mx-4 flex flex-col bg-content2 border-2 justify-between w-screen h-screen">
-            <div className=" bg-content1 m-2 border-3 rounded-medium hover:my-1 hover:mx-1 transition-all duration-300 ">
-                <div className="w-[30%] border-3 rounded-medium bg-content1">
-                    <h1>Editeaza Datele Personale:</h1>
-                    <form onSubmit={handleSubmit} className="grid gap-3">
-                        <Input label={"NUME:"} placeholder={"Nume Prenume"}  onChange={(e)=>{
-                            setUserData((prev)=>{
-                                return {
-                                    ...prev,
-                                    name:e.target.value
-                                }
-                            })
-                        }}/>
-                        <Input label={"EMAIL:"} placeholder={"adresa@student.upt.ro"}  onChange={(e)=>{
-                            setUserData((prev)=>{
-                                return {
-                                    ...prev,
-                                    email:e.target.value
-                                }
-                            })
-                        }}/>
-                        <Input label={"PAROLA:"} type="password" placeholder={"Parola"}  onChange={(e)=>{
-                            setUserData((prev)=>{
-                                return {
-                                    ...prev,
-                                    password:e.target.value
-                                }
-                            })
-                        }}/>
-                        <Button type="button" onClick={handleSubmit}> Salveaza Modificarile</Button>
-                    </form>
-                </div>
+        <div>
+            <h1>Profile Page</h1>
+            <div>
+                <Input
+                    label="Email:"
+                    placeholder="email@example.com"
+                    value={userData.email}
+                    onChange={(e) => {
+                        setUserData((prev) => ({
+                            ...prev,
+                            email: e.target.value
+                        }));
+                    }}
+                />
+                {isOwnProfile && (
+                    <Input
+                        label="Password:"
+                        type="password"
+                        placeholder="Password"
+                        value={userData.password}
+                        onChange={(e) => {
+                            setUserData((prev) => ({
+                                ...prev,
+                                password: e.target.value
+                            }));
+                        }}
+                    />
+                )}
+                {isOwnProfile && (
+                    <Button type="button" onClick={handleSubmit}>
+                        Save Changes
+                    </Button>
+                )}
             </div>
-        </main>
+        </div>
     );
-}
+};
+
 export default Settings;

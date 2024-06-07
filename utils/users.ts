@@ -1,4 +1,5 @@
 import {createClient} from "@/utils/supabase/client";
+import {useEffect, useState} from "react";
 export interface UserInterface {
     id: number;
     name: string;
@@ -113,3 +114,31 @@ export const fetchUsersComments = async (userId: any) => {
         .eq('id', userId);
     return {data, error}
 };
+
+export const displayUserEmail = async () => {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error) {
+        console.error('Error fetching authenticated user:', error.message);
+        return null;
+    }
+
+    if (user) {
+        const { data: profile, error: profileError } = await supabase
+            .from('users')
+            .select('name')
+            .eq('email', user.email)
+            .single();
+
+        if (profileError) {
+            console.error('Error fetching user profile:', profileError.message);
+            return null;
+        }
+
+        if (profile) {
+            return { email: user.email, name: profile.name };
+        }
+    }
+    return null;
+};
+
+

@@ -71,7 +71,7 @@ const ProjectPage = ({ params }: { params: any }) => {
             setIsAdmin(true);
         } else { // @ts-ignore
             if (user.email.endsWith('@student.upt.ro')) {
-                        setIsAdmin(false);
+                setIsAdmin(false);
             }
         }
     };
@@ -154,7 +154,7 @@ const ProjectPage = ({ params }: { params: any }) => {
         return date.toLocaleString([], { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
     };
 
-    const handleNewTaskChange = (e) => {
+    const handleNewTaskChange = (e:any) => {
         setNewTask({ ...newTask, [e.target.name]: e.target.value });
     };
 
@@ -183,7 +183,7 @@ const ProjectPage = ({ params }: { params: any }) => {
                             <label>Selecteaza Proiect: </label>
                             <select className="bg-content3 rounded-medium"
                                     onChange={(e) => setSelectedProject(e.target.value)}>
-                                <option>Optiuni</option>
+                                <option>Alegeti:</option>
                                 {projects.map((project) => (
                                     <option key={project.project_id} value={project.name}>
                                         {project.name}
@@ -224,6 +224,7 @@ const ProjectPage = ({ params }: { params: any }) => {
                                 value={newTask.end_time}
                                 onChange={handleNewTaskChange}/>
                         </div>
+
                         <button onClick={handleCreateTask}
                                 className="mt-2 bg-blue-500 text-white py-2 px-4 rounded-medium w-fit">
                             Adauga Sarcina

@@ -1,4 +1,3 @@
-
 import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -21,7 +20,7 @@ export default function Login({
     });
 
     if (error) {
-      return redirect("/login?message=Could not authenticate user");
+      return redirect("/login?message=Utilizatorul nu a putut fi autentificat");
     }
 
     return redirect("/");
@@ -48,7 +47,7 @@ export default function Login({
       return redirect("/login?message=Could not authenticate user");
     }
 
-    return redirect("/login?message=Check email to continue sign in process");
+    return redirect("/login?message=Verifica emailul pentru a continua inregistrarea");
   };
 
   return (

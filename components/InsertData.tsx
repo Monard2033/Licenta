@@ -31,7 +31,7 @@ export default function InsertData({updateUsers}:{updateUsers: ()=> Promise<void
         if(!error)
         {
             alert("Adaugat")
-            updateUsers()
+            await updateUsers()
         }
     };
     return (

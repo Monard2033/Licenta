@@ -26,7 +26,7 @@ const SessionTable = () => {
     const [editValue, setEditValue] = useState('');
     const fetchSessionData = async (sessionId: number) => {
         const { data, error } = await supabase
-            .from('sessions')  // Assuming 'users' is the table where session data is stored
+            .from('sessions')
             .select('*')
             .eq('session_id', sessionId);
         if (error) {

@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {useParams, usePathname, useRouter} from "next/navigation";
 import {createClient} from "@/utils/supabase/client";
 import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
-import {fetchUsersData, UserInterface} from "@/utils/users";
+import {displayUserEmail, fetchUsersData, UserInterface} from "@/utils/users";
 import Link from "next/link";
 
 const Header = () => {
@@ -11,6 +11,7 @@ const Header = () => {
     const router = useRouter()
     const pathName = usePathname()
     const supabase = createClient()
+    const [user, setUser] = useState({ email: '', name: '' });
     const [title, setTitle] = useState <string>()
     const [breadcrumb, setBreadcrumb] = useState<{ label: string, href: string }[]>([]);
     const [users, setUsers] = useState<UserInterface>();
@@ -18,7 +19,16 @@ const Header = () => {
         if(pathName.startsWith("/profile/")) return "/profile-user"
         return pathName
     }
+
     useEffect(()=> {
+        const fetchData = async () => {
+            const userData = await displayUserEmail();
+            if (userData) {
+                // @ts-ignore
+                setUser(userData);
+            }
+        };
+        fetchData();
         const currentPathname = getPath()
         const path = location.pathname;
         const pathSegments = path.split('/').filter(segment => segment !== '');
@@ -28,8 +38,8 @@ const Header = () => {
                     setTitle("Tablou de Bord")
                     break;
                 case "/settings":
-                    const { data: {user} } = await supabase.auth.getUser();
-                    setTitle("Bun Venit " + user?.email);
+                    const userData = await displayUserEmail();
+                    setTitle("Bun Venit, " + (userData ? userData.name : ''));
                     break;
                 case "/projects":
                     setTitle("Proiectele Tale")
@@ -43,7 +53,7 @@ const Header = () => {
                         setUsers(data);
                         setTitle(`Datele Utilizatorului: ${data.name}`);
                     } else {
-                        setTitle('Datele Utilizatorului: Not Found');
+                        setTitle('Datele Utilizatorului: Nu a fost gasit');
                     }
                     break;
             }
