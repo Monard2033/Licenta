@@ -1,147 +1,120 @@
-"use client";
-import React, { useEffect, useState } from 'react';
-import { createClient } from '@/utils/supabase/client';
+"use client"
+import React, { useEffect, useState } from "react";
+import {Spinner} from "@nextui-org/react";
+import {fetchUser} from "@/utils/users";
 
-const Profile = (params: any) => {
-    const [user, setUser] = useState<any>({});
-    const [team, setTeam] = useState<any>(null);
+
+const Profile = () => {
+    const [user, setUser] = useState({
+        email: '',
+        name: '',
+        projects: [],
+        tasks: [],
+        comments: [],
+        team: '',
+        members: '',
+    });
+    const [team, setTeam] = useState<any>({ name: '' });
+    const [loading, setLoading] = useState(true);
     const [projects, setProjects] = useState<any[]>([]);
+    const [membersData, setMembersData] = useState<any[]>([]);
     const [tasks, setTasks] = useState<any[]>([]);
-    const [sessions, setSessions] = useState<any[]>([]);
+    const [comments, setComments] = useState<any[]>([]);
 
-    const supabase = createClient();
 
-    const fetchUser = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-
-        if (user) {
-            // Fetch user profile
-            const { data: profile, error: profileError } = await supabase
-                .from('users')
-                .select('name, team_id')
-                .eq('email', user.email)
-                .single();
-
-            if (profileError) {
-                console.error('Error fetching user profile:', profileError);
-                return;
-            }
-
-            if (profile) {
-                const userInfo = {
-                    email: user.email,
-                    name: profile.name,
-                    teamId: profile.team_id,
-                    projects: [],
-                    tasks: [],
-                    sessions: [],
-                    team: []
-
-                };
-
-                // Fetch team information
-                const { data: team, error: teamError } = await supabase
-                    .from('teams')
-                    .select('*')
-                    .eq('id', profile.team_id)
-                    .single();
-
-                if (teamError) {
-                    console.error('Error fetching team:', teamError);
-                    return;
-                }
-
-                userInfo.team = team;
-
-                // Fetch projects associated with the team
-                const { data: projects, error: projectsError } = await supabase
-                    .from('projects')
-                    .select('*')
-                    .eq('team_id', profile.team_id);
-
-                if (projectsError) {
-                    console.error('Error fetching projects:', projectsError);
-                    return;
-                }
-
-                userInfo.projects = projects;
-
-                // Fetch tasks associated with the projects
-                const projectIds = projects.map(project => project.id);
-                const { data: tasks, error: tasksError } = await supabase
-                    .from('tasks')
-                    .select('*')
-                    .in('project_id', projectIds);
-
-                if (tasksError) {
-                    console.error('Error fetching tasks:', tasksError);
-                    return;
-                }
-
-                userInfo.tasks = tasks;
-
-                // Fetch sessions associated with the user
-                const { data: sessions, error: sessionsError } = await supabase
-                    .from('sessions')
-                    .select('*')
-                    .eq('user_id', user.id);
-
-                if (sessionsError) {
-                    console.error('Error fetching sessions:', sessionsError);
-                    return;
-                }
-
-                userInfo.sessions = sessions;
-
-                // Set the combined user information
-                setUser(userInfo);
-                setTeam(team);
-                setProjects(projects);
-                setTasks(tasks);
-                setSessions(sessions);
-            }
-        }
-    };
-
+    const formatTime = (created_at: any) => {
+        const date = new Date(created_at);
+        return date.toLocaleTimeString([], {day:'2-digit', month:'2-digit', year:'2-digit', hour: '2-digit', minute: '2-digit'});
+    }
     useEffect(() => {
-        fetchUser();
+        const fetchData = async () => {
+            try {
+                // @ts-ignore
+                await fetchUser(setUser, setTeam, setProjects, setTasks, setComments, setMembersData);
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        };
+        fetchData();
+        setLoading(false)
     }, []);
 
+    if (loading) {
+        return(
+            <main className="w-full flex items-center justify-center">
+                <Spinner/>
+            </main>
+        )
+    }
     return (
-        <main className="mx-4 flex flex-col bg-content2 p-3 border-2 justify-between w-screen">
-            <div className="flex flex-row h-fit justify-between bg-content2 p-2 m-2 border-3 rounded-medium">
+        <main className="mx-4 flex flex-col bg-content2 p-3 border-2 w-screen">
+            <div className="flex flex-row h-fit justify-between bg-content1 p-2 mb-4 border-3 rounded-medium">
                 <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
-                    <form className="flex flex-col gap-2">
+                    <form id="info" className="flex flex-col gap-2">
                         <span className="flex justify-center border-3 rounded-2xl">Datele Tale:</span>
                         <span>Nume: {user?.name}</span>
                         <span>Email: {user?.email}</span>
-                        <span>Tip: {user?.role}</span>
-                        <span>Echipa Ta: {user?.team?.name}</span>
+                        <span></span>
                     </form>
                 </div>
                 <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
-                    <form className="flex flex-col gap-2">
+                    <form id="team" className="flex flex-col gap-2">
                         <span className="flex justify-center border-3 rounded-2xl">Echipa Ta:</span>
                         <span>Numele Echipei: {team?.name}</span>
-                        <span>ID-ul Echipei: {team?.id}</span>
+                        <span>ID-ul Echipei: {team?.team_id}</span>
+                        <div className="flex space-x-1">
+                            <span>Membrii Echipei:</span>
+                            <div id="team-members" className="flex flex-row border-y-2 rounded-medium space-x-2">
+                                {membersData.map((name, index) => (
+                                    <span key={index} className="px-2 border-x-2 rounded-medium">{name}</span>
+                                ))}
+                            </div>
+                        </div>
                     </form>
                 </div>
-                <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
-                    <form className="flex flex-col gap-2">
+                <div
+                    className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
+                    <form id="projects" className="flex flex-col gap-2">
                         <span className="flex justify-center border-3 rounded-2xl">Proiectele Tale:</span>
                         {projects.map(project => (
-                            <div key={project.id} className="my-2">
+                            <div key={project.id} className="flex flex-col my-2 gap-3">
                                 <span>Nume Proiect: {project.name}</span>
                                 <span>Descriere Proiect: {project.description}</span>
                                 <span>Statut Proiect: {project.status}</span>
-                                <span>Data Incepere Proiect: {new Date(project.start_date).toLocaleDateString()}</span>
-                                <span>Data Finalizare Proiect: {new Date(project.end_date).toLocaleDateString()}</span>
+                                <span>Data Incepere Proiect: {formatTime(project.start_date)}</span>
+                                <span>Data Finalizare Proiect: {formatTime(project.end_date)}</span>
                             </div>
                         ))}
                     </form>
                 </div>
             </div>
+            <div className="w-full border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
+                <form id="tasks" className="flex flex-col gap-2">
+                    <span className="flex justify-center border-3 rounded-2xl">Sarcinile Tale:</span>
+                    {tasks.map(task => (
+                        <div key={task.id} className="flex flex-col my-2">
+                            <span>Nume Sarcina: {task.task_name}</span>
+                            <span>Descriere Sarcina: {task.description}</span>
+                            <span>Data Incepere Sarcinii: {formatTime(task.start_time)}</span>
+                            <span>Data Finalizare Sarcinii: {formatTime(task.end_time)}</span>
+                        </div>
+                    ))}
+                </form>
+            </div>
+            <div className="w-full border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
+                <form id="comments" className="flex flex-col gap-2">
+                    <span className="flex justify-center border-3 rounded-2xl">Comentariile Tale:</span>
+                    {comments.map((comment, index) => (
+                        <div key={index} className="flex flex-col gap-2 my-2">
+                            <span>Sarcina: {tasks.find(task => task.task_name === comment.task_name)?.task_name || 'N/A'}</span>
+                            <span>Comentariu: {comment.content}</span>
+                            <span>Data Comentariu: {formatTime(comment.created_at)}</span>
+                        </div>
+                    ))}
+                </form>
+            </div>
         </main>
     );
-}
+};
+
 export default Profile;

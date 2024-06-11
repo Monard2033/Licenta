@@ -1,11 +1,13 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import { Button, Input } from '@nextui-org/react';
+import {Button, Input, Spinner} from '@nextui-org/react';
+import {useRouter} from "next/navigation";
 
 const supabase = createClient();
 
 const Settings = () => {
+    const router = useRouter();
     const [userData, setUserData] = useState({
         email: "",
         password: "",
@@ -15,7 +17,7 @@ const Settings = () => {
 
     // Check if it's the user's own profile
     async function checkOwnProfile() {
-        const { data: { user }, error } = await supabase.auth.getUser();
+        const {data: {user}, error} = await supabase.auth.getUser();
         if (error) {
             console.error('Error fetching user profile:', error.message);
             return null;
@@ -29,7 +31,7 @@ const Settings = () => {
 
     // Fetch the user data
     const fetchUserData = async (email: string) => {
-        setUserData({ ...userData, email });
+        setUserData({...userData, email});
         setLoading(false);
     };
 
@@ -41,12 +43,19 @@ const Settings = () => {
                 password: userData.password
             });
 
-            alert('Credentials updated successfully');
+            if (error) {
+                alert('Error updating credentials');
+            } else {
+                alert('Credentials updated successfully');
+                if (userData.email !== user?.email) {
+                    // Redirect to login page if the email was changed
+                    router.push('/login');
+                }
+            }
         } catch (error) {
             alert('Error updating credentials');
         }
     };
-
     // Effect to initialize data on component mount
     useEffect(() => {
         const initialize = async () => {
@@ -59,45 +68,54 @@ const Settings = () => {
     }, []);
 
     if (loading) {
-        return <p>Loading...</p>;
+        return (
+            <main className="w-full flex items-center justify-center">
+                <Spinner/>
+            </main>
+        )
     }
 
     return (
-        <div>
-            <h1>Profile Page</h1>
-            <div>
-                <Input
-                    label="Email:"
-                    placeholder="email@example.com"
-                    value={userData.email}
-                    onChange={(e) => {
-                        setUserData((prev) => ({
-                            ...prev,
-                            email: e.target.value
-                        }));
-                    }}
-                />
-                {isOwnProfile && (
-                    <Input
-                        label="Password:"
-                        type="password"
-                        placeholder="Password"
-                        value={userData.password}
-                        onChange={(e) => {
-                            setUserData((prev) => ({
-                                ...prev,
-                                password: e.target.value
-                            }));
-                        }}
-                    />
-                )}
-                {isOwnProfile && (
-                    <Button type="button" onClick={handleSubmit}>
-                        Save Changes
-                    </Button>
-                )}
+        <main className="mx-4 flex flex-col bg-content2 border-2 justify-between w-screen h-screen">
+            <div className="flex flex-row h-fit justify-between bg-content1 p-2 mb-4 border-3 rounded-medium">
+                <div
+                    className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
+                    <h1>Editeaza Datele Personale:</h1>
+                    <form onSubmit={handleSubmit} className="grid gap-3">
+                        <Input
+                            label="Email:"
+                            placeholder="email@example.com"
+                            value={userData.email}
+                            onChange={(e) => {
+                                setUserData((prev) => ({
+                                    ...prev,
+                                    email: e.target.value
+                                }));
+                            }}
+                        />
+                        {isOwnProfile && (
+                            <Input
+                                label="Parola:"
+                                type="password"
+                                placeholder="Parola"
+                                value={userData.password}
+                                onChange={(e) => {
+                                    setUserData((prev) => ({
+                                        ...prev,
+                                        password: e.target.value
+                                    }));
+                                }}
+                            />
+                        )}
+                        {isOwnProfile && (
+                            <Button type="button" onClick={handleSubmit}>
+                                Salveaza Modificarile
+                            </Button>
+                        )}
+                    </form>
+                </div>
             </div>
-        </div>
+        </main>
     );
 };
 
