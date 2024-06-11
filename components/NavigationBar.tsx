@@ -10,55 +10,58 @@ import {
     Dropdown,
     DropdownMenu,
     DropdownSection, Button,
+    Switch,
 } from "@nextui-org/react";
 import {createClient} from "@/utils/supabase/client";
 import {usePathname, useRouter} from "next/navigation";
 import {useTheme} from "next-themes";
 import {MessageIcon} from "@/components/ui/MessageIcon";
 import Chat from "@/components/Chat";
-import {CircleUserIcon} from "lucide-react";
+import {CircleUserIcon, MoonIcon, SunIcon} from "lucide-react";
 import {displayUserEmail} from "@/utils/users";
 
 export default function NavigationBar() {
-    const { theme, setTheme } = useTheme();
+    const {theme, setTheme} = useTheme();
     const [selectedTheme, setSelectedTheme] = useState(theme);
+    const [isSelected, setIsSelected] = React.useState(true);
     const [availableThemes, setAvailableThemes] = useState(['System', 'Dark', 'Light']);
-    const [user, setUser] = useState({ email: '', name: '' });
+    const [user, setUser] = useState({name: ''});
     const supabase = createClient()
     const router = useRouter()
 
     useEffect(() => {
-        const fetchUserTheme = async (user: { name: string; email: string }) => {
+        const fetchUserTheme = async () => {
             try {
-                const { data: userTheme, error } = await supabase
+                const {data: userTheme, error} = await supabase
                     .from('user_themes')
                     .select('theme')
-                    .eq('user_name', user.name)
+                    .eq('user_name', user?.name)
                     .single();
                 if (userTheme) {
                     setSelectedTheme(userTheme.theme);
                     setTheme(userTheme.theme);
-                    console.log(userTheme.theme)
                 }
             } catch (error) {
                 console.error('Error fetching user theme:', error);
             }
         };
-        fetchUserTheme(user);
-    }, [user, setTheme]);
+        fetchUserTheme();
+    }, [user]);
+
 
     useEffect(() => {
         // Update available themes based on the current theme
-        setAvailableThemes(['System', 'Dark', 'Light']);
-    }, [theme]);
+        setAvailableThemes(["System", "Dark", "Light"]);
+    }, [selectedTheme]);
+
     const handleThemeChange = async (e:any) => {
-        const newTheme = e.target.value.toLowerCase();
-        setTheme(newTheme);
+        const newTheme = e.target.checked ? "light" : "dark";// Example of toggling between dark and light themes
         setSelectedTheme(newTheme);
+        setTheme(newTheme)
         try {
             await supabase
                 .from('user_themes')
-                .upsert([{ id: 1, user_name: user.name, theme: newTheme, is_selected: 1 }]);
+                .upsert([{id: 1, user_name: user.name, theme: newTheme}]);
 
             console.log(`Theme changed for user ${user.name} to ${newTheme}`);
         } catch (error) {
@@ -95,8 +98,8 @@ export default function NavigationBar() {
                             </Button>
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Chat Section" className=" w-[350px] h-full bg-content1 dark:bg-default-50">
-                           <DropdownItem aria-label="Chat" isReadOnly={true} className="bg-content3 cursor-default ">
-                                  <Chat isVisible />
+                            <DropdownItem aria-label="Chat" isReadOnly={true} className="bg-content3 cursor-default ">
+                                <Chat isVisible/>
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
@@ -155,23 +158,20 @@ export default function NavigationBar() {
                                     isReadOnly
                                     key="theme"
                                     className="cursor-default"
-                                    endContent={
-                                        <select
-                                            className="z-10 text-primary-900 w-16 py-0.5 rounded-md text-xs border-small dark:border-default-200 bg-default-400/20 dark:bg-content2"
-                                            id="theme"
-                                            name="theme"
-                                            aria-label="Select theme"
-                                            onChange={(e) => handleThemeChange(e)}
-                                        >
-                                            {availableThemes.map((themeOption) => (
-                                                <option key={themeOption} value={themeOption}>
-                                                    {themeOption.charAt(0).toUpperCase() + themeOption.slice(1)}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    }
                                 >
-                                    Theme
+                                    <Switch
+                                        isSelected={isSelected}
+                                        onValueChange={setIsSelected}
+                                        checked={selectedTheme === "light"}
+                                        size="md"
+                                        color="success"
+                                        className="flex flex-row-reverse font-thin gap-2 items-center"
+                                        startContent={<SunIcon/>}
+                                        endContent={<MoonIcon/>}
+                                        onChange={handleThemeChange}
+                                    >
+                                        Schimba Tema
+                                    </Switch>
                                 </DropdownItem>
                             </DropdownSection>
                             <DropdownSection aria-label="Setari si Delogare">

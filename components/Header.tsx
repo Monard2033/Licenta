@@ -44,6 +44,9 @@ const Header = () => {
                 case "/projects":
                     setTitle("Proiectele Tale")
                     break;
+                case "/profile":
+                    setTitle("Profilul Tau")
+                    break;
                 case "/sessions":
                     setTitle("Sesiunile Tale")
                     break;
@@ -52,8 +55,6 @@ const Header = () => {
                     if (data) {
                         setUsers(data);
                         setTitle(`Datele Utilizatorului: ${data.name}`);
-                    } else {
-                        setTitle('Datele Utilizatorului: Nu a fost gasit');
                     }
                     break;
             }
@@ -64,11 +65,11 @@ const Header = () => {
                     case 'main':
                         return { label: "Pagina Principala", href: "/" };
                     case "settings":
-                        return { label: "Setarile Tale", href: "/settings" };
+                        return { label: "Setari", href: "/settings" };
                     case "sessions":
-                        return { label: "Sesiunile Tale", href: "/sessions" };
-                    case "tasks":
-                        return { label: "Proiectele Tale", href: "/projects" };
+                        return { label: "Sesiuni", href: "/sessions" };
+                    case "projects":
+                        return { label: "Proiecte", href: "/projects" };
                     case "profile":
                         return { label: "Profil", href: "/profile" };
                     default:
@@ -84,7 +85,7 @@ const Header = () => {
         return (
             <header className="sticky my-1.5 mx-1.5 p-0 m-0 border-0">
                 <div
-                    className="flex flex-col rounded-3xl border-3 bg-gradient-to-l bg-blue-600 m-2 dark:bg-blue-900 hover:mx-0.5 h-[150px] px-10 transition-all duration-300 size pt-4">
+                    className="flex flex-col rounded-3xl border-3 bg-gradient-to-bl bg-blue-600 m-2 dark:bg-blue-900 hover:mx-0.5 h-[150px] px-10 transition-all duration-300 size pt-4">
                     <div className="text-3xl text-blue-100 font-semibold w-fit" >
                         {title}
                     </div>

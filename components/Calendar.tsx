@@ -1,70 +1,69 @@
-'use client'
-import React from "react";
-import {RangeCalendar, Radio, RadioGroup, Button, ButtonGroup, cn} from "@nextui-org/react";
-import type {DateValue} from "@react-types/calendar";
-import type {RangeValue} from "@react-types/shared";
-import {today, getLocalTimeZone, startOfWeek, startOfMonth , endOfMonth , endOfWeek , } from "@internationalized/date";
-import {useLocale} from "@react-aria/i18n";
+import React, { useState, useEffect } from "react";
+import { today, getLocalTimeZone, isSameDay } from "@internationalized/date";
+import { fetchUser, UserInfo } from "@/utils/users"; // Import your fetchUser function
+import Link from 'next/link'; // Assuming you're using Next.js
 
-export default function Calendar() {
-    let [value, setValue] = React.useState<RangeValue<DateValue>>({
-        start: today(getLocalTimeZone()),
-        end: today(getLocalTimeZone()).add({weeks: 1, days: 3}),
-    });
+const getDotColor = (endDate: string | number | Date) => {
+    const daysLeft = (new Date(endDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
+    if (daysLeft <= 1) return 'bg-red-600';
+    if (daysLeft <= 2) return 'bg-yellow-600';
+    if (daysLeft <= 5) return 'bg-green-600';
+    return 'bg-gray-500'; // Default color
+};
 
-    let [focusedValue, setFocusedValue] = React.useState<DateValue>(today(getLocalTimeZone()));
+const MiniCalendar = () => {
+    const [tasks, setTasks] = useState<any[]>([]);
+    const [userInfo, setUserInfo] = useState<any>();
+    const [todayDate, setTodayDate] = useState(today(getLocalTimeZone()));
+    const currentDate = new Date();
 
-    let {locale} = useLocale();
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // @ts-ignore
+                const userInfo = await fetchUser(setUserInfo, setTasks);
+                setUserInfo(userInfo)
+                // @ts-ignore
+                setTasks(userInfo?.tasks);
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
+        };
+        fetchData();
+    }, [userInfo]);
 
-    let now = today(getLocalTimeZone());
-    let nextMonth = now.add({months: 1});
+    const formattedDate = new Intl.DateTimeFormat('ro-RO', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    }).format(currentDate).toUpperCase();
 
-    let nextWeek = {
-        start: startOfWeek(now.add({weeks: 1}), locale),
-        end: endOfWeek(now.add({weeks: 1}), locale),
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleString(['ro-RO'], { hour: 'numeric', minute: '2-digit', month: 'long', day: '2-digit' });
     };
-    let thisMonth = {start: startOfMonth(now), end: endOfMonth(now)};
-    let nextMonthValue = {start: startOfMonth(nextMonth), end: endOfMonth(nextMonth)};
-
-
-    const CustomRadio = (props: any) => {
-        const {children, ...otherProps} = props;
-
-        return (
-            <Radio
-                {...otherProps}
-                classNames={{
-                    base: cn(
-                        "flex-none m-0 h-8 bg-content1 hover:bg-content2 items-center justify-between",
-                        "cursor-pointer rounded-full border-2 border-default-200/60",
-                        "data-[selected=true]:border-primary",
-                    ),
-                    label: "text-tiny text-default-500",
-                    labelWrapper: "px-1 m-0",
-                    wrapper: "hidden",
-                }}
-            >
-                {children}
-            </Radio>
-        );
-    };
-
     return (
-        <div className="flex flex-col gap-6">
-            <RangeCalendar
-                focusedValue={focusedValue}
-                nextButtonProps={{
-                    variant: "bordered",
-                }}
-                prevButtonProps={{
-                    variant: "bordered",
-                }}
-
-                value={value}
-                onChange={setValue}
-                onFocusChange={setFocusedValue}
-            />
+        <div className="p-4 border rounded shadow-md w-80">
+            <div className="text-center mb-4">
+                <h2 className="text-xl font-bold">{formattedDate}</h2>
+            </div>
+            <div>
+                {tasks.map((task, index) => (
+                    <div key={index} className="flex items-center border-1 rounded justify-around mb-2">
+                        <Link href={"/projects"} className="text-blue-500">
+                            {task.task_name}
+                        </Link>
+                        <span className={`w-4 h-4 border-1 rounded-2xl ${getDotColor(task.end_time)} mr-3`}/>
+                        <span className="flex flex-col items-center">
+                            De la: {formatDate(task.start_time)}
+                            <span/>
+                           Pana la: {formatDate(task.end_time)}
+                        </span>
+                    </div>
+                ))}
+            </div>
         </div>
     );
-}
+};
 
+export default MiniCalendar;

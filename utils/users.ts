@@ -1,5 +1,5 @@
 import {createClient} from "@/utils/supabase/client";
-import {useEffect, useState} from "react";
+
 export interface UserInterface {
     id: number;
     name: string;
@@ -48,11 +48,20 @@ export interface MessageInterface{
     content: string;
 }
 export interface CommentsInterface{
-    task_id: string;
-    user_id: string;
+    task_name: string;
+    user_name: string;
     content: string;
     created_at: string;
     updated_at: string;
+}
+export interface UserInfo {
+    email: string | undefined;
+    name: string;
+    projects: any[];
+    tasks: any[];
+    comments: any[];
+    team: any;
+    members: string[];
 }
 
 const supabase = createClient()
@@ -90,10 +99,11 @@ export const fetchUsersSessions = async (userId: any) => {
     return {data, error}
 };
 
-export const fetchUsersProjects = async (userId: any) => {
+export const fetchUsersProjects = async (projectId: any) => {
     const {data, error} = await supabase
-        .from('tasks')
+        .from('projects')
         .select('*')
+        .eq("name",projectId)
         .single();
     return {data, error}
 
@@ -107,13 +117,148 @@ export const deleteUsers = async (userId: any) => {
     return {data, error}
 
 };
-export const fetchUsersComments = async (userId: any) => {
+export const fetchUsersComments = async (userId: string | undefined) => {
     const {data, error} = await supabase
         .from('comments')
-        .select('*, projects(id)')
-        .eq('id', userId);
+        .select('*')
+        .eq('user_name', userId);
     return {data, error}
 };
+export const fetchUserTasks = async (userId: string | undefined) => {
+    const {data, error} = await supabase
+        .from('tasks')
+        .select('*')
+        .eq('project_name', userId);
+    return {data, error}
+};
+
+export const fetchUser = async (
+    setUser: (value: {
+        email: string | undefined;
+        name: string;
+        projects: any[];
+        tasks: any[];
+        comments: any[];
+        team: string;
+        members: string[];
+    }) => void,
+    setTeam: (arg0: any) => void,
+    setProjects: (arg0: any[]) => void,
+    setTasks: (arg0: any[]) => void,
+    setComments: ((arg0: any[]) => void) | undefined,
+    setMembersData: ((arg0: string[]) => void) | undefined
+) => {
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (user) {
+        const { data: profile, error: profileError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', user.email)
+            .single();
+
+        if (profileError) {
+            console.error('Error fetching user profile:', profileError);
+            return;
+        }
+
+        if (profile) {
+            const userInfo = {
+                email: user.email,
+                name: profile.name,
+                projects: [],
+                tasks: [],
+                comments: [],
+                team: profile.team,
+                members: profile.team,
+            };
+
+            const { data: team, error: teamError } = await supabase
+                .from('teams')
+                .select('*')
+                .eq('team_id', profile.team)
+                .single();
+
+            if (teamError) {
+                console.error('Error fetching team:', teamError);
+                return;
+            }
+            userInfo.team = team;
+
+            const { data: teamMembers, error: teamMembersError } = await supabase
+                .from('users')
+                .select('*')
+                .eq('team', profile.team);
+
+            if (teamMembersError) {
+                console.error('Error fetching team members:', teamMembersError);
+                return;
+            }
+
+            const names = teamMembers.map((member) => member.name);
+            userInfo.members = names;
+
+            const { data: projects, error: projectsError } = await supabase
+                .from('projects')
+                .select('*')
+                .eq('name', profile.project_name);
+
+            if (projectsError) {
+                console.error('Error fetching projects:', projectsError);
+                return;
+            }
+            // @ts-ignore
+            userInfo.projects = projects;
+
+            const projectNames = projects.map(project => project.name);
+            const { data: tasks, error: tasksError } = await supabase
+                .from('tasks')
+                .select('*')
+                .in('project_name', projectNames);
+
+            if (tasksError) {
+                console.error('Error fetching tasks:', tasksError);
+                return;
+            }
+            // @ts-ignore
+            userInfo.tasks = tasks;
+
+            const taskNames = tasks.map(task => task.task_name);
+
+            const { data: comments, error: commentsError } = await supabase
+                .from('comments')
+                .select('*')
+                .in('task_name', taskNames);
+
+            if (commentsError) {
+                console.error('Error fetching comments:', commentsError);
+                return;
+            }
+            // @ts-ignore
+            userInfo.comments = comments;
+
+            setUser(userInfo);
+            if (setProjects && setTasks) {
+                setProjects(projects);
+                setTasks(tasks);
+            }
+            if (setTeam) {
+                setTeam(team);
+            }
+            if (setComments) {
+                setComments(comments);
+            }
+            if (setMembersData) {
+                setMembersData(names);
+            }
+            return userInfo;
+        }
+        return user;
+    }
+};
+
+
+
 
 export const displayUserEmail = async () => {
     const { data: { user }, error } = await supabase.auth.getUser();
@@ -140,5 +285,16 @@ export const displayUserEmail = async () => {
     }
     return null;
 };
-
-
+export const checkAdminRole = async () => {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    // @ts-ignore
+    if (user.email.endsWith('@gmail.com')) {
+        return true;
+    } else {
+        // @ts-ignore
+        if (user.email.endsWith('@student.upt.ro')) {
+            return false;
+        }
+    }
+    return null;
+};
