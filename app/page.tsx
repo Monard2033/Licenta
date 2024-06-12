@@ -31,6 +31,7 @@ export default function Index() {
         fetchUser();
     }, [isAdmin]);
 
+
     if (loading) {
         return (
             <main className="w-full flex items-center justify-center">
@@ -77,7 +78,6 @@ export default function Index() {
                             <button className="text-blue-600 hover:text-blue-800" onClick={e => router.push("/projects")}>Proiecte</button>
                         </div>
                     </div>
-
                 </div>
             </div>
         </main>

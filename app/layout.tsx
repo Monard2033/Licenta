@@ -12,12 +12,15 @@ const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000/main";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+    console.log("Default URL: "+ defaultUrl)
     if (defaultUrl.includes("/main")) {
+
         return (
             <html>
             <head>
-                <title>IBM Nexus: The Student Hub</title>
+                <title>IBM Nexus: Centrul Studentesc</title>
                 <link rel="icon" href="/favicon.ico"/>
             </head>
             <body className={cn("relative h-full font-sans antialiasing bg-content2")}>
@@ -41,6 +44,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </html>
         );
     } else {
-        redirect("http://localhost:3000/main")
+        return redirect("/main");
     }
 }

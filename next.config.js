@@ -6,5 +6,15 @@ const nextConfig = {
 }
 
 module.exports = {
-    basePath: '/main',
+ basePath: "/main",
+    async redirects() {
+        return [
+            {
+                source: '/',
+                destination: '/main',
+                basePath: false,
+                permanent: false, // Change to true for permanent redirect
+            },
+        ];
+    },
 }
