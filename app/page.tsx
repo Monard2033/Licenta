@@ -50,7 +50,7 @@ export default function Index() {
                     <DataTable/>
                 </div>
             )}
-            <div className="flex flex-col p-2 min-h-fit h-fit shadow-xl bg-content1 m-2 border-3 rounded-medium hover:mx-1 transition-all duration-300">
+            <div className="flex flex-col p-2 h-fit shadow-xl bg-content1 m-2 border-3 rounded-medium hover:mx-1 transition-all duration-300 ">
                 <div className="bg-blue-500 my-1 w-full h-12 rounded-medium text-xl text-white">
                     <h5 className="flex items-center mx-2 h-full">
                         Pagini Accesibile Pentru Student

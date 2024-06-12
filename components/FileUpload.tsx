@@ -56,7 +56,7 @@ const FileUpload = ({ userId, onFileUpload, taskName }: {
                 {isDragActive ? (
                     <p>Arunca fisierele aici...</p>
                 ) : (
-                    <p>Drag 'n' drop some files here, or click to select files</p>
+                    <p className="text-large">Drag 'n' drop, sau click pentru selectie fisier</p>
                 )}
             </div>
 

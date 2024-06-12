@@ -203,12 +203,12 @@ const ProjectPage = ({ params }: { params: any }) => {
     }
 
     return (
-        <main className="mx-4 flex flex-col bg-content2 border-2 justify-between w-screen h-full">
+        <main className="mx-4 flex flex-col bg-content2 border-2 justify-evenly w-screen h-[155vh]">
             {isAdmin && (
                 <div
                     className="flex flex-col admin-panel p-2 m-1 gap-3 bg-content1 border-3 rounded-medium hover:m-0.5 transition-all duration-300">
                     <h2 className="bg-content3 rounded-medium text-3xl w-fit p-1">Panoul Mentorului</h2>
-                    <h2 className="bg-content3 rounded-medium w-fit p-1">Adauga o Sarcina Noua</h2>
+                    <h2 className="bg-content3 rounded-medium w-fit p-1 ml-1">Adauga o Sarcina Noua</h2>
                     <div>
                         <label>Selecteaza Proiect: </label>
                         <select className="bg-content3 rounded-medium"

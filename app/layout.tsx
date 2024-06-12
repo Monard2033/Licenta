@@ -20,15 +20,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <title>IBM Nexus: The Student Hub</title>
                 <link rel="icon" href="/favicon.ico"/>
             </head>
-            <body className={cn("relative h-full font-sans antialiasing bg-content2")} style={{height: "100%"}}>
+            <body className={cn("relative h-full font-sans antialiasing bg-content2")}>
             <NextUIProvider>
                 <NextThemesProvider attribute="class">
-                    <main className="flex flex-col min-w-screen min-h-full h-full" style={{minHeight: "100vh"}}>
+                    <main className="flex flex-col min-w-screen h-[180vh]">
                         <NavigationBar/>
                         <div className="static">
                             <Header/>
                         </div>
-                        <div className="flex flex-row ml-4 h-[110vh] min-h-full">
+                        <div className="flex flex-row ml-4 min-h-full">
                             <div>
                                 <LeftSidePanel/>
                             </div>
