@@ -6,6 +6,7 @@ import React from "react";
 import {cn} from "@/lib/utils";
 import LeftSidePanel from "@/components/LeftSidePanel";
 import Header from "@/components/Header";
+import {redirect} from "next/navigation";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -19,15 +20,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <title>IBM Nexus: The Student Hub</title>
                 <link rel="icon" href="/favicon.ico"/>
             </head>
-            <body className={cn("relative h-full font-sans antialiasing bg-content2")}>
+            <body className={cn("relative h-full font-sans antialiasing bg-content2")} style={{height: "100%"}}>
             <NextUIProvider>
                 <NextThemesProvider attribute="class">
-                    <main className="relative flex flex-col min-w-screen min-h-full">
+                    <main className="flex flex-col min-w-screen min-h-full h-full" style={{minHeight: "100vh"}}>
                         <NavigationBar/>
                         <div className="static">
                             <Header/>
                         </div>
-                        <div className="flex flex-row ml-4 h-full min-h-screen grow">
+                        <div className="flex flex-row ml-4 h-[110vh] min-h-full">
                             <div>
                                 <LeftSidePanel/>
                             </div>
@@ -39,5 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </body>
             </html>
         );
+    } else {
+        redirect("http://localhost:3000/main")
     }
 }

@@ -26,15 +26,15 @@ const Profile = () => {
         const date = new Date(created_at);
         return date.toLocaleTimeString([], {day:'2-digit', month:'2-digit', year:'2-digit', hour: '2-digit', minute: '2-digit'});
     }
+    const fetchData = async () => {
+        try {
+            // @ts-ignore
+            await fetchUser(setUser, setTeam, setProjects, setTasks, setComments, setMembersData);
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        }
+    };
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // @ts-ignore
-                await fetchUser(setUser, setTeam, setProjects, setTasks, setComments, setMembersData);
-            } catch (error) {
-                console.error('Error fetching user:', error);
-            }
-        };
         fetchData();
         setLoading(false)
     }, []);
@@ -47,7 +47,7 @@ const Profile = () => {
         )
     }
     return (
-        <main className="mx-4 flex flex-col bg-content2 p-3 border-2 w-screen">
+        <main className="mx-4 flex flex-col bg-content2 p-3 border-2 w-screen h-full">
             <div className="flex flex-row h-fit justify-between bg-content1 p-2 mb-4 border-3 rounded-medium">
                 <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
                     <form id="info" className="flex flex-col gap-2">

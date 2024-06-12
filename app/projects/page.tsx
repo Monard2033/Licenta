@@ -35,6 +35,7 @@ const ProjectPage = ({ params }: { params: any }) => {
         fetchTasks();
         fetchProjects();
         fetchUser();
+        setLoading(false)
     }, [projectId]);
 
     useEffect(() => {
@@ -103,7 +104,6 @@ const ProjectPage = ({ params }: { params: any }) => {
             console.error('Error fetching projects:', error);
         } else {
             setProjects(data);
-            setLoading(false);
         }
     };
 
@@ -136,13 +136,8 @@ const ProjectPage = ({ params }: { params: any }) => {
             .select('*')
             .eq('task_name', taskName);
 
-        const { data: files, error: filesError } = await supabase
-            .from('files')
-            .select('*')
-            .eq('task_name', taskName);
-
-        if (commentsError || filesError) {
-            console.error('Error fetching task details:', commentsError || filesError);
+        if (commentsError) {
+            console.error('Error fetching task details:', commentsError);
         } else {
             setComments(comments);
             setFiles(files);
@@ -197,9 +192,6 @@ const ProjectPage = ({ params }: { params: any }) => {
         }
     };
 
-    const getCurrentDate = () => new Date().toISOString();
-
-    const ongoingTasks = tasks.filter(task => new Date(task.end_time) >= new Date());
     const finishedTasks = tasks.filter(task => new Date(task.end_time) < new Date());
 
     if (loading) {
@@ -211,7 +203,7 @@ const ProjectPage = ({ params }: { params: any }) => {
     }
 
     return (
-        <main className="mx-4 flex flex-col bg-content2 border-2 justify-between w-screen h-screen">
+        <main className="mx-4 flex flex-col bg-content2 border-2 justify-between w-screen h-full">
             {isAdmin && (
                 <div
                     className="flex flex-col admin-panel p-2 m-1 gap-3 bg-content1 border-3 rounded-medium hover:m-0.5 transition-all duration-300">

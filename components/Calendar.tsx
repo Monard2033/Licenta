@@ -30,7 +30,7 @@ const MiniCalendar = () => {
             }
         };
         fetchData();
-    }, [userInfo]);
+    }, []);
 
     const formattedDate = new Intl.DateTimeFormat('ro-RO', {
         day: 'numeric',

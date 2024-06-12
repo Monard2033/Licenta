@@ -29,24 +29,25 @@ export default function NavigationBar() {
     const supabase = createClient()
     const router = useRouter()
 
-    useEffect(() => {
-        const fetchUserTheme = async () => {
-            try {
-                const {data: userTheme, error} = await supabase
-                    .from('user_themes')
-                    .select('theme')
-                    .eq('user_name', user?.name)
-                    .single();
-                if (userTheme) {
-                    setSelectedTheme(userTheme.theme);
-                    setTheme(userTheme.theme);
-                }
-            } catch (error) {
-                console.error('Error fetching user theme:', error);
+    const fetchUserTheme = async () => {
+        try {
+            const {data: userTheme, error} = await supabase
+                .from('user_themes')
+                .select('theme')
+                .eq('user_name', user.name)
+                .single();
+            if (userTheme) {
+                console.log("User Name: "+ user.name)
+                setSelectedTheme(userTheme.theme);
+                setTheme(userTheme.theme);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching user theme:', error);
+        }
+    };
+    useEffect(() => {
         fetchUserTheme();
-    }, [user]);
+    }, []);
 
 
     useEffect(() => {

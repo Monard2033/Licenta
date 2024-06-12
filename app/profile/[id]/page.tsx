@@ -105,8 +105,6 @@ const UserProfile = (params : any) => {
             Session();
             Project();
             Members();
-            Comments();
-            Tasks();
             setLoading(false);
         }
     }, [user]);

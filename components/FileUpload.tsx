@@ -54,7 +54,7 @@ const FileUpload = ({ userId, onFileUpload, taskName }: {
             >
                 <input {...getInputProps()} />
                 {isDragActive ? (
-                    <p>Drop the files here...</p>
+                    <p>Arunca fisierele aici...</p>
                 ) : (
                     <p>Drag 'n' drop some files here, or click to select files</p>
                 )}
@@ -65,7 +65,7 @@ const FileUpload = ({ userId, onFileUpload, taskName }: {
                     className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
                     onClick={handleFileUpload}
                 >
-                    Send Files
+                    Trimite Fisierele
                 </Button>
             )}
         </div>
