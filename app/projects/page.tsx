@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import FileUpload from '@/components/FileUpload';
 import CommentSection from '@/components/CommentSection';
 import { createClient } from '@/utils/supabase/client';
-import { ProjectInterface, TaskInterface } from '@/utils/users';
+import {checkAdminRole, ProjectInterface, TaskInterface} from '@/utils/users';
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { Spinner } from "@nextui-org/react";
 
@@ -31,7 +31,6 @@ const ProjectPage = ({ params }: { params: any }) => {
     const projectId = params.projectId;
 
     useEffect(() => {
-        checkAdminRole();
         fetchTasks();
         fetchProjects();
         fetchUser();
@@ -62,23 +61,12 @@ const ProjectPage = ({ params }: { params: any }) => {
                 // @ts-ignore
                 setUser({ email: user.email, name: profile.name });
             }
+            const isAdmin = await checkAdminRole();
+            // @ts-ignore
+            setIsAdmin(isAdmin);
         }
     }
 
-    const checkAdminRole = async () => {
-        const { data: { user }, error } = await supabase.auth.getUser()
-        if (error) {
-            console.error('Error checking user role:', error);
-            return;
-        }
-        // @ts-ignore
-        if (user.email.endsWith('@gmail.com')) {
-            setIsAdmin(true);
-        // @ts-ignore
-        } else if (user.email.endsWith('@student.upt.ro')) {
-            setIsAdmin(false);
-        }
-    };
 
     const fetchTasks = async () => {
         const { data, error } = await supabase
@@ -154,7 +142,7 @@ const ProjectPage = ({ params }: { params: any }) => {
             const hours = Math.floor(timeDifference / (1000 * 60 * 60));
             const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-            setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
+            setTimeLeft(`${hours} ore ${minutes} m ${seconds}s`);
         } else {
             setTimeLeft('Time is up!');
         }
@@ -196,7 +184,7 @@ const ProjectPage = ({ params }: { params: any }) => {
 
     if (loading) {
         return (
-            <main className="w-full flex items-center justify-center">
+            <main className="w-full flex items-start justify-center">
                 <Spinner />
             </main>
         )

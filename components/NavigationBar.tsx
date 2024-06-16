@@ -99,7 +99,7 @@ export default function NavigationBar() {
                             </Button>
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Chat Section" className=" w-[350px] h-full bg-content1 dark:bg-default-50">
-                            <DropdownItem aria-label="Chat" isReadOnly={true} className="bg-content3 cursor-default ">
+                            <DropdownItem aria-label="Chat" isReadOnly={true} className="bg-content3 cursor-default">
                                 <Chat isVisible/>
                             </DropdownItem>
                         </DropdownMenu>

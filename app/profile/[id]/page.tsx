@@ -111,7 +111,7 @@ const UserProfile = (params : any) => {
 
     if (loading) {
         return(
-            <main className="w-full flex items-center justify-center">
+            <main className="w-full flex items-start justify-center">
                 <Spinner/>
             </main>
         )

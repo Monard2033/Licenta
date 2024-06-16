@@ -14,7 +14,6 @@ const defaultUrl = process.env.VERCEL_URL
 
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-    console.log("Default URL: "+ defaultUrl)
     if (defaultUrl.includes("/main")) {
 
         return (

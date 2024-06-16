@@ -296,6 +296,6 @@ export const checkAdminRole = async () => {
             return false;
         }
     }
-    return null;
+    return user?.email;
 };
     

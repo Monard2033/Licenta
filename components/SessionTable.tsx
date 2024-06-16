@@ -15,6 +15,7 @@ import {
     Tooltip
 } from "@nextui-org/react";
 import { sessioncolumns} from "@/components/data";
+import {checkAdminRole} from "@/utils/users";
 
 const supabase = createClient();
 
@@ -25,6 +26,7 @@ const SessionTable = () => {
     const [editingCell, setEditingCell] = useState({ row: null, column: null });
     const [editValue, setEditValue] = useState('');
     const [userTeams, setUserTeams] = useState<string[]>([]);
+    const [meetings, setMeetings] = useState<any[]>([]);
 
     useEffect(() => {
         const checkAdminRole = async () => {
@@ -34,14 +36,10 @@ const SessionTable = () => {
                 return;
             }
             // @ts-ignore
-            if (user.email.endsWith('@gmail.com')) {
-                setIsAdmin(true);
-            } else {
-                // @ts-ignore
-                if (user.email.endsWith('@student.upt.ro')) {
-                    setIsAdmin(false);
-                }
-            }
+            const isAdmin = await checkAdminRole();
+            // @ts-ignore
+            setIsAdmin(isAdmin);
+
             const { data: teamData, error: teamError } = await supabase
                 .from('users')
                 .select('team')
@@ -54,7 +52,7 @@ const SessionTable = () => {
             const teams = teamData.map((team: { team: string }) => team.team);
             setUserTeams(teams);
         };
-
+        fetchMeetings();
         checkAdminRole();
     }, []);
 
@@ -69,6 +67,17 @@ const SessionTable = () => {
             return [];
         }
         return data;
+    };
+
+    const fetchMeetings = async () => {
+        const { data, error } = await supabase
+            .from('meetings')
+            .select('*');
+        if (error) {
+            console.error(error);
+            return [];
+        }
+        setMeetings(data);
     };
 
     const updateSession = async (userId:any, updatedField: any) => {
@@ -118,6 +127,10 @@ const SessionTable = () => {
             await handleBlur();
         }
     };
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleString([], { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
+    };
 
 
     return (
@@ -127,157 +140,59 @@ const SessionTable = () => {
                 selectedKey={String(selectedTab)}
                 onSelectionChange={handleTabChange}
             >
-                <Tab key="1" title="Sesiunea 1">
-                    <Card>
-                        <CardBody>
-                            <Tooltip content="Prin dublu click puteti modifica notele, prezenta si data">
-                                <Table
-                                    isHeaderSticky
-                                    classNames={{
-                                        wrapper: "max-h-[382px]",
-                                    }}
-                                >
-                                    <TableHeader columns={sessioncolumns}>
-                                        {(column) => (
-                                            <TableColumn
-                                                key={column.uid}
-                                                align={column.uid === "actions" ? "center" : "start"}
-                                            >
-                                                {column.name}
-                                            </TableColumn>
-                                        )}
-                                    </TableHeader>
-                                    <TableBody id="session1">
-                                        {sessionData.map((row: any, rowIndex: React.Key | null | undefined) => (
-                                            <TableRow key={rowIndex}>
-                                                {sessioncolumns.map((column) => (
-                                                    <TableCell key={column.uid} onDoubleClick={() => handleDoubleClick(rowIndex, column.uid)}>
-                                                        {editingCell.row === rowIndex && editingCell.column === column.uid ? (
-                                                            <Input
-                                                                value={editValue}
-                                                                onChange={(e) => setEditValue(e.target.value)}
-                                                                onBlur={handleBlur}
-                                                                onKeyDown={handleKeyDown}
-                                                                autoFocus
-                                                            />
-                                                        ) : (
-                                                            <div>
-                                                                {getKeyValue(row, column.uid)}
-                                                                {isAdmin && ['grade', 'attendance', 'date'].includes(column.uid) && (
-                                                                    <span style={{ marginLeft: 5, color: '#888' }}>(dbl-click pt edit)</span>
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                    </TableCell>
-                                                ))}
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </Tooltip>
-                        </CardBody>
-                    </Card>
-                </Tab>
-                <Tab key="2" title="Sesiunea 2">
-                    <Card id="session1">
-                        <CardBody id="session 2">
-                            <Table
-                                id="session2"
-                                isHeaderSticky
-                                classNames={{
-                                    wrapper: "max-h-[382px]",
-                                }}
-                            >
-                                <TableHeader columns={sessioncolumns}>
-                                    {(column) => (
-                                        <TableColumn
-                                            key={column.uid}
-                                            align={column.uid === "actions" ? "center" : "start"}
-                                        >
-                                            {column.name}
-                                        </TableColumn>
-                                    )}
-                                </TableHeader>
-                                <TableBody id="session2">
-                                    {sessionData.map((row: any, rowIndex: React.Key | null | undefined) => (
-                                        <TableRow key={rowIndex}>
-                                            {sessioncolumns.map((column) => (
-                                                <TableCell key={column.uid} onDoubleClick={() => handleDoubleClick(rowIndex, column.uid)}>
-                                                    {editingCell.row === rowIndex && editingCell.column === column.uid ? (
-                                                        <Input
-                                                            value={editValue}
-                                                            onChange={(e) => setEditValue(e.target.value)}
-                                                            onBlur={handleBlur}
-                                                            onKeyDown={handleKeyDown}
-                                                            autoFocus
-                                                        />
-                                                    ) : (
-                                                        <div>
-                                                            {getKeyValue(row, column.uid)}
-                                                            {isAdmin && ['grade', 'attendance', 'date'].includes(column.uid) && (
-                                                                <span style={{ marginLeft: 5, color: '#888' }}>(dbl-click pt edit)</span>
+                {meetings.map((meeting, index) => (
+                    <Tab key={index +1} title={meeting.name}>
+                        <Card>
+                            <CardBody>
+                                <Tooltip content="Prin dublu click puteti modifica notele, prezenta si data">
+                                    <Table
+                                        isHeaderSticky
+                                        classNames={{
+                                            wrapper: "max-h-[382px]",
+                                        }}
+                                    >
+                                        <TableHeader columns={sessioncolumns}>
+                                            {(column) => (
+                                                <TableColumn
+                                                    key={column.uid}
+                                                    align={column.uid === "actions" ? "center" : "start"}
+                                                >
+                                                    {column.name}
+                                                </TableColumn>
+                                            )}
+                                        </TableHeader>
+                                        <TableBody>
+                                            {sessionData.map((row: any, rowIndex: React.Key | null | undefined) => (
+                                                <TableRow key={rowIndex}>
+                                                    {sessioncolumns.map((column) => (
+                                                        <TableCell key={column.uid} onDoubleClick={() => handleDoubleClick(rowIndex, column.uid)}>
+                                                            {editingCell.row === rowIndex && editingCell.column === column.uid ? (
+                                                                <Input
+                                                                    value={editValue}
+                                                                    onChange={(e) => setEditValue(e.target.value)}
+                                                                    onBlur={handleBlur}
+                                                                    onKeyDown={handleKeyDown}
+                                                                    autoFocus
+                                                                />
+                                                            ) : (
+                                                                <div>
+                                                                    {getKeyValue(row, column.uid)}
+                                                                    {isAdmin && ['grade', 'attendance', 'date'].includes(column.uid) && (
+                                                                        <span style={{ marginLeft: 5, color: '#888' }}>(dbl-click pt edit)</span>
+                                                                    )}
+                                                                </div>
                                                             )}
-                                                        </div>
-                                                    )}
-                                                </TableCell>
+                                                        </TableCell>
+                                                    ))}
+                                                </TableRow>
                                             ))}
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </CardBody>
-                    </Card>
-                </Tab>
-                <Tab key="3" title="Sesiunea 3">
-                    <Card>
-                        <CardBody>
-                            <Table
-                                id="session 3"
-                                isHeaderSticky
-                                classNames={{
-                                    wrapper: "max-h-[382px]",
-                                }}
-                            >
-                                <TableHeader columns={sessioncolumns}>
-                                    {(column) => (
-                                        <TableColumn
-                                            key={column.uid}
-                                            align={column.uid === "actions" ? "center" : "start"}
-                                        >
-                                            {column.name}
-                                        </TableColumn>
-                                    )}
-                                </TableHeader>
-                                <TableBody id="session3">
-                                    {sessionData.map((row: any, rowIndex: React.Key | null | undefined) => (
-                                        <TableRow key={rowIndex}>
-                                            {sessioncolumns.map((column) => (
-                                                <TableCell key={column.uid} onDoubleClick={() => handleDoubleClick(rowIndex, column.uid)}>
-                                                    {editingCell.row === rowIndex && editingCell.column === column.uid ? (
-                                                        <Input
-                                                            value={editValue}
-                                                            onChange={(e) => setEditValue(e.target.value)}
-                                                            onBlur={handleBlur}
-                                                            onKeyDown={handleKeyDown}
-                                                            autoFocus
-                                                        />
-                                                    ) : (
-                                                        <div>
-                                                            {getKeyValue(row, column.uid)}
-                                                            {isAdmin && ['grade', 'attendance', 'date'].includes(column.uid) && (
-                                                                <span style={{ marginLeft: 5, color: '#888' }}>(dbl-click pt edit)</span>
-                                                            )}
-                                                        </div>
-                                                    )}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </CardBody>
-                    </Card>
-                </Tab>
+                                        </TableBody>
+                                    </Table>
+                                </Tooltip>
+                            </CardBody>
+                        </Card>
+                    </Tab>
+                ))}
             </Tabs>
         </div>
     );
