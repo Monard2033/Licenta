@@ -1,4 +1,5 @@
 import {createClient} from "@/utils/supabase/client";
+import React from "react";
 
 export interface UserInterface {
     id: number;
@@ -256,8 +257,39 @@ export const fetchUser = async (
         return user;
     }
 };
+export const fetchMeetings = async () => {
+        const { data, error } = await supabase
+            .from('meetings')
+            .select('*')
+            .order('meeting_date', { ascending: false }); // Fetch meetings ordered by date in descending order
+        if (error) {
+            console.error('Error fetching meetings:', error);
+            return [];
+        }
+        return data; // Return the fetched meetings data
+};
 
+export const startTimer = (endTime: Date, setTimer: React.Dispatch<React.SetStateAction<string>>) => {
+    const updateTimer = () => {
+        const now = new Date();
+        const timeDifference = endTime.getTime() - now.getTime();
 
+        if (timeDifference > 0) {
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+            setTimer(`${days} zile ${hours} ore ${minutes}m ${seconds}s`);
+        }
+    };
+
+    updateTimer(); // Initial call to updateTimer
+
+    const intervalId = setInterval(updateTimer, 1000);
+
+    // Return a cleanup function to clear the interval
+    return () => clearInterval(intervalId);
+};
 
 
 export const displayUserEmail = async () => {

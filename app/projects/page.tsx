@@ -191,7 +191,7 @@ const ProjectPage = ({ params }: { params: any }) => {
     }
 
     return (
-        <main className="mx-4 flex flex-col bg-content2 border-2 justify-evenly w-screen h-[155vh]">
+        <main className="mx-4 flex flex-col bg-content2 border-2 gap-3 w-screen h-[155vh]">
             {isAdmin && (
                 <div
                     className="flex flex-col admin-panel p-2 m-1 gap-3 bg-content1 border-3 rounded-medium hover:m-0.5 transition-all duration-300">
@@ -259,6 +259,7 @@ const ProjectPage = ({ params }: { params: any }) => {
             )}
             <div
                 className="flex flex-col bg-content1 m-1 border-3 rounded-medium hover:m-0.5 transition-all duration-300 p-2">
+                <h2 className="text-2xl">Sarcina Curenta: </h2>
                 {currentTask && (
                     <div className="flex flex-col gap-3">
                         <div className="flex justify-between text-2xl p-1">

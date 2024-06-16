@@ -14,35 +14,30 @@ const defaultUrl = process.env.VERCEL_URL
 
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-    if (defaultUrl.includes("/main")) {
-
-        return (
-            <html>
-            <head>
-                <title>IBM Nexus: Centrul Studentesc</title>
-                <link rel="icon" href="/favicon.ico"/>
-            </head>
-            <body className={cn("relative h-full font-sans antialiasing bg-content2")}>
-            <NextUIProvider>
-                <NextThemesProvider attribute="class">
-                    <main className="flex flex-col min-w-screen h-[180vh]">
-                        <NavigationBar/>
-                        <div className="static">
-                            <Header/>
+    return (
+        <html>
+        <head>
+            <title>IBM Nexus: Centrul Studentesc</title>
+            <link rel="icon" href="/favicon.ico"/>
+        </head>
+        <body className={cn("relative h-full font-sans antialiasing bg-content2")}>
+        <NextUIProvider>
+            <NextThemesProvider attribute="class">
+                <main className="flex flex-col min-w-screen h-[180vh]">
+                    <NavigationBar/>
+                    <div className="static">
+                        <Header/>
+                    </div>
+                    <div className="flex flex-row ml-4 min-h-full">
+                        <div>
+                            <LeftSidePanel/>
                         </div>
-                        <div className="flex flex-row ml-4 min-h-full">
-                            <div>
-                                <LeftSidePanel/>
-                            </div>
-                            {children}
-                        </div>
-                    </main>
-                </NextThemesProvider>
-            </NextUIProvider>
-            </body>
-            </html>
-        );
-    } else {
-        return redirect("/main");
-    }
+                        {children}
+                    </div>
+                </main>
+            </NextThemesProvider>
+        </NextUIProvider>
+        </body>
+        </html>
+    );
 }
