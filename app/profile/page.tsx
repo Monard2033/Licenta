@@ -37,7 +37,7 @@ const Profile = () => {
     useEffect(() => {
         fetchData();
         setLoading(false)
-    }, []);
+    }, [user]);
 
     if (loading) {
         return(

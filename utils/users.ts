@@ -286,7 +286,7 @@ export const displayUserEmail = async () => {
     return null;
 };
 export const checkAdminRole = async () => {
-    const { data: { user }, error } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
     // @ts-ignore
     if (user.email.endsWith('@gmail.com')) {
         return true;
@@ -298,3 +298,4 @@ export const checkAdminRole = async () => {
     }
     return null;
 };
+    

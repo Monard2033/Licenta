@@ -95,8 +95,6 @@ const UserProfile = (params : any) => {
     }
     useEffect(() => {
         User();
-        Comments();
-        Tasks();
     }, []);
 
     useEffect(() => {
@@ -105,6 +103,8 @@ const UserProfile = (params : any) => {
             Session();
             Project();
             Members();
+            Comments();
+            Tasks();
             setLoading(false);
         }
     }, [user]);
@@ -161,7 +161,7 @@ const UserProfile = (params : any) => {
                     <form id="comments" className="flex flex-col gap-2">
                         <span className="flex justify-center border-3 rounded-2xl">Comentariile Utilizatorului:</span>
                         {comments.map((comment, index) => (
-                            <div key={index} className="flex flex-col gap-2 my-2">
+                            <div key={index} className="flex flex-col gap-2 my-2 border-2 p-2 rounded-medium">
                                 <span>Sarcina: {tasks.find(task => task.task_name === comment.task_name)?.task_name || 'N/A'}</span>
                                 <span>Comentariu: {comment.content}</span>
                                 <span>Data Comentariu: {formatTime(comment.created_at)}</span>
@@ -173,7 +173,7 @@ const UserProfile = (params : any) => {
                     <form id="tasks" className="flex flex-col gap-2">
                         <span className="flex justify-center border-3 rounded-2xl">Sarcinile Realizate a Utilizatorului:</span>
                         {tasks.map(task => (
-                            <div key={task.id} className="flex flex-col my-2">
+                            <div key={task.id} className="flex flex-col my-2 border-2 p-2 rounded-medium">
                                 <span>Nume Sarcina: {task.task_name}</span>
                                 <span>Descriere Sarcina: {task.description}</span>
                                 <span>Data Incepere Sarcinii: {formatTime(task.start_time)}</span>
