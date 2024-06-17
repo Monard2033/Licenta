@@ -16,7 +16,6 @@ const Sessions = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [timer, setTimer] = useState<string>('');
 
-
     const fetchMeetings = async () => {
         const { data, error } = await supabase
             .from('meetings')
@@ -38,6 +37,10 @@ const Sessions = () => {
         }
     };
 
+    const formatTime = (created_at: any) => {
+        const date = new Date(created_at);
+        return date.toLocaleTimeString(["ro-RO"], {day:"2-digit",month:"2-digit", year:"numeric"});
+    }
 
     const handleAddMeeting = async () => {
         if (!meetingCode || !meetingName || !meetingDate || !zoomLink) {
@@ -96,7 +99,7 @@ const Sessions = () => {
         <main className="mx-4 flex flex-col bg-content2 border-2 gap-3 h-full w-screen">
             {isAdmin && (
                 <div className="bg-content1 m-2 p-2 border-3 h-fit rounded-medium hover:m-1 transition-all duration-300">
-                    <h2 className="text-xl font-bold mb-2">Adaugă Sesiune Nouă</h2>
+                    <h2 className="text-xl font-bold mb-2">Adaugă o Sesiune Nouă</h2>
                     <form className="grid gap-4">
                         <Input
                             isClearable
@@ -133,8 +136,8 @@ const Sessions = () => {
                 <div className="mb-4">
                     {meetings.length > 0 && (
                         <div className="flex flex-col items-end p-2 text-large">
-                            <p>Urmatoarea Sesiune: {meetings[0].name}</p>
-                            <p>Time ramas pana la urmatoarea sesiune: {timer}</p>
+                            <p>Urmatoarea Sesiune: {formatTime(meetings[0].meeting_date)}</p>
+                            <p>Timp ramas pana la urmatoarea sesiune: {timer}</p>
                             <a href={zoomLink} target="_blank" rel="noopener noreferrer" className="flex text-blue-500 w-fit underline gap-2">
                                 Link Zoom
                             </a>

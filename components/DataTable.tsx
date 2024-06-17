@@ -200,7 +200,6 @@ export default function DataTable() {
                 <div className="flex justify-between gap-3 items-end">
                     <Input
                         classNames={{
-                            //when in dark mode make a border 1px around the input
                             inputWrapper: "text-default-500 bg-default-500/20 dark:bg-default-500/20 border border-default-500/20",
                         }}
                         isClearable

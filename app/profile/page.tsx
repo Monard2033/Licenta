@@ -54,7 +54,6 @@ const Profile = () => {
                         <span className="flex justify-center border-3 rounded-2xl">Datele Tale:</span>
                         <span>Nume: {user?.name}</span>
                         <span>Email: {user?.email}</span>
-                        <span></span>
                     </form>
                 </div>
                 <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
@@ -75,10 +74,12 @@ const Profile = () => {
                 <div
                     className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
                     <form id="projects" className="flex flex-col gap-2">
-                        <span className="flex justify-center border-3 rounded-2xl">Proiectele Tale:</span>
-                        {projects.map(project => (
-                            <div key={project.id} className="flex flex-col my-2 gap-3">
-                                <span>Nume Proiect: {project.name}</span>
+                        <a href={"/main/projects"} className="text-blue-400 hover:text-blue-800">
+                            <span className="flex justify-center border-3 rounded-2xl">Proiectele Tale:</span>
+                        </a>
+                            {projects.map(project => (
+                                <div key={project.id} className="flex flex-col my-2 gap-3">
+                             <span>Nume Proiect: {project.name}</span>
                                 <span>Descriere Proiect: {project.description}</span>
                                 <span>Statut Proiect: {project.status}</span>
                                 <span>Data Incepere Proiect: {formatTime(project.start_date)}</span>
@@ -90,9 +91,11 @@ const Profile = () => {
             </div>
             <div className="w-full border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
                 <form id="tasks" className="flex flex-col gap-2">
-                    <span className="flex justify-center border-3 rounded-2xl">Sarcinile Tale:</span>
-                    {tasks.map(task => (
-                        <div key={task.id} className="flex flex-col my-2">
+                    <a href={"/main/projects"} className="text-blue-400 hover:text-blue-800">
+                        <span className="flex justify-center border-3 rounded-2xl">Sarcinile Tale:</span>
+                    </a>
+                        {tasks.map(task => (
+                            <div key={task.id} className="flex flex-col my-2">
                             <span>Nume Sarcina: {task.task_name}</span>
                             <span>Descriere Sarcina: {task.description}</span>
                             <span>Data Incepere Sarcinii: {formatTime(task.start_time)}</span>

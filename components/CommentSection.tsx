@@ -44,7 +44,7 @@ const CommentSection = ({ userId, taskName }: { userId: string, onCommentSubmit?
         } else {
             setNewComment('');
             fetchComments();
-            ("Trimis cu succes")
+            alert("Trimis cu succes")
         }
     };
 

@@ -328,6 +328,6 @@ export const checkAdminRole = async () => {
             return false;
         }
     }
-    return user?.email;
+    return null;
 };
     

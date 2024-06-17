@@ -142,7 +142,7 @@ const ProjectPage = ({ params }: { params: any }) => {
             const hours = Math.floor(timeDifference / (1000 * 60 * 60));
             const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-            setTimeLeft(`${hours} ore ${minutes} m ${seconds}s`);
+            setTimeLeft(`${hours} ore ${minutes}m ${seconds}s`);
         } else {
             setTimeLeft('Time is up!');
         }
@@ -194,7 +194,7 @@ const ProjectPage = ({ params }: { params: any }) => {
         <main className="mx-4 flex flex-col bg-content2 border-2 gap-3 w-screen h-[155vh]">
             {isAdmin && (
                 <div
-                    className="flex flex-col admin-panel p-2 m-1 gap-3 bg-content1 border-3 rounded-medium hover:m-0.5 transition-all duration-300">
+                    className="flex flex-col admin-panel p-2 m-1 gap-3 bg-content1 border-3 rounded-medium hover:m-0.5 transition-all">
                     <h2 className="bg-content3 rounded-medium text-3xl w-fit p-1">Panoul Mentorului</h2>
                     <h2 className="bg-content3 rounded-medium w-fit p-1 ml-1">Adauga o Sarcina Noua</h2>
                     <div>
@@ -258,7 +258,7 @@ const ProjectPage = ({ params }: { params: any }) => {
                 </div>
             )}
             <div
-                className="flex flex-col bg-content1 m-1 border-3 rounded-medium hover:m-0.5 transition-all duration-300 p-2">
+                className="flex flex-col bg-content1 m-1 border-3 rounded-medium hover:m-0.5 transition-all p-2">
                 <h2 className="text-2xl">Sarcina Curenta: </h2>
                 {currentTask && (
                     <div className="flex flex-col gap-3">
@@ -306,7 +306,7 @@ const ProjectPage = ({ params }: { params: any }) => {
                 )}
             </div>
             <div
-                className="flex flex-col bg-content1 m-1 border-3 rounded-medium hover:m-0.5 transition-all duration-300 p-2">
+                className="flex flex-col bg-content1 m-1 border-3 rounded-medium hover:m-0.5 transition-all p-2">
                 <h2 className="text-2xl">Sarcini Incheiate</h2>
                 {finishedTasks.map(task => (
                     <div key={task.task_name} className="flex flex-col gap-3 p-2 my-2 bg-content2 rounded-medium">
