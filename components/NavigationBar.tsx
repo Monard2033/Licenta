@@ -37,7 +37,6 @@ export default function NavigationBar() {
                 .eq('user_name', user.name)
                 .single();
             if (userTheme) {
-                console.log("User Name: "+ user.name)
                 setSelectedTheme(userTheme.theme);
                 setTheme(userTheme.theme);
             }

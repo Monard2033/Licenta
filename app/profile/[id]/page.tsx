@@ -1,14 +1,19 @@
 'use client'
 import React, {useEffect, useState} from 'react';
 import {
-    fetchUsersData, fetchUsersProjects,
+    CommentsInterface,
+    fetchTeamMembers,
+    fetchUsersComments,
+    fetchUsersData,
+    fetchUsersProjects,
     fetchUsersSessions,
     fetchUsersTeam,
-    fetchTeamMembers,
+    fetchUserTasks,
+    ProjectInterface,
     SessionInterface,
+    TaskInterface,
     TeamInterface,
     UserInterface,
-    ProjectInterface, fetchUsersComments, CommentsInterface, fetchUserTasks, TaskInterface,
 } from "@/utils/users";
 import {Spinner} from "@nextui-org/react";
 
@@ -88,11 +93,14 @@ const UserProfile = (params : any) => {
         const date = new Date(created_at);
         return date.toLocaleTimeString([], {day:'2-digit', month:'2-digit', year:'2-digit', hour: '2-digit', minute: '2-digit'});
     }
+
     const isTaskCompleted = (task: TaskInterface) => {
         const endDate = new Date(task.end_time);
-        const hasComment = comments.some(comment => comment.task_name === task.task_name);
-        return endDate < new Date() && hasComment;
-    }
+        const startDate = new Date(task.start_time);
+        return comments.some(comment => comment.task_name === task.task_name && new Date(comment.created_at) >= startDate && new Date(comment.created_at) <= endDate);
+    };
+
+
     useEffect(() => {
         User();
     }, []);
@@ -178,7 +186,7 @@ const UserProfile = (params : any) => {
                                 <span>Descriere Sarcina: {task.description}</span>
                                 <span>Data Incepere Sarcinii: {formatTime(task.start_time)}</span>
                                 <span>Data Finalizare Sarcinii: {formatTime(task.end_time)}</span>
-                                <span>Status: {isTaskCompleted(task) ? 'Indeplinit' : 'Ne-Indeplinit'}</span>
+                                <span>Statut: {isTaskCompleted(task) ? 'Indeplinit' : 'Ne-Indeplinit'}</span>
                             </div>
                         ))}
                     </form>
