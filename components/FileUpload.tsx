@@ -1,7 +1,8 @@
 import { createClient } from "@/utils/supabase/client";
-import React, { useState, useCallback } from "react";
+import React, {useState, useCallback, useEffect} from "react";
 import { useDropzone } from "react-dropzone";
 import {Button} from "@nextui-org/react";
+
 
 const FileUpload = ({ userId, onFileUpload, taskName }: {
     userId: string,
@@ -19,12 +20,12 @@ const FileUpload = ({ userId, onFileUpload, taskName }: {
 
     const handleFileUpload = async () => {
         for (const file of filesToUpload) {
-            const filePath = `Files/projects/${userId}/${file.name}`;
-
+            const fileName = encodeURIComponent(file.name);
+            const filePath = `Files/${userId}/${file.name}`;
             const { data, error } = await supabase
                 .storage
                 .from('projects-files')
-                .upload(filePath, file);
+                .upload(filePath,file);
 
             if (error) {
                 console.error('Error uploading file:', error);
@@ -59,7 +60,6 @@ const FileUpload = ({ userId, onFileUpload, taskName }: {
                     <p className="text-large">Drag 'n' drop, sau click pentru selectie fisier</p>
                 )}
             </div>
-
             {filesToUpload.length > 0 && (
                 <Button
                     className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"

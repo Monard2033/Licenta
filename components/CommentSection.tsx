@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@nextui-org/react";
 import { CommentsInterface} from "@/utils/users";
 
-const CommentSection = ({ userId, taskName }: { userId: string, onCommentSubmit?: (comment: any) => void,taskName: string }) => {
+const CommentSection = ({ userId, taskName , onCommentSubmit }: { userId: string, onCommentSubmit?: (comment: any) => void,taskName: string }) => {
     const supabase = createClient();
     const [newComment, setNewComment] = useState('');
     const [comments, setComments] = useState<CommentsInterface[]>([]);
@@ -44,8 +44,12 @@ const CommentSection = ({ userId, taskName }: { userId: string, onCommentSubmit?
         } else {
             setNewComment('');
             fetchComments();
-            alert("Trimis cu succes")
+            if (onCommentSubmit) {
+                onCommentSubmit(comments);
+            }
+            alert('Trimis cu succes');
         }
+
     };
 
     const pathName = usePathname();

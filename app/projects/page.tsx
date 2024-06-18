@@ -11,8 +11,12 @@ const supabase = createClient();
 
 const ProjectPage = ({ params }: { params: any }) => {
     const [comments, setComments] = useState<string[]>([]);
+    const [commentsFetched, setCommentsFetched] = useState(false);
+    const [filesFetched, setFilesFetched] = useState(false);
+    const [commentsLength, setCommentsLength] = useState(0);
+    const [filesLength, setFilesLength] = useState(0);
     const [timeLeft, setTimeLeft] = useState('');
-    const [files, setFiles] = useState<File[]>([]);
+    const [files, setFiles] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [tasks, setTasks] = useState<TaskInterface[]>([]);
     const [currentTask, setCurrentTask] = useState<TaskInterface>();
@@ -34,8 +38,10 @@ const ProjectPage = ({ params }: { params: any }) => {
         fetchTasks();
         fetchProjects();
         fetchUser();
+        fetchComments()
         setLoading(false)
     }, [projectId]);
+
 
     useEffect(() => {
         if (currentTask) {
@@ -43,9 +49,11 @@ const ProjectPage = ({ params }: { params: any }) => {
             const interval = setInterval(() => {
                 updateTimeLeft();
             }, 1000);
-
+            setCommentsFetched(false);
+            setFilesFetched(false);
             return () => clearInterval(interval);
         }
+       fetchFiles()
     }, [currentTask]);
 
     const fetchUser = async () => {
@@ -66,7 +74,7 @@ const ProjectPage = ({ params }: { params: any }) => {
             setIsAdmin(isAdmin);
         }
     }
-
+    const showCheckCircle = commentsFetched || filesFetched;
 
     const fetchTasks = async () => {
         const { data, error } = await supabase
@@ -94,6 +102,22 @@ const ProjectPage = ({ params }: { params: any }) => {
             setProjects(data);
         }
     };
+    const fetchFiles = async () => {
+        const {data, error} = await supabase
+            .storage
+            .from('projects-files')
+            .list(`Files/${user.name}/${files}`);
+
+        if (error) {
+            console.error('Error fetching files:', error.message);
+        } else {
+            // @ts-ignore
+            setFiles(data?.map(file => ({
+                fileName: file.name,
+                userName: user.name,
+            })) || []);
+        }
+    }
 
     const setCurrentWeeklyTask = (tasks: any) => {
         const currentDate = new Date();
@@ -119,18 +143,12 @@ const ProjectPage = ({ params }: { params: any }) => {
     };
 
     const fetchTaskDetails = async (taskName: string) => {
-        const { data: comments, error: commentsError } = await supabase
-            .from('comments')
+        const { data } = await supabase
+            .from('tasks')
             .select('*')
             .eq('task_name', taskName);
+    }
 
-        if (commentsError) {
-            console.error('Error fetching task details:', commentsError);
-        } else {
-            setComments(comments);
-            setFiles(files);
-        }
-    };
 
     const updateTimeLeft = () => {
         if (!currentTask) return;
@@ -148,14 +166,6 @@ const ProjectPage = ({ params }: { params: any }) => {
         }
     };
 
-    const handleFileUpload = (file: File) => {
-        setFiles([...files, file]);
-    };
-
-    const handleCommentSubmit = (comment: string) => {
-        setComments([...comments, comment]);
-    };
-
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleString([], { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' });
@@ -164,6 +174,7 @@ const ProjectPage = ({ params }: { params: any }) => {
     const handleNewTaskChange = (e: any) => {
         setNewTask({ ...newTask, [e.target.name]: e.target.value });
     };
+
 
     const handleCreateTask = async () => {
         const { data, error } = await supabase
@@ -179,6 +190,19 @@ const ProjectPage = ({ params }: { params: any }) => {
             alert("Adaugat cu Succes")
         }
     };
+    const fetchComments = async () => {
+        const { data, error } = await supabase
+            .from('comments')
+            .select('*')
+            .eq('task_name', currentTask?.task_name);
+        if (error) {
+            console.error('Error fetching comments:', error);
+        } else {
+            setCommentsLength(data.length);
+            setCommentsFetched(true);
+        }
+    };
+
 
     const finishedTasks = tasks.filter(task => new Date(task.end_time) < new Date());
 
@@ -242,16 +266,17 @@ const ProjectPage = ({ params }: { params: any }) => {
                             value={newTask.end_time}
                             onChange={handleNewTaskChange}/>
                     </div>
-
                     <button onClick={handleCreateTask}
                             className="mt-2 bg-blue-500 text-white py-2 px-4 rounded-medium w-fit">
                         Adauga Sarcina
                     </button>
                     <div>
-                        <h2>Fisierele Incarcate</h2>
+                        <h2>Fisierele Utilizatorului: {user.name}</h2>
                         <ul>
                             {files.map((file, index) => (
-                                <li key={index}>{file.name}</li>
+                                <li key={index}>
+                                    {user.name} - {files}
+                                </li>
                             ))}
                         </ul>
                     </div>
@@ -265,8 +290,8 @@ const ProjectPage = ({ params }: { params: any }) => {
                         <div className="flex justify-between text-2xl p-1">
                             <div className="flex items-center gap-2">
                                 {currentTask.task_name}
-                                {comments.length > 0 && files.length > 0 && (
-                                    <AiOutlineCheckCircle className="text-green-500"/>
+                                {showCheckCircle && (
+                                    <AiOutlineCheckCircle className="text-green-500" />
                                 )}
                             </div>
                             <span className="text-medium">
@@ -292,11 +317,11 @@ const ProjectPage = ({ params }: { params: any }) => {
                         {isTaskEditable ? (
                             <div className="flex flex-row gap-3 justify-between">
                                 <div className="flex w-[50%]">
-                                    <CommentSection taskName={currentTask.task_name} userId={user.name} onCommentSubmit={handleCommentSubmit}/>
+                                    <CommentSection taskName={currentTask.task_name} userId={user.name} onCommentSubmit={fetchComments}/>
                                 </div>
                                 <div className="flex w-[50%]">
-                                    <FileUpload taskName={currentTask.task_name} onFileUpload={handleFileUpload}
-                                                userId={user.name}/>
+                                    <FileUpload taskName={currentTask.task_name} onFileUpload={fetchFiles}
+                                                userId={user.name} />
                                 </div>
                             </div>
                         ) : (
