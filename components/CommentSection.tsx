@@ -3,11 +3,12 @@ import { createClient } from "@/utils/supabase/client";
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@nextui-org/react";
-import { CommentsInterface} from "@/utils/users";
+import {checkAdminRole, CommentsInterface} from "@/utils/users";
 
 const CommentSection = ({ userId, taskName , onCommentSubmit }: { userId: string, onCommentSubmit?: (comment: any) => void,taskName: string }) => {
     const supabase = createClient();
     const [newComment, setNewComment] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
     const [comments, setComments] = useState<CommentsInterface[]>([]);
 
     useEffect(() => {
@@ -24,11 +25,18 @@ const CommentSection = ({ userId, taskName , onCommentSubmit }: { userId: string
             console.error('Error fetching comments:', error);
         } else {
             setComments(data);
+            const isAdmin = await checkAdminRole();
+            // @ts-ignore
+            setIsAdmin(isAdmin);
         }
     };
 
     const handleCommentSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
+        if (newComment === '') {
+            alert('Introduceti un comentariu');
+            return;
+        }
         const { data, error } = await supabase
             .from('comments')
             .insert([{
@@ -66,6 +74,7 @@ const CommentSection = ({ userId, taskName , onCommentSubmit }: { userId: string
                 />
                 <Button className="w-fit justify-center" type="submit">Adauga</Button>
             </form>
+            {isAdmin && (
             <div className="comments-list">
                 {comments.map((comment: any) => (
                     <div key={comment.id} className="comment-item border p-2 my-2 rounded">
@@ -79,6 +88,7 @@ const CommentSection = ({ userId, taskName , onCommentSubmit }: { userId: string
                     </div>
                 ))}
             </div>
+                )}
         </div>
     );
 };

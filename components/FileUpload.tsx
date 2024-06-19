@@ -21,7 +21,7 @@ const FileUpload = ({ userId, onFileUpload, taskName }: {
     const handleFileUpload = async () => {
         for (const file of filesToUpload) {
             const fileName = encodeURIComponent(file.name);
-            const filePath = `Files/${userId}/${file.name}`;
+            const filePath = `${userId}/${file.name}`;
             const { data, error } = await supabase
                 .storage
                 .from('projects-files')
@@ -30,7 +30,7 @@ const FileUpload = ({ userId, onFileUpload, taskName }: {
             if (error) {
                 console.error('Error uploading file:', error);
             } else {
-                console.log('File uploaded:', data);
+               alert("Fisier incarcat cu succes")
                 if (onFileUpload) {
                     onFileUpload(file);
                 }

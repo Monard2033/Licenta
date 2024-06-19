@@ -83,6 +83,8 @@ const Settings = () => {
                     <h1>Editeaza Datele Personale:</h1>
                     <form onSubmit={handleSubmit} className="grid gap-3">
                         <Input
+                            isReadOnly
+                            isDisabled
                             label="Email:"
                             placeholder="email@example.com"
                             value={userData.email}

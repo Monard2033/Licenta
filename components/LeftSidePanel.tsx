@@ -5,12 +5,11 @@ import { useRouter} from "next/navigation";
 import Calendar from "@/components/Calendar";
 
 
-const LeftSidePanel=()=>{
+const LeftSidePanel=()=> {
     const router = useRouter();
 
     const pathName = usePathname();
-    if(pathName != "/login")
-    {
+    if (pathName != "/login") {
         return <div className="flex flex-col rounded min-h-screen min-w-[330px] border-2">
             <div className="flex flex-col gap-4">
                 <div
@@ -24,7 +23,7 @@ const LeftSidePanel=()=>{
                         <button className="flex justify-center bg-content2 hover:text-blue-800 border-1 p-1 rounded-3xl"
                                 onClick={e => router.push("/sessions")}>Sesiuni</button>
                         <button className="flex justify-center bg-content2 hover:text-blue-800 border-1 p-1 rounded-3xl"
-                            onClick={e => router.push("/projects")}>Proiecte</button>
+                                onClick={e => router.push("/projects")}>Proiecte</button>
                     </span>
                 </div>
                 <div
@@ -34,7 +33,7 @@ const LeftSidePanel=()=>{
                     </div>
                     <div className=" flex flex-col h-full w-full my-2 items-center justify-between">
                         <div className="">
-                         <Calendar/>
+                            <Calendar/>
                         </div>
                     </div>
                 </div>

@@ -25,9 +25,8 @@ export default function Index() {
             const isAdmin = await checkAdminRole();
             // @ts-ignore
             setIsAdmin(isAdmin);
+            setLoading(false);
         };
-        setIsAdmin(isAdmin);
-        setLoading(false);
         fetchUser();
     }, []);
 

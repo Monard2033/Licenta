@@ -7,6 +7,7 @@ import {cn} from "@/lib/utils";
 import LeftSidePanel from "@/components/LeftSidePanel";
 import Header from "@/components/Header";
 import {redirect} from "next/navigation";
+import { MessageProvider } from "@/components/MessageContext";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -24,7 +25,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <NextUIProvider>
             <NextThemesProvider attribute="class">
                 <main className="flex flex-col min-w-screen h-[180vh]">
+                    <MessageProvider>
                     <NavigationBar/>
+                    </MessageProvider>
                     <div className="static">
                         <Header/>
                     </div>

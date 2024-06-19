@@ -48,7 +48,7 @@ const Profile = () => {
     }
     return (
         <main className="mx-4 flex flex-col bg-content2 p-3 border-2 w-screen h-full">
-            <div className="flex flex-row h-fit justify-between bg-content1 p-2 mb-4 border-3 rounded-medium">
+            <div className="flex flex-row h-fit justify-between bg-content1 p-2 mb-4 border-3 shadow-xl rounded-medium">
                 <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
                     <form id="info" className="flex flex-col gap-2">
                         <span className="flex justify-center border-3 rounded-2xl">Datele Tale:</span>
@@ -56,7 +56,7 @@ const Profile = () => {
                         <span>Email: {user?.email}</span>
                     </form>
                 </div>
-                <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
+                <div className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-xl bg-content1 hover:m-0.5 transition-all duration-300">
                     <form id="team" className="flex flex-col gap-2">
                         <span className="flex justify-center border-3 rounded-2xl">Echipa Ta:</span>
                         <span>Numele Echipei: {team?.name}</span>
@@ -72,7 +72,7 @@ const Profile = () => {
                     </form>
                 </div>
                 <div
-                    className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
+                    className="w-[30%] border-3 rounded-medium h-fit p-3 shadow-xl bg-content1 hover:m-0.5 transition-all duration-300">
                     <form id="projects" className="flex flex-col gap-2">
                         <a href={"/main/projects"} className="text-blue-400 hover:text-blue-800">
                             <span className="flex justify-center border-3 rounded-2xl">Proiectele Tale:</span>
@@ -89,7 +89,7 @@ const Profile = () => {
                     </form>
                 </div>
             </div>
-            <div className="w-full border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
+            <div className="w-full border-3 rounded-medium h-fit p-3 shadow-xl bg-content1 hover:m-0.5 transition-all duration-300">
                 <form id="tasks" className="flex flex-col gap-2">
                     <a href={"/main/projects"} className="text-blue-400 hover:text-blue-800">
                         <span className="flex justify-center border-3 rounded-2xl">Sarcinile Tale:</span>
@@ -104,7 +104,7 @@ const Profile = () => {
                     ))}
                 </form>
             </div>
-            <div className="w-full border-3 rounded-medium h-fit p-3 shadow-2xl bg-content1 hover:m-0.5 transition-all duration-300">
+            <div className="w-full border-3 rounded-medium h-fit p-3 shadow-xl bg-content1 hover:m-0.5 transition-all duration-300">
                 <form id="comments" className="flex flex-col gap-2">
                     <span className="flex justify-center border-3 rounded-2xl">Comentariile Tale:</span>
                     {comments.map((comment, index) => (

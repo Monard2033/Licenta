@@ -34,11 +34,12 @@ const ProjectPage = ({ params }: { params: any }) => {
 
     const projectId = params.projectId;
 
+
     useEffect(() => {
         fetchTasks();
         fetchProjects();
         fetchUser();
-        fetchComments()
+        fetchFiles()
         setLoading(false)
     }, [projectId]);
 
@@ -49,11 +50,11 @@ const ProjectPage = ({ params }: { params: any }) => {
             const interval = setInterval(() => {
                 updateTimeLeft();
             }, 1000);
-            setCommentsFetched(false);
-            setFilesFetched(false);
+            setCommentsFetched(true);
+            setFilesFetched(true);
             return () => clearInterval(interval);
         }
-       fetchFiles()
+        fetchComments()
     }, [currentTask]);
 
     const fetchUser = async () => {
@@ -103,21 +104,22 @@ const ProjectPage = ({ params }: { params: any }) => {
         }
     };
     const fetchFiles = async () => {
-        const {data, error} = await supabase
+        const filePath = `${user.name}/${files}`;
+        const { data, error } = await supabase
             .storage
-            .from('projects-files')
-            .list(`Files/${user.name}/${files}`);
+            .from('project-files')
+            .list(`${user.name}`);
+
 
         if (error) {
             console.error('Error fetching files:', error.message);
         } else {
             // @ts-ignore
-            setFiles(data?.map(file => ({
-                fileName: file.name,
-                userName: user.name,
-            })) || []);
+            const filesList = data.map(file => file.name);
+            setFiles(filesList);
         }
     }
+
 
     const setCurrentWeeklyTask = (tasks: any) => {
         const currentDate = new Date();
@@ -147,6 +149,7 @@ const ProjectPage = ({ params }: { params: any }) => {
             .from('tasks')
             .select('*')
             .eq('task_name', taskName);
+        return data;
     }
 
 
@@ -177,6 +180,16 @@ const ProjectPage = ({ params }: { params: any }) => {
 
 
     const handleCreateTask = async () => {
+        if (
+            newTask.task_name === '' ||
+            newTask.description === '' ||
+            newTask.start_time === '' ||
+            newTask.end_time === ''
+        ) {
+
+            alert('Completați toate câmpurile');
+            return;
+        }
         const { data, error } = await supabase
             .from('tasks')
             .insert([{ ...newTask, project_name: selectedProject }]);
@@ -270,18 +283,42 @@ const ProjectPage = ({ params }: { params: any }) => {
                             className="mt-2 bg-blue-500 text-white py-2 px-4 rounded-medium w-fit">
                         Adauga Sarcina
                     </button>
+
                     <div>
                         <h2>Fisierele Utilizatorului: {user.name}</h2>
-                        <ul>
+                        <ul className="bg-red-900">
                             {files.map((file, index) => (
                                 <li key={index}>
-                                    {user.name} - {files}
+                                    <a
+                                        href={`https://trzkgzklxvbrxfydsfqm.supabase.co/storage/v1/object/public/project-files/${user.name}/${file}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Folder: ({user.name}) - File: ({file})
+                                    </a>
                                 </li>
                             ))}
                         </ul>
                     </div>
                 </div>
             )}
+            <div
+                className="w-full border-3 m-1 rounded-medium h-fit p-3 shadow-xl bg-content1 hover:m-0.5 transition-all duration-300">
+                <h2 className="text-2xl">Proiect Curent: </h2>
+                <form id="projects" className="flex flex-col gap-2">
+                    {projects.map(project => (
+                        <div key={project.name} className="flex flex-col my-2 gap-3">
+                            <span>Nume Proiect: {project.name}</span>
+                            <span className="bg-content3 rounded-3xl border-1 gap-2 p-2 w-[80%]">
+                                {project.description}
+                            </span>
+                            <span>Statut Proiect: {project.status}</span>
+                            <span>Data Incepere Proiect: {formatDate(project.start_date)}</span>
+                            <span>Data Finalizare Proiect: {formatDate(project.end_date)}</span>
+                        </div>
+                    ))}
+                </form>
+            </div>
             <div
                 className="flex flex-col bg-content1 m-1 border-3 rounded-medium hover:m-0.5 transition-all p-2">
                 <h2 className="text-2xl">Sarcina Curenta: </h2>
@@ -291,7 +328,7 @@ const ProjectPage = ({ params }: { params: any }) => {
                             <div className="flex items-center gap-2">
                                 {currentTask.task_name}
                                 {showCheckCircle && (
-                                    <AiOutlineCheckCircle className="text-green-500" />
+                                    <AiOutlineCheckCircle className="text-green-500"/>
                                 )}
                             </div>
                             <span className="text-medium">

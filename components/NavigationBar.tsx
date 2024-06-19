@@ -10,7 +10,7 @@ import {
     Dropdown,
     DropdownMenu,
     DropdownSection, Button,
-    Switch,
+    Switch, Badge
 } from "@nextui-org/react";
 import {createClient} from "@/utils/supabase/client";
 import {usePathname, useRouter} from "next/navigation";
@@ -19,13 +19,17 @@ import {MessageIcon} from "@/components/ui/MessageIcon";
 import Chat from "@/components/Chat";
 import {CircleUserIcon, MoonIcon, SunIcon} from "lucide-react";
 import {displayUserEmail} from "@/utils/users";
+import {useMessageContext} from "@/components/MessageContext";
+
 
 export default function NavigationBar() {
     const {theme, setTheme} = useTheme();
+    const { unseenMessages } = useMessageContext();
     const [selectedTheme, setSelectedTheme] = useState(theme);
     const [isSelected, setIsSelected] = React.useState(true);
     const [availableThemes, setAvailableThemes] = useState(['System', 'Dark', 'Light']);
     const [user, setUser] = useState({name: ''});
+    const [isChatVisible, setIsChatVisible] = useState(false);
     const supabase = createClient()
     const router = useRouter()
 
@@ -91,6 +95,7 @@ export default function NavigationBar() {
                     </NavbarBrand>
                 </NavbarContent>
                 <NavbarContent aria-label={"Profile Content"} className="flex items-center" justify="end">
+                    <Badge color="danger" content={unseenMessages} isInvisible={unseenMessages === 0}   shape="circle">
                     <Dropdown>
                         <DropdownTrigger>
                             <Button aria-label="chat-button" isIconOnly radius="full" size="md">
@@ -103,6 +108,7 @@ export default function NavigationBar() {
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
+                    </Badge>
                     <Dropdown placement="bottom-end">
                         <DropdownTrigger>
                             <Button

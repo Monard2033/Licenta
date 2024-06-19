@@ -51,22 +51,22 @@ export default function Login({
   };
 
   return (
-    <div className="flex h-screen flex-col items-center w-full px-8 justify-center gap-2">
-      <form className="animate-in flex flex-col w-full md:max-w-md justify-center gap-2 text-foreground">
-        <label className="text-md" htmlFor="email">
+    <div className="flex h-screen flex-col items-center bg-content3 w-full px-8 justify-center gap-2">
+      <form className="animate-in border-4 p-2 rounded-medium bg-content1 shadow-medium flex flex-col w-full md:max-w-md justify-center  gap-2 text-foreground">
+        <label className="text-large" htmlFor="email">
           Email
         </label>
         <input
-            className="rounded-md px-4 py-2 bg-inherit border mb-6"
+            className="rounded-md px-4 py-2 bg-cyan-100 border mb-6"
             name="email"
-            placeholder="you@example.com"
+            placeholder="@ibm.ro/@student.upt.ro"
             required
         />
-        <label className="text-md" htmlFor="password">
+        <label className="text-large" htmlFor="password">
           Parola
         </label>
         <input
-            className="rounded-md px-4 py-2 bg-inherit border mb-6"
+            className="rounded-md px-4 py-2 bg-cyan-100 border mb-6"
             type="password"
             name="password"
             placeholder="••••••••"
@@ -75,14 +75,14 @@ export default function Login({
         <SubmitButton
             formAction={signIn}
             className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
-            pendingText="Signing In..."
+            pendingText="Conectare..."
         >
           Conectare
         </SubmitButton>
         <SubmitButton
             formAction={signUp}
             className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
-            pendingText="Signing Up..."
+            pendingText="Inregistrare..."
         >
           Inregistrare
         </SubmitButton>

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { today, getLocalTimeZone, isSameDay } from "@internationalized/date";
-import {fetchMeetings, fetchUser, UserInfo} from "@/utils/users"; // Import your fetchUser function
-import Link from 'next/link'; // Assuming you're using Next.js
+import { today, getLocalTimeZone, } from "@internationalized/date";
+import { fetchUser, } from "@/utils/users";
+import Link from 'next/link';
 
 const getDotColor = (endDate: string | number | Date) => {
     const daysLeft = (new Date(endDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
     if (daysLeft <= 1) return 'bg-red-600';
     if (daysLeft <= 2) return 'bg-yellow-600';
     if (daysLeft <= 5) return 'bg-green-600';
-    return 'bg-gray-500'; // Default color
+    return 'bg-gray-500';
 };
 
 const MiniCalendar = () => {
@@ -68,7 +68,7 @@ const MiniCalendar = () => {
                 {meetings.length > 0 && (
                     <div className="flex flex-col items-end p-2 text-large">
                         <p>Urmatoarea Sesiune: {meetings[0].name}</p>
-                        <p>Time ramas pana la urmatoarea sesiune: {timer}</p>
+                        <p>Timp ramas pana la urmatoarea sesiune: {timer}</p>
                     </div>
                 )}
             </div>

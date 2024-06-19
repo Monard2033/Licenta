@@ -20,7 +20,7 @@ const Sessions = () => {
         const { data, error } = await supabase
             .from('meetings')
             .select('*')
-            .order('meeting_date', { ascending: false }); // Fetch meetings ordered by date in descending order
+            .order('meeting_date', { ascending: false });
         if (error) {
             console.error(error);
             return [];
