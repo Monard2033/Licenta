@@ -84,7 +84,6 @@ export default function DataTable() {
                 user.name.toLowerCase().includes(filterValue.toLowerCase()),
             );
         }
-
         return filteredUsers;
     }, [users, filterValue, statusFilter]);
 
@@ -152,8 +151,8 @@ export default function DataTable() {
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu>
-                                <DropdownItem onClick={event =>router.push(`/profile/${user.id}`)}>Vizualizeaza</DropdownItem>
-                                <DropdownItem onClick={() => deleteUsers(user.id)}>Sterge</DropdownItem>
+                                <DropdownItem onClick={(e) =>router.push(`/profile/${user.id}`)}>Vizualizeaza</DropdownItem>
+                                <DropdownItem onClick={(e) => deleteUsers(user.id)}>Sterge</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </div>
@@ -201,7 +200,6 @@ export default function DataTable() {
                 <div className="flex justify-between gap-3 items-end">
                     <Input
                         classNames={{
-                            //when in dark mode make a border 1px around the input
                             inputWrapper: "text-default-500 bg-default-500/20 dark:bg-default-500/20 border border-default-500/20",
                         }}
                         isClearable
@@ -213,7 +211,6 @@ export default function DataTable() {
                         onValueChange={onSearchChange}
                     />
                     <div className="flex gap-3">
-
                         <Dropdown>
                             <DropdownTrigger className="hidden sm:flex">
                                 <Button endContent={<ChevronDownIcon className="text-small"/>} variant="flat">
@@ -235,7 +232,7 @@ export default function DataTable() {
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        {users.role !== "Student" && <InsertData updateUsers={updateUsers}/>}
+                      <InsertData updateUsers={updateUsers}/>
                     </div>
                 </div>
                 <div className="flex justify-between items-center">
