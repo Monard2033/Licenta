@@ -1,4 +1,3 @@
-
 import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -21,7 +20,7 @@ export default function Login({
     });
 
     if (error) {
-      return redirect("/login?message=Could not authenticate user");
+      return redirect("/login?message=Utilizatorul nu a putut fi autentificat");
     }
 
     return redirect("/");
@@ -31,6 +30,7 @@ export default function Login({
     "use server";
 
     const origin = headers().get("origin");
+    const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const supabase = createClient();
@@ -47,50 +47,49 @@ export default function Login({
       return redirect("/login?message=Could not authenticate user");
     }
 
-    return redirect("/login?message=Check email to continue sign in process");
+    return redirect("/login?message=Verifica emailul pentru a continua inregistrarea");
   };
 
   return (
-    <div className="flex w-screen h-screen flex-col items-center w-full px-8 justify-center gap-2">
-
-      <form className="animate-in flex flex-col w-full md:max-w-md justify-center gap-2 text-foreground">
-        <label className="text-md" htmlFor="email">
+    <div className="flex h-screen flex-col items-center bg-content3 w-full px-8 justify-center gap-2">
+      <form className="animate-in border-4 p-2 rounded-medium bg-content1 shadow-medium flex flex-col w-full md:max-w-md justify-center  gap-2 text-foreground">
+        <label className="text-large" htmlFor="email">
           Email
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          name="email"
-          placeholder="you@example.com"
-          required
+            className="rounded-md px-4 py-2 bg-cyan-100 border mb-6"
+            name="email"
+            placeholder="@ibm.ro/@student.upt.ro"
+            required
         />
-        <label className="text-md" htmlFor="password">
-          Password
+        <label className="text-large" htmlFor="password">
+          Parola
         </label>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          required
+            className="rounded-md px-4 py-2 bg-cyan-100 border mb-6"
+            type="password"
+            name="password"
+            placeholder="••••••••"
+            required
         />
         <SubmitButton
-          formAction={signIn}
-          className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
-          pendingText="Signing In..."
+            formAction={signIn}
+            className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
+            pendingText="Conectare..."
         >
-          Sign In
+          Conectare
         </SubmitButton>
         <SubmitButton
-          formAction={signUp}
-          className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
-          pendingText="Signing Up..."
+            formAction={signUp}
+            className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+            pendingText="Inregistrare..."
         >
-          Sign Up
+          Inregistrare
         </SubmitButton>
         {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-            {searchParams.message}
-          </p>
+            <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
+              {searchParams.message}
+            </p>
         )}
       </form>
     </div>

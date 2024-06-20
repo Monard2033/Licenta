@@ -1,29 +1,32 @@
+
 import {createClient} from "@/utils/supabase/client";
-export const columns = [
+
+export const usercolumns = [
     {name: "ID", uid: "id", sortable: true},
     {name: "NUME", uid: "name", sortable: true},
-    {name: "VARSTA", uid: "varsta", sortable: true},
+    {name: "EMAIL", uid: "email" , sortable: true},
     {name: "ROL", uid: "role", sortable: true},
-    {name: "ECHIPA", uid: "team"},
-    {name: "EMAIL", uid: "email"},
-    {name: "STATUS", uid: "status", sortable: true},
+    {name: "ECHIPA", uid: "team", sortable: true},
+    {name: "PROIECT", uid: "project_name", sortable: true},
     {name: "ACTIUNI", uid: "actions"},
 ];
-export const statusOptions = [
-    {name: "Active", uid: "active"},
-    {name: "Paused", uid: "paused"},
-    {name: "Vacation", uid: "vacation"},
+
+export const sessioncolumns = [
+    {name: "ID", uid: "id", sortable: true},
+    {name: "NUME", uid: "student_name" , sortable: true},
+    {name: "ECHIPA", uid: "team_name", sortable: true},
+    {name: "NOTA", uid: "grade", sortable: true},
+    {name: "PREZENTA", uid: "attendance"},
+    {name: "DATA", uid: "date"},
 ];
+
+
 export const fetchUsers = async () => {
     const supabase = createClient()
     const { data, error } = await supabase
-        .from('students')
-        .select();
-
-    if (error) {
-        console.error('Error fetching users:', error);
-    } else {
-        console.log(data);
-       return data
-    }
+        .from('users')
+        .select('*');
+        return data
 };
+
+
