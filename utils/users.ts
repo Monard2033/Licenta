@@ -229,7 +229,8 @@ export const fetchUser = async (
             const { data: comments, error: commentsError } = await supabase
                 .from('comments')
                 .select('*')
-                .in('task_name', taskNames);
+                .in('task_name', taskNames)
+                .eq('user_name',userInfo.name)
 
             if (commentsError) {
                 console.error('Error fetching comments:', commentsError);
