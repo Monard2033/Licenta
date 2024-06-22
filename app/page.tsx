@@ -56,7 +56,7 @@ export default function Index() {
                         Pagini Accesibile Pentru Student
                     </h5>
                 </div>
-                <div className="flex flex-row w-full h-full items-center justify-evenly mt-2">
+               <div className="flex flex-row w-full h-[100%] items-center justify-evenly mt-2">
                     <div id="SessiuniTile" className="w-[25%] h-full shadow-xl bg-content1 border-3 rounded-medium flex flex-col">
                         <div className="h-[80%] rounded-medium">
                             <a href="/main/sessions" className="flex items-center justify-center h-full">
