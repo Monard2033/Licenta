@@ -229,8 +229,7 @@ export const fetchUser = async (
                 .from('comments')
                 .select('*')
                 .in('task_name', taskNames)
-                .eq('user_name',userInfo.name)
-                .single();
+                .eq('user_name',userInfo.name);
             if (commentsError) {
                 console.error('Error fetching comments:', commentsError);
                 return;
