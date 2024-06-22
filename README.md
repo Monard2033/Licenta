@@ -52,15 +52,6 @@ Implementarea pe Vercel va ghida crearea unui cont și proiect Supabase. După i
 
 Aplicația ar trebui să ruleze acum pe [localhost:3000](http://localhost:3000).
 
-## Feedback și probleme
-
-Vă rugăm să trimiteți feedback și probleme pe [GitHub Supabase](https://github.com/supabase/supabase/issues/new/choose).
-
-## Mai multe exemple Supabase
-
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Autentificare bazată pe cookie-uri și App Router Next.js 13 (curs gratuit)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Autentificare Supabase și App Router Next.js](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
 
 ## Livrabilele Proiectului
 
