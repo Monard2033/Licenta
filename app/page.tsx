@@ -56,21 +56,21 @@ export default function Index() {
                         Pagini Accesibile Pentru Student
                     </h5>
                 </div>
-               <div className="flex flex-row w-full h-[60%] items-center justify-evenly mt-2">
+                <div className="flex flex-row w-full h-full items-center justify-evenly mt-2">
                     <div id="SessiuniTile" className="w-[25%] h-full shadow-xl bg-content1 border-3 rounded-medium flex flex-col">
                         <div className="h-[80%] rounded-medium">
                             <a href="/main/sessions" className="flex items-center justify-center h-full">
-                                <Image alt={"Sesiuni"} className="w-full h-full rounded-medium object-cover" priority src={"/main/SessionImage.png"} width={512} height={512}/>
+                                <Image alt={"Sesiuni"} className="w-full h-full rounded-medium object-cover" priority src={"/main/SessionImg.png"} width={512} height={512}/>
                             </a>
                         </div>
-                        <div className="flex items-center justify-around h-[25%] bg-content1 border-2 rounded-medium mt-auto">
+                        <div className="flex items-center justify-around h-[25%] border-2 rounded-medium mt-auto">
                             <button className="text-blue-600 hover:text-blue-800" onClick={e => router.push("/sessions")}>Sesiuni</button>
                         </div>
                     </div>
                     <div id="ProiecteTile" className="w-[25%] h-full shadow-xl bg-content1 border-3 rounded-medium flex flex-col">
                         <div className="h-[80%] rounded-medium">
                             <a href="/main/projects" className="flex items-center justify-center h-full">
-                                <Image alt={"Proiecte"} className="w-full h-full rounded-medium object-cover" priority src={"/main/TProjectImage.png"} width={512} height={512}/>
+                                <Image alt={"Proiecte"} className="w-full h-full rounded-medium object-cover" priority src={"/main/ProjectImg.png"} width={512} height={512}/>
                             </a>
                         </div>
                         <div className="flex items-center justify-around h-[25%] bg-content1 border-2 rounded-medium mt-auto">
