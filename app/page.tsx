@@ -60,7 +60,7 @@ export default function Index() {
                     <div id="SessiuniTile" className="w-[25%] h-full shadow-xl bg-content1 border-3 rounded-medium flex flex-col">
                         <div className="h-[80%] rounded-medium">
                             <a href="/main/sessions" className="flex items-center justify-center h-full">
-                                <Image alt={"Sesiuni"} className="w-full h-full rounded-medium object-cover" priority={true} src={"/main/TileImage.png"} width={512} height={512}/>
+                                <Image alt={"Sesiuni"} className="w-full h-full rounded-medium object-cover" priority={true} src={"/main/TileImage1.png"} width={512} height={512}/>
                             </a>
                         </div>
                         <div className="flex items-center justify-around h-[25%] bg-content1 border-2 rounded-medium mt-auto">
