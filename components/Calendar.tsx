@@ -50,7 +50,7 @@ const MiniCalendar = () => {
                 <h2 className="text-xl font-bold">{formattedDate}</h2>
             </div>
             <div>
-                {tasks.map((task, index) => (
+                {userInfo && tasks.map((task, index) => (
                     <div key={index} className="flex items-center border-1 rounded justify-around mb-2 bg-content2">
                         <Link href={"/projects"} className="text-blue-500">
                             {task.task_name}

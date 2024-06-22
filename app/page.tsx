@@ -19,7 +19,7 @@ export default function Index() {
             const {data: {user}, error} = await supabase.auth.getUser();
 
             if (error || !user) {
-                redirect('/login');
+                router.replace('/login');
             }
 
             const isAdmin = await checkAdminRole();

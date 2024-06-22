@@ -319,12 +319,12 @@ export const displayUserEmail = async () => {
 };
 export const checkAdminRole = async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    // @ts-ignore
-    if (user.email.endsWith('@gmail.com')) {
+
+    if (user && user.email?.endsWith('@gmail.com')) {
         return true;
     } else {
         // @ts-ignore
-        if (user.email.endsWith('@student.upt.ro')) {
+        if (user && user.email?.endsWith('@student.upt.ro')) {
             return false;
         }
     }

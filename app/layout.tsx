@@ -6,8 +6,8 @@ import React from "react";
 import {cn} from "@/lib/utils";
 import LeftSidePanel from "@/components/LeftSidePanel";
 import Header from "@/components/Header";
-import {redirect} from "next/navigation";
 import { MessageProvider } from "@/components/MessageContext";
+
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -15,6 +15,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+
     return (
         <html>
         <head>
