@@ -33,6 +33,12 @@ export default function NavigationBar() {
     const supabase = createClient()
     const router = useRouter()
 
+    const SignOut = async () =>{
+        await supabase.auth.signOut()
+        router.replace('/login')
+    }
+
+
     const fetchUserTheme = async () => {
         try {
             const {data: userTheme, error} = await supabase
@@ -185,7 +191,7 @@ export default function NavigationBar() {
                                     <button onClick={e => router.push("/settings")}>Setari</button>
                                 </DropdownItem>
                                 <DropdownItem>
-                                    <button onClick={e => router.replace("/login")}>Delogare</button>
+                                    <button onClick={e =>SignOut()}>Delogare</button>
                                 </DropdownItem>
                             </DropdownSection>
                         </DropdownMenu>

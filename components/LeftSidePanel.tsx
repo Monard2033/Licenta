@@ -1,14 +1,29 @@
 "use client"
 import {usePathname} from "next/navigation";
-import React from "react";
+import React, {useEffect} from "react";
 import { useRouter} from "next/navigation";
 import Calendar from "@/components/Calendar";
+import {checkAdminRole} from "@/utils/users";
+import {createClient} from "@/utils/supabase/client";
 
 
 const LeftSidePanel=()=> {
     const router = useRouter();
-
     const pathName = usePathname();
+    const supabase = createClient()
+    useEffect(() => {
+        const fetchUser = async () => {
+            const {data: {user}, error} = await supabase.auth.getUser();
+
+            if (error || !user) {
+                router.replace('/login');
+            }
+
+        };
+        fetchUser()
+    }, []);
+
+
     if (pathName != "/login") {
         return <div className="flex flex-col rounded min-h-screen min-w-[330px] border-2">
             <div className="flex flex-col gap-4">
