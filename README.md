@@ -1,4 +1,5 @@
-# Kit de pornire Next.js și Supabase
+# IBM Nexus: Centrul Studentesc
+Această aplicație este menită să gestioneze și monitorizeze studenții înregistrati la practica de vară în cadrul firmei IBM.
 
 ## Caracteristici
 
