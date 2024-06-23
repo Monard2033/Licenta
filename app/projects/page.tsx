@@ -14,6 +14,7 @@ const ProjectPage = ({ params }: { params: any }) => {
     const [commentsFetched, setCommentsFetched] = useState(false);
     const [filesFetched, setFilesFetched] = useState(false);
     const [commentsLength, setCommentsLength] = useState(0);
+    const [showCheckCircle, setShowCheckCircle] = useState(false);
     const [filesLength, setFilesLength] = useState(0);
     const [timeLeft, setTimeLeft] = useState('');
     const [files, setFiles] = useState<string[]>([]);
@@ -75,7 +76,9 @@ const ProjectPage = ({ params }: { params: any }) => {
             setIsAdmin(isAdmin);
         }
     }
-    const showCheckCircle = commentsFetched || filesFetched;
+    const updateShowCheckCircle = (filesFetched: boolean, commentsFetched: boolean) => {
+        setShowCheckCircle(filesFetched || commentsFetched);
+    }
 
     const fetchTasks = async () => {
         const { data, error } = await supabase
@@ -104,12 +107,10 @@ const ProjectPage = ({ params }: { params: any }) => {
         }
     };
     const fetchFiles = async () => {
-        const filePath = `${user.name}/${files}`;
         const { data, error } = await supabase
-            .storage
-            .from('project-files')
-            .list(`${user.name}`);
-
+            .from('storage.objects')
+            .select('name')
+            .eq('bucket_id', user.name); // Adjust the condition based on your schema
 
         if (error) {
             console.error('Error fetching files:', error.message);
@@ -117,9 +118,29 @@ const ProjectPage = ({ params }: { params: any }) => {
             // @ts-ignore
             const filesList = data.map(file => file.name);
             setFiles(filesList);
+            setFilesFetched(true);
+            updateShowCheckCircle(true, commentsFetched);
         }
-    }
+    };
 
+    const fetchComments = async () => {
+        if (!currentTask) return;
+
+        const { data, error } = await supabase
+            .from('comments')
+            .select('*')
+            .eq('user_name', user.name)
+            .eq('task_name', currentTask.task_name);
+
+        if (error) {
+            console.error('Error fetching comments:', error);
+        } else {
+            setComments(data);
+            setCommentsLength(data.length);
+            setCommentsFetched(data.length > 0);
+            updateShowCheckCircle(true, commentsFetched);
+        }
+    };
 
     const setCurrentWeeklyTask = (tasks: any) => {
         const currentDate = new Date();
@@ -203,18 +224,6 @@ const ProjectPage = ({ params }: { params: any }) => {
             alert("Adaugat cu Succes")
         }
     };
-    const fetchComments = async () => {
-        const { data, error } = await supabase
-            .from('comments')
-            .select('*')
-            .eq('task_name', currentTask?.task_name);
-        if (error) {
-            console.error('Error fetching comments:', error);
-        } else {
-            setCommentsLength(data.length);
-            setCommentsFetched(true);
-        }
-    };
 
 
     const finishedTasks = tasks.filter(task => new Date(task.end_time) < new Date());
@@ -283,23 +292,6 @@ const ProjectPage = ({ params }: { params: any }) => {
                             className="mt-2 bg-blue-500 text-white py-2 px-4 rounded-medium w-fit">
                         Adauga Sarcina
                     </button>
-
-                    <div>
-                        <h2>Fisierele Utilizatorului: {user.name}</h2>
-                        <ul className="bg-red-900">
-                            {files.map((file, index) => (
-                                <li key={index}>
-                                    <a
-                                        href={`https://trzkgzklxvbrxfydsfqm.supabase.co/storage/v1/object/public/project-files/${user.name}/${file}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        Folder: ({user.name}) - File: ({file})
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
                 </div>
             )}
             <div
@@ -324,80 +316,80 @@ const ProjectPage = ({ params }: { params: any }) => {
                 <h2 className="text-2xl">Sarcina Curenta: </h2>
                 {currentTask && (
                     <div className="flex flex-col gap-3">
-                        <div className="flex justify-between text-2xl p-1">
-                            <div className="flex items-center gap-2">
-                                {currentTask.task_name}
-                                {showCheckCircle && (
-                                    <AiOutlineCheckCircle className="text-green-500"/>
-                                )}
-                            </div>
-                            <span className="text-medium">
+                            <div className="flex justify-between text-2xl p-1">
+                                <div className="flex items-center gap-2">
+                                    {currentTask.task_name}
+                                    {showCheckCircle && (
+                                        <AiOutlineCheckCircle className="text-green-500"/>
+                                    )}
+                                </div>
+                                <span className="text-medium">
                                 Nume Proiect: {currentTask.project_name}
                             </span>
+                            </div>
+                            <div className="flex flex-row justify-between">
+                                <p className="bg-content3 rounded-3xl border-1 gap-2 p-2 w-[80%]">
+                                    {currentTask.description}
+                                </p>
+                                <div className="flex flex-col items-end">
+                                    <div className="m-3">
+                                        <span>Inceput: {formatDate(currentTask.start_time)}</span>
+                                    </div>
+                                    <div className="m-3">
+                                        <span>Sfarsit: {formatDate(currentTask.end_time)}</span>
+                                    </div>
+                                    <div className="m-3">
+                                        <span>Timp Ramas: {timeLeft}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {isTaskEditable ? (
+                                <div className="flex flex-row gap-3 justify-between">
+                                    <div className="flex w-[50%]">
+                                        <CommentSection taskName={currentTask.task_name} userId={user.name} onCommentSubmit={fetchComments}/>
+                                    </div>
+                                    <div className="flex w-[50%]">
+                                        <FileUpload taskName={currentTask.task_name} userId={user.name} onFileUpload={fetchFiles}/>
+                                    </div>
+                                </div>
+                            ) : (
+                                <p>Aceasta sarcina nu poate fi modificata. Termen expirat</p>
+                            )}
                         </div>
-                        <div className="flex flex-row justify-between">
-                            <p className="bg-content3 rounded-3xl border-1 gap-2 p-2 w-[80%]">
-                                {currentTask.description}
-                            </p>
-                            <div className="flex flex-col items-end">
-                                <div className="m-3">
-                                    <span>Inceput: {formatDate(currentTask.start_time)}</span>
+                    )}
+                </div>
+                <div
+                    className="flex flex-col bg-content1 m-1 border-3 rounded-medium hover:m-0.5 transition-all p-2">
+                    <h2 className="text-2xl">Sarcini Incheiate</h2>
+                    {finishedTasks.map(task => (
+                        <div key={task.task_name} className="flex flex-col gap-3 p-2 my-2 bg-content2 rounded-medium">
+                            <div className="flex justify-between text-2xl p-1">
+                                <div className="flex items-center gap-2">
+                                    {task.task_name}
+                                    {comments.length > 0 && files.length > 0 && (
+                                        <AiOutlineCheckCircle className="text-green-500"/>
+                                    )}
                                 </div>
-                                <div className="m-3">
-                                    <span>Sfarsit: {formatDate(currentTask.end_time)}</span>
-                                </div>
-                                <div className="m-3">
-                                    <span>Timp Ramas: {timeLeft}</span>
-                                </div>
-                            </div>
-                        </div>
-                        {isTaskEditable ? (
-                            <div className="flex flex-row gap-3 justify-between">
-                                <div className="flex w-[50%]">
-                                    <CommentSection taskName={currentTask.task_name} userId={user.name} onCommentSubmit={fetchComments}/>
-                                </div>
-                                <div className="flex w-[50%]">
-                                    <FileUpload taskName={currentTask.task_name} userId={user.name} onFileUpload={fetchFiles}/>
-                                </div>
-                            </div>
-                        ) : (
-                            <p>Aceasta sarcina nu poate fi modificata. Termen expirat</p>
-                        )}
-                    </div>
-                )}
-            </div>
-            <div
-                className="flex flex-col bg-content1 m-1 border-3 rounded-medium hover:m-0.5 transition-all p-2">
-                <h2 className="text-2xl">Sarcini Incheiate</h2>
-                {finishedTasks.map(task => (
-                    <div key={task.task_name} className="flex flex-col gap-3 p-2 my-2 bg-content2 rounded-medium">
-                        <div className="flex justify-between text-2xl p-1">
-                            <div className="flex items-center gap-2">
-                                {task.task_name}
-                                {comments.length > 0 && files.length > 0 && (
-                                    <AiOutlineCheckCircle className="text-green-500"/>
-                                )}
-                            </div>
-                            <span className="text-medium">
+                                <span className="text-medium">
                                     Nume Proiect: {task.project_name}
                                 </span>
-                        </div>
-                        <div className="flex flex-row justify-between">
-                            <p className="bg-content3 rounded-3xl border-1 gap-2 p-2 w-[80%]">{task.description}</p>
-                            <div className="flex flex-col items-end">
-                                <div className="m-3">
-                                    <span>Inceput: {formatDate(task.start_time)}</span>
-                                </div>
-                                <div className="m-3">
-                                    <span>Sfarsit: {formatDate(task.end_time)}</span>
+                            </div>
+                            <div className="flex flex-row justify-between">
+                                <p className="bg-content3 rounded-3xl border-1 gap-2 p-2 w-[80%]">{task.description}</p>
+                                <div className="flex flex-col items-end">
+                                    <div className="m-3">
+                                        <span>Inceput: {formatDate(task.start_time)}</span>
+                                    </div>
+                                    <div className="m-3">
+                                        <span>Sfarsit: {formatDate(task.end_time)}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
         </main>
-    );
+);
 };
 
 export default ProjectPage;
