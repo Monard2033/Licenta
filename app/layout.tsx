@@ -25,14 +25,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <body className={cn("relative h-full font-sans antialiasing bg-content2")}>
         <NextUIProvider>
             <NextThemesProvider attribute="class">
-                <main className="flex flex-col min-w-screen h-[180vh]">
+                <main className="flex flex-col min-w-screen h-full">
                     <MessageProvider>
                     <NavigationBar/>
                     </MessageProvider>
                     <div className="static">
                         <Header/>
                     </div>
-                    <div className="flex flex-row ml-4 min-h-full">
+                    <div className="flex flex-row ml-4 min-h-fit">
                         <div>
                             <LeftSidePanel/>
                         </div>

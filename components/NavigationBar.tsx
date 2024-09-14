@@ -27,9 +27,7 @@ export default function NavigationBar() {
     const { unseenMessages } = useMessageContext();
     const [selectedTheme, setSelectedTheme] = useState(theme);
     const [isSelected, setIsSelected] = React.useState(true);
-    const [availableThemes, setAvailableThemes] = useState(['System', 'Dark', 'Light']);
     const [user, setUser] = useState({name: ''});
-    const [isChatVisible, setIsChatVisible] = useState(false);
     const supabase = createClient()
     const router = useRouter()
 
@@ -58,11 +56,6 @@ export default function NavigationBar() {
         fetchUserTheme();
     }, []);
 
-
-    useEffect(() => {
-        // Update available themes based on the current theme
-        setAvailableThemes(["System", "Dark", "Light"]);
-    }, [selectedTheme]);
 
     const handleThemeChange = async (e:any) => {
         const newTheme = e.target.checked ? "light" : "dark";// Example of toggling between dark and light themes

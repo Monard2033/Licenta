@@ -108,8 +108,8 @@ const Chat = ({ isVisible }) => {
     }
 
     const handleRightClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, messageId: null) => {
-        e.preventDefault(); // Prevent the default context menu from appearing
-        setSelectedMessageId(prev => prev === messageId ? null : messageId); // Toggle selection
+        e.preventDefault();
+        setSelectedMessageId(prev => prev === messageId ? null : messageId);
     }
 
 
@@ -148,7 +148,7 @@ const Chat = ({ isVisible }) => {
                                 <div id="message-content" className="flex flex-col gap-1">
                                     {msg.author_name === user.name ? (
                                         <div className="font-bold">
-                                            <span className="font-light mr-4 text-[10px]">
+                                            <span className="font-light mr-2 text-[10px]">
                                                 {formatTime(msg.created_at)}
                                             </span>
                                             {msg.author_name}

@@ -25,7 +25,7 @@ const LeftSidePanel=()=> {
 
 
     if (pathName != "/login") {
-        return <div className="flex flex-col rounded min-h-screen min-w-[330px] border-2">
+        return <div className="flex flex-col rounded min-h-fit min-w-[330px] border-2">
             <div className="flex flex-col gap-4">
                 <div
                     className="flex flex-col shadow-xl m-1 p-2 h-48 bg-content1 rounded-medium border-3">

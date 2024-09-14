@@ -15,7 +15,6 @@ const ProjectPage = ({ params }: { params: any }) => {
     const [filesFetched, setFilesFetched] = useState(false);
     const [commentsLength, setCommentsLength] = useState(0);
     const [showCheckCircle, setShowCheckCircle] = useState(false);
-    const [filesLength, setFilesLength] = useState(0);
     const [timeLeft, setTimeLeft] = useState('');
     const [files, setFiles] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
@@ -237,7 +236,7 @@ const ProjectPage = ({ params }: { params: any }) => {
     }
 
     return (
-        <main className="mx-4 flex flex-col bg-content2 border-2 gap-3 w-screen h-[155vh]">
+        <main className="mx-4 flex flex-col bg-content2 border-2 gap-3 w-screen h-full">
             {isAdmin && (
                 <div
                     className="flex flex-col admin-panel p-2 m-1 gap-3 bg-content1 border-3 rounded-medium hover:m-0.5 transition-all">
@@ -295,7 +294,7 @@ const ProjectPage = ({ params }: { params: any }) => {
                 </div>
             )}
             <div
-                className="w-full border-3 m-1 rounded-medium h-fit p-3 shadow-xl bg-content1 hover:m-0.5 transition-all duration-300">
+                className="w-full border-3 m-1 rounded-medium h-fit p-3 shadow-xl bg-content1 hover:m-0.5 transition-all">
                 <h2 className="text-2xl">Proiect Curent: </h2>
                 <form id="projects" className="flex flex-col gap-2">
                     {projects.map(project => (
@@ -312,7 +311,7 @@ const ProjectPage = ({ params }: { params: any }) => {
                 </form>
             </div>
             <div
-                className="flex flex-col bg-content1 m-1 border-3 rounded-medium hover:m-0.5 transition-all p-2">
+                className="flex flex-col bg-content1 m-1 border-3 max-h-fit rounded-medium hover:m-0.5 transition-all p-2">
                 <h2 className="text-2xl">Sarcina Curenta: </h2>
                 {currentTask && (
                     <div className="flex flex-col gap-3">
@@ -344,11 +343,11 @@ const ProjectPage = ({ params }: { params: any }) => {
                                 </div>
                             </div>
                             {isTaskEditable ? (
-                                <div className="flex flex-row gap-3 justify-between">
-                                    <div className="flex w-[50%]">
+                                <div className="flex flex-row gap-3 justify-around">
+                                    <div className="flex w-[70%]">
                                         <CommentSection taskName={currentTask.task_name} userId={user.name} onCommentSubmit={fetchComments}/>
                                     </div>
-                                    <div className="flex w-[50%]">
+                                    <div className="flex w-[30%]">
                                         <FileUpload taskName={currentTask.task_name} userId={user.name} onFileUpload={fetchFiles}/>
                                     </div>
                                 </div>

@@ -76,6 +76,9 @@ const Sessions = () => {
                 const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
                 setTimer(`${days} zile ${hours} ore ${minutes}m ${seconds}s`);
             }
+            else {
+                setTimer("NA")
+            }
         };
         updateTimer();
         const intervalId = setInterval(updateTimer, 1000);
@@ -98,7 +101,7 @@ const Sessions = () => {
     return (
         <main className="mx-4 flex flex-col bg-content2 border-2 gap-3 h-full w-screen">
             {isAdmin && (
-                <div className="bg-content1 m-2 p-2 border-3 h-fit rounded-medium hover:m-1 transition-all duration-300">
+                <div className="bg-content1 m-2 p-2 border-3 h-fit rounded-medium hover:m-1 transition-all">
                     <h2 className="text-xl font-bold mb-2">Adaugă o Sesiune Nouă</h2>
                     <form className="grid gap-4">
                         <Input
@@ -132,7 +135,7 @@ const Sessions = () => {
                     </form>
                 </div>
             )}
-            <div className="bg-content1 m-2 border-3 h-fit rounded-medium hover:m-1 transition-all duration-300">
+            <div className="bg-content1 m-2 border-3 h-fit rounded-medium hover:m-1 transition-all">
                 <div className="mb-4">
                     {meetings.length > 0 && (
                         <div className="flex flex-col items-end p-2 text-large">

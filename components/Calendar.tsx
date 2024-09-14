@@ -8,7 +8,7 @@ const getDotColor = (endDate: string | number | Date) => {
     if (daysLeft <= 1) return 'bg-red-600';
     if (daysLeft <= 2) return 'bg-yellow-600';
     if (daysLeft <= 5) return 'bg-green-600';
-    return 'bg-gray-500';
+    return 'bg-cyan-500';
 };
 
 const MiniCalendar = () => {
@@ -42,7 +42,7 @@ const MiniCalendar = () => {
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
-        return date.toLocaleString(['ro-RO'], { hour: 'numeric', minute: '2-digit', month: 'long', day: '2-digit' });
+        return date.toLocaleString(['ro-RO'], { hour: 'numeric', minute: 'numeric', month: 'long', day: 'numeric' });
     };
     return (
         <div className="p-4 border rounded shadow-md w-80">
@@ -50,27 +50,20 @@ const MiniCalendar = () => {
                 <h2 className="text-xl font-bold">{formattedDate}</h2>
             </div>
             <div>
-                {userInfo && tasks.map((task, index) => (
-                    <div key={index} className="flex items-center border-1 rounded justify-around mb-2 bg-content2">
-                        <Link href={"/projects"} className="text-blue-500">
+                {userInfo && tasks
+                    .sort((a, b) => a.task_name.localeCompare(b.task_name))
+                    .map((task, index) => (
+                    <div key={index} className="flex flex-row gap-6 items-center border-1 rounded justify-evenly mb-2 bg-content2">
+                        <Link href={"/projects"} className="text-blue-500 min-w-fit">
                             {task.task_name}
                         </Link>
-                        <span className={`w-4 h-4 border-1 rounded-2xl ${getDotColor(task.end_time)} mr-3`}/>
-                        <span className="flex flex-col items-center">
-                            De la: {formatDate(task.start_time)}
-                            <span/>
-                           Pana la: {formatDate(task.end_time)}
+                        <span className={`w-5 h-5 rounded-[100%] ${getDotColor(task.end_time)}`}/>
+                        <span className="flex flex-col items-start justify-evenly gap-1">
+                            <p>De la: {formatDate(task.start_time)}</p>
+                            <p>Pana la: {formatDate(task.end_time)}</p>
                         </span>
                     </div>
                 ))}
-            </div>
-            <div className="mb-4">
-                {meetings.length > 0 && (
-                    <div className="flex flex-col items-end p-2 text-large">
-                        <p>Urmatoarea Sesiune: {meetings[0].name}</p>
-                        <p>Timp ramas pana la urmatoarea sesiune: {timer}</p>
-                    </div>
-                )}
             </div>
         </div>
     );

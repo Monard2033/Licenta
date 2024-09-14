@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/client";
-import React, {useState, useCallback, useEffect} from "react";
+import React, {useState, useCallback} from "react";
 import { useDropzone } from "react-dropzone";
 import {Button} from "@nextui-org/react";
 
@@ -40,7 +40,7 @@ const FileUpload = ({ userId, onFileUpload, taskName }: {
     };
 
     return (
-        <div className="file-upload flex flex-col w-full max-h-max bg-content2 rounded-3xl border-1 gap-2 p-2">
+        <div className="file-upload flex flex-col w-full min-w-96 overflow-auto min-h-96 max-h-screen bg-content2 rounded-3xl border-1 gap-2 p-2">
             <div className="file-preview p-1">
                 <h3 className="text-xl">Fisiere pentru Incarcare (format fisier .zip , .rar):</h3>
                 <ul>
