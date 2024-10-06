@@ -23,7 +23,7 @@ import {useMessageContext} from "@/components/MessageContext";
 
 
 export default function NavigationBar() {
-    const {theme, setTheme} = useTheme();
+    const { theme, setTheme, systemTheme, resolvedTheme } = useTheme();
     const { unseenMessages } = useMessageContext();
     const [selectedTheme, setSelectedTheme] = useState(theme);
     const [isSelected, setIsSelected] = React.useState(true);
@@ -35,36 +35,45 @@ export default function NavigationBar() {
         await supabase.auth.signOut()
         router.replace('/login')
     }
-
-
-    const fetchUserTheme = async () => {
-        try {
-            const {data: userTheme, error} = await supabase
-                .from('user_themes')
-                .select('theme')
-                .eq('user_name', user.name)
-                .single();
-            if (userTheme) {
-                setSelectedTheme(userTheme.theme);
-                setTheme(userTheme.theme);
-            }
-        } catch (error) {
-            console.error('Error fetching user theme:', error);
-        }
-    };
     useEffect(() => {
-        fetchUserTheme();
-    }, []);
+        // Apply the system theme on initial render
+        if (theme === 'system') {
+            setSelectedTheme(resolvedTheme);
+        }
+    }, [theme, resolvedTheme]);
+
+    useEffect(() => {
+        const fetchTheme = async () => {
+            try {
+                const { data } = await supabase
+                    .from('user_themes')
+                    .select('theme')
+                    .eq('user_name', user.name)
+                    .single();
+
+                if (data?.theme) {
+                    setTheme(data.theme);
+                    setSelectedTheme(data.theme);
+                }
+            } catch (error) {
+                console.error('Error fetching theme:', error);
+            }
+        };
+
+        fetchTheme();
+    }, [user.name]);
 
 
-    const handleThemeChange = async (e:any) => {
-        const newTheme = e.target.checked ? "light" : "dark";// Example of toggling between dark and light themes
+
+    const handleThemeChange = async (e: any) => {
+        const newTheme = e.target.checked ? 'light' : 'dark'; // Toggling light/dark
         setSelectedTheme(newTheme);
-        setTheme(newTheme)
+        setTheme(newTheme);
+
         try {
             await supabase
                 .from('user_themes')
-                .upsert([{id: 1, user_name: user.name, theme: newTheme}]);
+                .upsert([{ id: 1, user_name: user.name, theme: newTheme }]);
 
             console.log(`Theme changed for user ${user.name} to ${newTheme}`);
         } catch (error) {

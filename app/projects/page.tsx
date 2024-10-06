@@ -239,7 +239,7 @@ const ProjectPage = ({ params }: { params: any }) => {
         <main className="mx-4 flex flex-col bg-content2 border-2 gap-3 w-screen h-full">
             {isAdmin && (
                 <div
-                    className="flex flex-col admin-panel p-2 m-1 gap-3 bg-content1 border-3 rounded-medium hover:m-0.5 transition-all">
+                    className="admin-panel flex flex-col p-2 m-1 gap-3 bg-content1 border-3 rounded-medium shadow-lg hover:m-0.5 transition-all">
                     <h2 className="bg-content3 rounded-medium text-3xl w-fit p-1">Panoul Mentorului</h2>
                     <h2 className="bg-content3 rounded-medium w-fit p-1 ml-1">Adauga o Sarcina Noua</h2>
                     <div>
@@ -294,7 +294,7 @@ const ProjectPage = ({ params }: { params: any }) => {
                 </div>
             )}
             <div
-                className="w-full border-3 m-1 rounded-medium h-fit p-3 shadow-xl bg-content1 hover:m-0.5 transition-all">
+                className="border-3 m-1 rounded-medium h-fit p-2 shadow-xl bg-content1 hover:m-0.5 transition-all">
                 <h2 className="text-2xl">Proiect Curent: </h2>
                 <form id="projects" className="flex flex-col gap-2">
                     {projects.map(project => (
@@ -311,7 +311,7 @@ const ProjectPage = ({ params }: { params: any }) => {
                 </form>
             </div>
             <div
-                className="flex flex-col bg-content1 m-1 border-3 max-h-fit rounded-medium hover:m-0.5 transition-all p-2">
+                className="curent-task drop-shadow-xl bg-content1 m-1 border-3 max-h-fit rounded-medium hover:m-0.5 transition-all p-2">
                 <h2 className="text-2xl">Sarcina Curenta: </h2>
                 {currentTask && (
                     <div className="flex flex-col gap-3">
