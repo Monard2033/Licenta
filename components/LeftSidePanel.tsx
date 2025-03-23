@@ -74,7 +74,6 @@ const LeftSidePanel=()=> {
 
 
     if (pathName != "/login") {
-        // @ts-ignore
         return <div className="flex flex-col bg-content2 rounded min-h-fit min-w-[330px] border-2">
             <div className="flex flex-col gap-4">
                 <div
@@ -105,8 +104,8 @@ const LeftSidePanel=()=> {
                         </div>
                         <ul className="w-full gap-2 flex flex-col">
                             {onlineUsers.length > 0 ? (
-                                onlineUsers.sort((a: { name: string; }, b: { name: any; }) => a.name.localeCompare(b.name)).map((user: { name: boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | Promise<React.AwaitedReactNode> | React.Key | null | undefined; team: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; }) => (
-                                    <li className="gap-2 border-2 rounded-medium w-full p-2" key={user.name}>
+                                onlineUsers.sort((a: { name: string; }, b: { name: any; }) => a.name.localeCompare(b.name)).map((user:any,index:any) => (
+                                    <li className="gap-2 border-2 rounded-medium w-full p-2" key={`${user.name}-${user.team}-${index}`}>
                                        <a>{user.name} - Echipa {user.team}</a>
                                     </li>
                                 ))
