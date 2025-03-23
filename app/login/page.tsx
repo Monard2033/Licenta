@@ -51,9 +51,11 @@ export default function Login({
   };
 
   return (
-    <div className="flex h-screen flex-col items-center bg-content3 w-full px-8 justify-center gap-2">
-      <form className="animate-in border-4 p-2 rounded-medium bg-content1 shadow-medium flex flex-col w-full md:max-w-md justify-center  gap-2 text-foreground">
-        <label className="text-large" htmlFor="email">
+    <div className="flex h-screen flex-col items-center bg-content2 w-screen px-8 justify-center gap-2">
+      <form className="relative flex flex-col animate-in border-4 p-2 rounded-medium bg-content1 shadow-medium ring-8 ring-cyan-400 ring-opacity-50 w-full md:max-w-md justify-center gap-2 text-foreground
+  before:absolute before:inset-0 before:rounded-medium before:border-4 before:border-cyan-400 before:blur-lg before:opacity-50 before:pointer-events-none">
+
+      <label className="text-large" htmlFor="email">
           Email
         </label>
         <input

@@ -23,7 +23,7 @@ import {useMessageContext} from "@/components/MessageContext";
 
 
 export default function NavigationBar() {
-    const { theme, setTheme, systemTheme, resolvedTheme } = useTheme();
+    const { theme, setTheme, resolvedTheme } = useTheme();
     const { unseenMessages } = useMessageContext();
     const [selectedTheme, setSelectedTheme] = useState(theme);
     const [isSelected, setIsSelected] = React.useState(true);
@@ -97,16 +97,17 @@ export default function NavigationBar() {
         return (
             <Navbar maxWidth="full" className="h-[53px] bg-content2 border-2">
                 <NavbarContent className="flex rounded-3xl">
-                    <NavbarBrand aria-label="link-pagina" className="flex justify-start">
-                        <Link className="text-xl p-1 m-2 font-bold hover:border-3 rounded-medium duration-100 transition-all"
+                    <NavbarBrand aria-label="link-pagina" className="flex justify-start ml-2">
+                        <Button aria-label="main-button" title="Pagina Principala"  radius="full" size="md">
+                        <Link className="text-xl p-1 m-2 font-bold rounded-medium" title="Pagina Principala"
                               href={"/main"}>PAGINA PRINCIPALA</Link>
+                        </Button>
                     </NavbarBrand>
-                </NavbarContent>
-                <NavbarContent aria-label={"Profile Content"} className="flex items-center" justify="end">
-                    <Badge color="danger" content={unseenMessages} isInvisible={unseenMessages === 0}   shape="circle">
+                <NavbarContent aria-label={"Profile Content"} className="flex items-center rounded-3xl mr-2" justify="end">
+                    <Badge color="danger" content={unseenMessages} isInvisible={unseenMessages === 0} shape="circle">
                     <Dropdown>
                         <DropdownTrigger>
-                            <Button aria-label="chat-button" isIconOnly radius="full" size="md">
+                            <Button aria-label="chat-button" title="Chat" isIconOnly radius="full" size="md">
                                 <MessageIcon size={"28"} height={undefined} width={undefined}/>
                             </Button>
                         </DropdownTrigger>
@@ -123,6 +124,7 @@ export default function NavigationBar() {
                                 aria-label="profile-button"
                                 isIconOnly
                                 as="button"
+                                title="Profil"
                                 className="transition-transform"
                                 color="default"
                                 name={user?.name}
@@ -198,6 +200,7 @@ export default function NavigationBar() {
                             </DropdownSection>
                         </DropdownMenu>
                     </Dropdown>
+                </NavbarContent>
                 </NavbarContent>
             </Navbar>
         );

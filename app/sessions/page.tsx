@@ -77,7 +77,7 @@ const Sessions = () => {
                 setTimer(`${days} zile ${hours} ore ${minutes}m ${seconds}s`);
             }
             else {
-                setTimer("NA")
+                setTimer("N/A")
             }
         };
         updateTimer();
@@ -136,7 +136,7 @@ const Sessions = () => {
                 </div>
             )}
             <div className="bg-content1 m-2 border-3 h-fit rounded-medium hover:m-1 transition-all">
-                <div className="mb-4">
+                <div className="mb-4 border-3 rounded-2xl bg-content3 ml-auto m-2 w-fit">
                     {meetings.length > 0 && (
                         <div className="flex flex-col items-end p-2 text-large">
                             <p>Urmatoarea Sesiune: {formatTime(meetings[0].meeting_date)}</p>
@@ -147,8 +147,10 @@ const Sessions = () => {
                         </div>
                     )}
                 </div>
-                <h1 className="flex text-2xl font-bold mb-4 justify-center">Tabela de Sesiuni</h1>
-                <SessionTable/>
+                <form className="flex flex-col border-3 rounded-2xl m-2">
+                    <h1 className="flex text-2xl font-bold mb-4 justify-center ">Tabela de Sesiuni</h1>
+                    <SessionTable/>
+                </form>
             </div>
         </main>
     );

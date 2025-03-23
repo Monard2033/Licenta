@@ -3,12 +3,8 @@ import {usePathname} from "next/navigation";
 import React, {useEffect, useState} from "react";
 import { useRouter} from "next/navigation";
 import Calendar from "@/components/Calendar";
-import {checkAdminRole, fetchUser} from "@/utils/users";
 import {createClient} from "@/utils/supabase/client";
-import {userInfo} from "node:os";
 import {user} from "@nextui-org/theme";
-import Link from "next/link";
-
 
 const LeftSidePanel=()=> {
     const router = useRouter();
@@ -78,6 +74,7 @@ const LeftSidePanel=()=> {
 
 
     if (pathName != "/login") {
+        // @ts-ignore
         return <div className="flex flex-col bg-content2 rounded min-h-fit min-w-[330px] border-2">
             <div className="flex flex-col gap-4">
                 <div
@@ -114,7 +111,7 @@ const LeftSidePanel=()=> {
                                     </li>
                                 ))
                             ) : (
-                                <p>No users online</p>
+                                <p>Nu exista utilizatori Online</p>
                             )}
                         </ul>
                     </div>

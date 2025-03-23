@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Textarea } from "@nextui-org/react";
+import { Button} from "@nextui-org/react";
 import { createClient } from "@/utils/supabase/client";
 import { SendIcon } from "@/components/ui/SendIcon";
 import { Trash } from "lucide-react";
@@ -134,10 +134,10 @@ const Chat = ({ isVisible }) => {
                     <div id="messages" className="flex flex-col self-start w-full">
                         {messages.map((msg, index) => (
                             <div id="message-block"
-                                 className="border-2 p-2 my-2 bg-content3 w-[55%] rounded-medium"
+                                 className="border-2 p-2 my-2 bg-content3 rounded-medium"
                                  key={index}
                                  style={{
-                                     textAlign: msg.author_name === user.name ? "left" : "right",
+                                     textAlign: msg.author_name === user.name ? "right" : "left",
                                      alignSelf: msg.author_name === user.name ? "flex-end" : "flex-start",
                                      wordBreak: 'break-word',
                                      whiteSpace: 'nowrap',
@@ -148,7 +148,7 @@ const Chat = ({ isVisible }) => {
                                 <div id="message-content" className="flex flex-col gap-1">
                                     {msg.author_name === user.name ? (
                                         <div className="font-bold">
-                                            <span className="font-light mr-2 text-[10px]">
+                                            <span className="font-light mr-4 text-[10px]">
                                                 {formatTime(msg.created_at)}
                                             </span>
                                             {msg.author_name}
@@ -156,7 +156,7 @@ const Chat = ({ isVisible }) => {
                                     ) : (
                                         <div className="font-bold">
                                             {msg.author_name}
-                                            <span className="font-light ml-4 text-[10px]">
+                                            <span className="font-light ml-8 text-[10px]">
                                                 {formatTime(msg.created_at)}
                                             </span>
                                         </div>
@@ -191,7 +191,7 @@ const Chat = ({ isVisible }) => {
                         }}
                     />
                     <Button isIconOnly onClick={sendMessage} className="h- w-" aria-label="Send message">
-                        <SendIcon size={undefined} height={undefined} width={undefined}/>
+                        <SendIcon size={24} height={40} width={120}/>
                     </Button>
                 </div>
             </main>

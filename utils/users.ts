@@ -1,5 +1,4 @@
 import {createClient} from "@/utils/supabase/client";
-import React, {useEffect} from "react";
 
 export interface UserInterface {
     id: number;
@@ -23,7 +22,7 @@ export interface SessionInterface{
     project_name: number;
     grade: number;
     attendance: number;
-    date: string;
+    date: number;
     student_id: number;
 }
 export interface ProjectInterface{

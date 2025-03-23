@@ -12,7 +12,6 @@ import {
     TableRow,
     Tabs,
     Tab, Input, getKeyValue,
-    Tooltip
 } from "@nextui-org/react";
 import { sessioncolumns} from "@/components/data";
 import {checkAdminRole} from "@/utils/users";
@@ -100,7 +99,7 @@ const SessionTable = () => {
     };
 
     const handleDoubleClick = (rowIndex: any, columnKey: any) => {
-        if (isAdmin && ['grade', 'attendance', 'date'].includes(columnKey)) {
+        if (isAdmin && ['grade', 'attendance'].includes(columnKey)) {
             setEditingCell({row: rowIndex, column: columnKey});
             setEditValue(sessionData[rowIndex][columnKey]);
         }
@@ -143,7 +142,7 @@ const SessionTable = () => {
                                 <Table
                                     isHeaderSticky
                                     classNames={{
-                                        wrapper: "max-h-[382px]",
+                                        wrapper: "max-h-[380px]",
                                     }}
                                 >
                                     <TableHeader columns={sessioncolumns}>
